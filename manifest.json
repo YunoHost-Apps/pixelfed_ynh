@@ -1,0 +1,52 @@
+{
+  "name": "Pixelfed",
+  "id": "pixelfed",
+  "packaging_format": 1,
+  "description": {
+    "en": "Federated Image Sharing"
+  },
+  "version": "0.0.0~ynh1",
+  "url": "https://pixelfed.org/",
+  "license": "MIT",
+  "requirements": {
+		"yunohost": ">= 3.0.0~beta1.2"
+  },
+  "maintainer": {
+    "name": "jibec",
+    "email": "jean-baptiste@holcroft.fr"
+  },
+  "multi_instance": false,
+  "services": [
+    "nginx",
+    "php7-fpm"
+  ],
+  "arguments": {
+    "install": [
+      {
+        "name": "domain",
+        "ask": {
+          "en": "Choose a domain for Kanboard"
+        },
+        "example": "domain.org",
+        "type": "domain"
+      },
+      {
+        "name": "path",
+        "ask": {
+          "en": "Choose a path for Kanboard"
+        },
+        "type": "path",
+        "example": "/pixelfed",
+        "default": "/pixelfed"
+      },
+      {
+        "name": "is_public",
+        "ask": {
+          "en": "Is it a public site ?"
+        },
+        "type": "boolean",
+        "default": "0"
+      }
+    ]
+  }
+}
