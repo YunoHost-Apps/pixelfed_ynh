@@ -25,7 +25,7 @@
       {
         "name": "domain",
         "ask": {
-          "en": "Choose a domain for Kanboard"
+          "en": "Choose a domain for Pixelfed"
         },
         "example": "domain.org",
         "type": "domain"
@@ -33,7 +33,7 @@
       {
         "name": "path",
         "ask": {
-          "en": "Choose a path for Kanboard"
+          "en": "Choose a path for Pixelfed"
         },
         "type": "path",
         "example": "/pixelfed",
