@@ -8,7 +8,7 @@
   },
   "version": "0.0.0~ynh2",
   "url": "https://pixelfed.org/",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "maintainer": {
     "name": "jibec",
     "email": "jean-baptiste@holcroft.fr"
