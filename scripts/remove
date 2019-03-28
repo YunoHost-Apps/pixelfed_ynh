@@ -9,6 +9,7 @@
 source _common.sh
 source _pgsql.sh
 source ynh_install_php
+source ynh_add_secure_repos__2
 source /usr/share/yunohost/helpers
 
 #=================================================
