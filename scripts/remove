@@ -65,7 +65,7 @@ ynh_remove_nginx_config
 ynh_print_info "Removing php-fpm configuration"
 
 # Remove the dedicated php-fpm config
-ynh_remove_php71-fpm_config
+ynh_remove_fpm_config
 
 #=================================================
 # GENERIC FINALIZATION

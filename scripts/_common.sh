@@ -62,39 +62,3 @@ init_composer() {
 	exec_composer "$AS_USER" "$WORKDIR" install --no-dev \
 		|| ynh_die "Unable to update core dependencies with Composer"
 }
-
-
-# Create a dedicated php-fpm config for php7.1
-#
-# usage: ynh_add_fpm_config
-ynh_add_php71-fpm_config () {
-	finalphpconf="/etc/php/7.1/fpm/pool.d/$app.conf"
-	ynh_backup_if_checksum_is_different "$finalphpconf"
-	cp ../conf/php-fpm.conf "$finalphpconf"
-	ynh_replace_string "__NAMETOCHANGE__" "$app" "$finalphpconf"
-	ynh_replace_string "__FINALPATH__" "$final_path" "$finalphpconf"
-	ynh_replace_string "__USER__" "$app" "$finalphpconf"
-	chown root: "$finalphpconf"
-	ynh_store_file_checksum "$finalphpconf"
-
-	if [ -e "../conf/php-fpm.ini" ]
-	then
-		finalphpini="/etc/php/7.1/fpm/conf.d/20-$app.ini"
-		ynh_backup_if_checksum_is_different "$finalphpini"
-		cp ../conf/php-fpm.ini "$finalphpini"
-		chown root: "$finalphpini"
-		ynh_store_file_checksum "$finalphpini"
-	fi
-
-	systemctl reload php7.1-fpm
-}
-
-
-# Remove the dedicated php-fpm config for php7.1
-#
-# usage: ynh_remove_fpm_config
-ynh_remove_php71-fpm_config () {
-	ynh_secure_remove "/etc/php/7.1/fpm/pool.d/$app.conf"
-	ynh_secure_remove "/etc/php/7.1/fpm/conf.d/20-$app.ini" 2>&1
-	systemctl reload php7.1-fpm
-}
