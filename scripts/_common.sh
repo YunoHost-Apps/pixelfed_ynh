@@ -5,7 +5,7 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="php7.1-mbstring postgresql redis-server"
+pkg_dependencies="php7.2-mbstring postgresql redis-server"
 
 #=================================================
 # PERSONAL HELPERS
@@ -41,7 +41,7 @@ exec_composer() {
 	shift 2
 
 	exec_as "$AS_USER" COMPOSER_HOME="${WORKDIR}/.composer" \
-		php7.1 "${WORKDIR}/composer.phar" $@ \
+		php7.2 "${WORKDIR}/composer.phar" $@ \
 		-d "${WORKDIR}" --quiet --no-interaction
 }
 
@@ -54,7 +54,7 @@ init_composer() {
 	# install composer
 	curl -sS https://getcomposer.org/installer \
 		| COMPOSER_HOME="${WORKDIR}/.composer" \
-		php7.1 -- --quiet --install-dir="$WORKDIR" \
+		php7.2 -- --quiet --install-dir="$WORKDIR" \
 		|| ynh_die "Unable to install Composer"
 
 

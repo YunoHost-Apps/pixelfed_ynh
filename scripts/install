@@ -55,7 +55,7 @@ ynh_app_setting_set $app is_public $is_public
 #=================================================
 ynh_print_info "Installing dependencies..."
 
-ynh_install_php --phpversion=7.1
+ynh_install_php --phpversion=7.2
 
 ynh_install_app_dependencies $pkg_dependencies
 
@@ -105,7 +105,7 @@ ynh_system_user_create $app
 #=================================================
 
 # Create a dedicated php-fpm config
-ynh_add_fpm_config --phpversion=7.1
+ynh_add_fpm_config --phpversion=7.2
 
 #=================================================
 # INSTALL PHP DEPENDENCIES
@@ -145,8 +145,8 @@ ynh_store_file_checksum "$config"
 # generate key and clear cache
 (
 	cd "$final_path"
-	php7.1 artisan -n key:generate --force
-	php7.1 artisan config:clear
+	php7.2 artisan -n key:generate --force
+	php7.2 artisan config:clear
 )
 
 #=================================================
