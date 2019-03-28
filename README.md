@@ -26,6 +26,10 @@ Don't hesitate to give a hand if you wish, I assume only the nginx file needs im
 * to be added:
   * [ ] everything
 
+## Screenshots
+
+![](https://camo.githubusercontent.com/c1c2e74057dcff57e103fcbb3239840802fcf752/68747470733a2f2f706978656c6665642e6e7963332e63646e2e6469676974616c6f6365616e7370616365732e636f6d2f6d656469612f53637265656e25323053686f74253230323031392d30322d30352532306174253230362e33342e3539253230504d2e706e67)
+
 ## Documentation
 
  * Official documentation: https://docs.pixelfed.org/master/
