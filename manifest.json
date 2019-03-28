@@ -3,17 +3,18 @@
   "id": "pixelfed",
   "packaging_format": 1,
   "description": {
-    "en": "Federated Image Sharing"
+    "en": "ActivityPub Federated Image Sharing",
+    "fr": "Partage d'image fédéré avec ActivityPub."
   },
   "version": "0.0.0~ynh2",
   "url": "https://pixelfed.org/",
   "license": "MIT",
-  "requirements": {
-		"yunohost": ">= 3.0.0"
-  },
   "maintainer": {
     "name": "jibec",
     "email": "jean-baptiste@holcroft.fr"
+  },
+  "requirements": {
+		"yunohost": ">= 3.0.0"
   },
   "multi_instance": false,
   "services": [
@@ -23,28 +24,31 @@
     "install": [
       {
         "name": "domain",
+        "type": "domain",
         "ask": {
-          "en": "Choose a domain for Pixelfed"
+          "en": "Choose a domain for Pixelfed",
+          "fr": "Choisissez un nom de domaine pour Pixelfed"
         },
-        "example": "domain.org",
-        "type": "domain"
+        "example": "domain.org"
       },
       {
         "name": "path",
-        "ask": {
-          "en": "Choose a path for Pixelfed"
-        },
         "type": "path",
+        "ask": {
+          "en": "Choose a path for Pixelfed",
+          "fr": "Choisissez un chemin pour Pixelfed"
+        },
         "example": "/pixelfed",
         "default": "/pixelfed"
       },
       {
         "name": "is_public",
-        "ask": {
-          "en": "Is it a public site ?"
-        },
         "type": "boolean",
-        "default": "0"
+        "ask": {
+          "en": "Is it a public application?",
+          "fr": "Est-ce une application publique ?"
+        },
+        "default": true
       }
     ]
   }
