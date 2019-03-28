@@ -10,6 +10,7 @@ source _common.sh
 source _pgsql.sh
 source ynh_install_php
 source ynh_add_secure_repos__2
+source ynh_composer
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -113,7 +114,7 @@ ynh_add_fpm_config --phpversion=7.2
 
 chown -R "$app": "$final_path"
 
-init_composer "$app" "$final_path"
+ynh_install_composer --workdir=$final_path
 
 #=================================================
 # SPECIFIC SETUP
