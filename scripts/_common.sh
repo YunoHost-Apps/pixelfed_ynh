@@ -5,7 +5,7 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="php7.1 php7.1-fpm php7.1-mbstring postgresql redis-server"
+pkg_dependencies="php7.1-mbstring postgresql redis-server"
 
 #=================================================
 # PERSONAL HELPERS
@@ -18,20 +18,6 @@ pkg_dependencies="php7.1 php7.1-fpm php7.1-mbstring postgresql redis-server"
 #=================================================
 # FUTURE OFFICIAL HELPERS
 #=================================================
-
-ynh_install_php7 () {
-  wget -q -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-  echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php7.list
-
-  ynh_package_update
-}
-
-ynh_remove_php7 () {
-  rm -f /etc/apt/sources.list.d/php7.list
-  apt-key del 4096R/89DF5277
-  apt-key del 2048R/11A06851
-}
-
 
 # Execute a command as another user
 # usage: exec_as USER COMMAND [ARG ...]

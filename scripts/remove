@@ -8,6 +8,7 @@
 
 source _common.sh
 source _pgsql.sh
+source ynh_install_php
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -39,6 +40,7 @@ ynh_print_info "Removing dependencies"
 
 # Remove metapackage and its dependencies
 ynh_remove_app_dependencies
+ynh_remove_php
 
 #=================================================
 # REMOVE APP MAIN DIR

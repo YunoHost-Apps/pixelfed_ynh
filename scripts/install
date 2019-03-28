@@ -8,6 +8,7 @@
 
 source _common.sh
 source _pgsql.sh
+source ynh_install_php
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -53,7 +54,7 @@ ynh_app_setting_set $app is_public $is_public
 #=================================================
 ynh_print_info "Installing dependencies..."
 
-ynh_install_php7
+ynh_install_php --phpversion=7.1
 
 ynh_install_app_dependencies $pkg_dependencies
 
