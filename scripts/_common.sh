@@ -5,7 +5,7 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="deb1 deb2"
+pkg_dependencies="php7.1 php7.1-fpm php7.1-mbstring postgresql redis-server"
 
 #=================================================
 # PERSONAL HELPERS

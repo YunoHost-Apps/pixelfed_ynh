@@ -55,7 +55,7 @@ ynh_print_info "Installing dependencies..."
 
 ynh_install_php7
 
-ynh_install_app_dependencies php7.1 php7.1-fpm php7.1-mbstring postgresql redis-server
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
