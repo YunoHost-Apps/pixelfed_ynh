@@ -32,16 +32,6 @@
                 "example": "domain.org"
             },
             {
-                "name": "path",
-                "type": "path",
-                "ask": {
-                    "en": "Choose a path for Pixelfed",
-                    "fr": "Choisissez un chemin pour Pixelfed"
-                },
-                "example": "/pixelfed",
-                "default": "/pixelfed"
-            },
-            {
                 "name": "is_public",
                 "type": "boolean",
                 "ask": {

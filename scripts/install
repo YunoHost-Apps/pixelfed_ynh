@@ -7,7 +7,6 @@
 #=================================================
 
 source _common.sh
-source _pgsql.sh
 source ynh_install_php
 source ynh_add_secure_repos__2
 source ynh_composer
@@ -25,7 +24,7 @@ ynh_abort_if_errors
 #=================================================
 
 domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
+path_url="/"
 is_public=$YNH_APP_ARG_IS_PUBLIC
 
 app=$YNH_APP_INSTANCE_NAME
@@ -56,7 +55,7 @@ ynh_app_setting_set $app is_public $is_public
 #=================================================
 ynh_print_info "Installing dependencies..."
 
-ynh_install_php --phpversion=7.2
+ynh_install_php --phpversion="7.2"
 
 ynh_install_app_dependencies $pkg_dependencies
 
@@ -67,13 +66,13 @@ ynh_print_info "Creating a PostgreSQL database..."
 
 ynh_psql_test_if_first_run
 
-db_name=$(ynh_sanitize_dbid "$app")
+db_name=$(ynh_sanitize_dbid $app)
 db_user=$db_name
 db_pwd=$(ynh_string_random)
-ynh_app_setting_set "$app" db_name "$db_name"
+ynh_app_setting_set $app db_name $db_name
 
 # Initialize database and store postgres password for upgrade
-ynh_psql_setup_db "$db_name" "$db_user"
+ynh_psql_setup_db $db_user $db_name $db_pwd
 
 systemctl reload postgresql
 
@@ -104,9 +103,14 @@ ynh_system_user_create $app
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
+ynh_print_info "Configuring php-fpm..."
 
 # Create a dedicated php-fpm config
-ynh_add_fpm_config --phpversion=7.2
+ynh_add_fpm_config --phpversion="7.2"
+
+#Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
+mv /etc/php/7.0/fpm/pool.d/$app.conf /etc/php/7.2/fpm/pool.d/$app.conf
+systemctl reload php7.2-fpm
 
 #=================================================
 # INSTALL PHP DEPENDENCIES
@@ -140,15 +144,19 @@ ynh_replace_string "__DB_PWD__"  "$db_pwd"   "$config"
 ynh_store_file_checksum "$config"
 
 #=================================================
-# GENERATE KEY AND CLEAR CACHE
+# DEPLOYMENT
 #=================================================
 
-# generate key and clear cache
-(
-	cd "$final_path"
+pushd $final_path
 	php7.2 artisan -n key:generate --force
 	php7.2 artisan config:clear
-)
+	php7.2 artisan config:cache
+	php7.2 artisan route:cache
+	php7.2 artisan storage:link
+	php7.2 artisan migrate --force
+	php7.2 artisan update
+	php7.2 artisan horizon:purge
+popd
 
 #=================================================
 # GENERIC FINALIZATION
