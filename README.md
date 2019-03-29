@@ -7,7 +7,7 @@
 If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to know how to install and enjoy it.*
 
 ## Overview
-The federated image shareing service Pixelfed, for YunoHost
+The federated image sharing service Pixelfed, for YunoHost
 
 **Shipped version:** 0.8.4
 
