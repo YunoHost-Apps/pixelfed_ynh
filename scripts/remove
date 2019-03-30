@@ -17,10 +17,10 @@ ynh_print_info "Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get $app domain)
-db_name=$(ynh_app_setting_get $app db_name)
+domain=$(ynh_app_setting_get "$app" domain)
+db_name=$(ynh_app_setting_get "$app" db_name)
 db_user=$db_name
-final_path=$(ynh_app_setting_get $app final_path)
+final_path=$(ynh_app_setting_get "$app" final_path)
 
 #=================================================
 # STANDARD REMOVE
@@ -72,7 +72,7 @@ ynh_remove_php71-fpm_config
 ynh_print_info "Removing the dedicated system user"
 
 # Delete a system user
-ynh_system_user_delete $app
+ynh_system_user_delete "$app"
 
 #=================================================
 # END OF SCRIPT
