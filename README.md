@@ -32,7 +32,7 @@ Don't hesitate to give a hand if you wish, I assume only the nginx file needs im
 
 ## Documentation
 
- * Official documentation: https://docs.pixelfed.org/master/
+ * [Official documentation](https://docs.pixelfed.org/master/)
 
 ## YunoHost specific features
 
