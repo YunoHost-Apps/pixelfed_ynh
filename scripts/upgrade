@@ -99,6 +99,8 @@ ynh_add_nginx_config
 #=================================================
 ynh_print_info "Upgrading dependencies..."
 
+ynh_install_php --phpversion="7.2"
+
 ynh_install_app_dependencies "$pkg_dependencies"
 
 #=================================================
@@ -115,17 +117,43 @@ ynh_system_user_create "$app"
 ynh_print_info "Upgrading php-fpm configuration..."
 
 # Create a dedicated php-fpm config
-ynh_add_fpm_config
+ynh_add_fpm_config --phpversion="7.2"
+
+#Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
+mv -f "/etc/php/7.0/fpm/pool.d/$app.conf" "/etc/php/7.2/fpm/pool.d/$app.conf"
+systemctl reload php7.0-fpm
+systemctl reload php7.2-fpm
 
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
-# ...
+# INSTALL PHP DEPENDENCIES
 #=================================================
+
+chown -R "$app": "$final_path"
+
+ynh_install_composer --workdir="$final_path"
+
+#=================================================
+# DEPLOYMENT
+#=================================================
+
+pushd "$final_path"
+	php7.2 artisan config:clear
+	php7.2 artisan config:cache
+	php7.2 artisan route:clear
+	php7.2 artisan route:cache
+	php7.2 artisan storage:link
+	php7.2 artisan migrate --force
+	php7.2 artisan update
+	php7.2 artisan horizon:purge
+popd
+
+
 
 ynh_backup_if_checksum_is_different "$final_path/CONFIG_FILE"
 # Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum "$final_path/CONFIG_FILE"
+ynh_store_file_checksum "$final_path/.env"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -134,7 +162,7 @@ ynh_store_file_checksum "$final_path/CONFIG_FILE"
 #=================================================
 
 # Set permissions on app files
-chown -R root: "$final_path"
+chown -R "$app": "$final_path"
 
 #=================================================
 # SETUP SSOWAT
