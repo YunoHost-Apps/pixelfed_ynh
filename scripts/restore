@@ -77,7 +77,7 @@ chown -R root: $final_path
 # RESTORE THE PHP-FPM CONFIGURATION
 #=================================================
 
-ynh_restore_file "/etc/php/7.0/fpm/pool.d/$app.conf"
+ynh_restore_file "/etc/php/7.2/fpm/pool.d/$app.conf"
 
 #=================================================
 # SPECIFIC RESTORATION
@@ -131,7 +131,7 @@ ynh_restore_file "/etc/logrotate.d/$app"
 #=================================================
 ynh_print_info "Reloading nginx web server and php-fpm..."
 
-systemctl reload php7.0-fpm
+systemctl reload php7.2-fpm
 systemctl reload nginx
 
 #=================================================
