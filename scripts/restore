@@ -71,12 +71,6 @@ ynh_system_user_create "$app"
 chown -R "$app": "$final_path"
 
 #=================================================
-# RESTORE THE PHP-FPM CONFIGURATION
-#=================================================
-
-ynh_restore_file "/etc/php/7.2/fpm/pool.d/$app.conf"
-
-#=================================================
 # SPECIFIC RESTORATION
 #=================================================
 # REINSTALL DEPENDENCIES
@@ -96,6 +90,12 @@ ynh_print_info "Restoring the PostgreSQL database..."
 ynh_psql_test_if_first_run
 ynh_psql_create_db "$db_name" "$db_name" "$db_pwd"
 ynh_psql_execute_file_as_root ./db.sql "$db_name"
+
+#=================================================
+# RESTORE THE PHP-FPM CONFIGURATION
+#=================================================
+
+ynh_restore_file "/etc/php/7.2/fpm/pool.d/$app.conf"
 
 #=================================================
 # GENERIC FINALIZATION
