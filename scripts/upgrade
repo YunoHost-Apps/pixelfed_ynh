@@ -16,13 +16,13 @@ ynh_print_info "Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get $app domain)
-path_url=$(ynh_app_setting_get $app path)
-admin=$(ynh_app_setting_get $app admin)
-is_public=$(ynh_app_setting_get $app is_public)
-final_path=$(ynh_app_setting_get $app final_path)
-language=$(ynh_app_setting_get $app language)
-db_name=$(ynh_app_setting_get $app db_name)
+domain=$(ynh_app_setting_get "$app" domain)
+path_url=$(ynh_app_setting_get "$app" path)
+admin=$(ynh_app_setting_get "$app" admin)
+is_public=$(ynh_app_setting_get "$app" is_public)
+final_path=$(ynh_app_setting_get "$app" final_path)
+language=$(ynh_app_setting_get "$app" language)
+db_name=$(ynh_app_setting_get "$app" db_name)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -31,23 +31,23 @@ ynh_print_info "Ensuring downward compatibility..."
 
 # Fix is_public as a boolean value
 if [ "$is_public" = "Yes" ]; then
-	ynh_app_setting_set $app is_public 1
+	ynh_app_setting_set "$app" is_public 1
 	is_public=1
 elif [ "$is_public" = "No" ]; then
-	ynh_app_setting_set $app is_public 0
+	ynh_app_setting_set "$app" is_public 0
 	is_public=0
 fi
 
 # If db_name doesn't exist, create it
-if [ -z $db_name ]; then
-	db_name=$(ynh_sanitize_dbid $app)
-	ynh_app_setting_set $app db_name $db_name
+if [ -z "$db_name" ]; then
+	db_name=$(ynh_sanitize_dbid "$app")
+	ynh_app_setting_set "$app" db_name "$db_name"
 fi
 
 # If final_path doesn't exist, create it
-if [ -z $final_path ]; then
+if [ -z "$final_path" ]; then
 	final_path=/var/www/$app
-	ynh_app_setting_set $app final_path $final_path
+	ynh_app_setting_set "$app" final_path "$final_path"
 fi
 
 #=================================================
@@ -74,7 +74,7 @@ ynh_abort_if_errors
 # instead of /foo ....
 # If nobody installed your app before 2.7, then you may
 # safely remove this line
-path_url=$(ynh_normalize_url_path $path_url)
+path_url=$(ynh_normalize_url_path "$path_url")
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -99,7 +99,7 @@ ynh_add_nginx_config
 #=================================================
 ynh_print_info "Upgrading dependencies..."
 
-ynh_install_app_dependencies $pkg_dependencies
+ynh_install_app_dependencies "$pkg_dependencies"
 
 #=================================================
 # CREATE DEDICATED USER
@@ -107,7 +107,7 @@ ynh_install_app_dependencies $pkg_dependencies
 ynh_print_info "Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create $app
+ynh_system_user_create "$app"
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -152,7 +152,7 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R root: $final_path
+chown -R root: "$final_path"
 
 #=================================================
 # SETUP SSOWAT
@@ -163,7 +163,7 @@ ynh_print_info "Upgrading SSOwat configuration..."
 if [ $is_public -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway
-	ynh_app_setting_set $app unprotected_uris "/"
+	ynh_app_setting_set "$app" unprotected_uris "/"
 fi
 
 #=================================================
