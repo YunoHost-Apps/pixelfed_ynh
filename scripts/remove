@@ -7,7 +7,8 @@
 #=================================================
 
 source _common.sh
-source _pgsql.sh
+source ynh_install_php
+source ynh_add_secure_repos__2
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -29,8 +30,23 @@ final_path=$(ynh_app_setting_get "$app" final_path)
 #=================================================
 ynh_print_info "Removing the PostgreSQL database"
 
+ynh_psql_execute_as_root "\connect $db_name 
+SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$db_name';"
+
 # Remove a database if it exists, along with the associated user
-ynh_psql_remove_db "$db_name" "$app"
+ynh_psql_remove_db $db_user $db_name
+
+#=================================================
+# REMOVE PHP-FPM CONFIGURATION
+#=================================================
+ynh_print_info "Removing php-fpm configuration"
+
+#Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
+mv /etc/php/7.2/fpm/pool.d/$app.conf /etc/php/7.0/fpm/pool.d/$app.conf
+systemctl reload php7.2-fpm
+
+# Remove the dedicated php-fpm config
+ynh_remove_fpm_config
 
 #=================================================
 # REMOVE DEPENDENCIES
@@ -38,6 +54,7 @@ ynh_psql_remove_db "$db_name" "$app"
 ynh_print_info "Removing dependencies"
 
 # Remove metapackage and its dependencies
+ynh_remove_php
 ynh_remove_app_dependencies
 
 #=================================================
@@ -55,14 +72,6 @@ ynh_print_info "Removing nginx web server configuration"
 
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
-
-#=================================================
-# REMOVE PHP-FPM CONFIGURATION
-#=================================================
-ynh_print_info "Removing php-fpm configuration"
-
-# Remove the dedicated php-fpm config
-ynh_remove_php71-fpm_config
 
 #=================================================
 # GENERIC FINALIZATION
