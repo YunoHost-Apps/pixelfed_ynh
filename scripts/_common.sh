@@ -349,7 +349,7 @@ ynh_install_extra_repo () {
 		else
 			local key_ext=gpg
 		fi
-		wget -q "$key" -O - | $wget_append /etc/apt/trusted.gpg.d/$name.$key_ext
+		wget -q "$key" -O - | gpg --dearmor | $wget_append /etc/apt/trusted.gpg.d/$name.$key_ext > /dev/null
 	fi
 
 	# Update the list of package with the new repo
