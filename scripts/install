@@ -106,8 +106,9 @@ ynh_print_info "Configuring php-fpm..."
 # Create a dedicated php-fpm config
 ynh_add_fpm_config --phpversion="7.2"
 
-#Workaround waiting 'ynh_add_fpm_config --phpversion='' released
-cp "/etc/php/7.0/fpm/pool.d/$app.conf" "/etc/php/7.2/fpm/pool.d/$app.conf"
+#Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
+mv "/etc/php/7.0/fpm/pool.d/$app.conf" "/etc/php/7.2/fpm/pool.d/$app.conf"
+systemctl reload php7.0-fpm
 systemctl reload php7.2-fpm
 
 #=================================================
