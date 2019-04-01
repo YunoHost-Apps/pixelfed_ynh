@@ -116,16 +116,11 @@ ynh_system_user_create "$app"
 #=================================================
 ynh_print_info "Upgrading php-fpm configuration..."
 
-mv -f "/etc/php/7.2/fpm/pool.d/$app.conf" "/etc/php/7.0/fpm/pool.d/$app.conf"
-systemctl reload php7.0-fpm
-systemctl reload php7.2-fpm
-
 # Create a dedicated php-fpm config
 ynh_add_fpm_config --phpversion="7.2"
 
-#Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
-mv -f "/etc/php/7.0/fpm/pool.d/$app.conf" "/etc/php/7.2/fpm/pool.d/$app.conf"
-systemctl reload php7.0-fpm
+#Workaround waiting 'ynh_add_fpm_config --phpversion='' released
+cp -f "/etc/php/7.0/fpm/pool.d/$app.conf" "/etc/php/7.2/fpm/pool.d/$app.conf"
 systemctl reload php7.2-fpm
 
 #=================================================
@@ -153,9 +148,7 @@ pushd "$final_path"
 	php7.2 artisan horizon:purge
 popd
 
-
-
-ynh_backup_if_checksum_is_different "$final_path/CONFIG_FILE"
+ynh_backup_if_checksum_is_different "$final_path/.env"
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum "$final_path/.env"
 
