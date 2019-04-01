@@ -5,7 +5,7 @@
     "description": {
         "en": "ActivityPub Federated Image Sharing"
     },
-    "version": "0.0.0~ynh3",
+    "version": "0.8.4~ynh1",
     "url": "https://pixelfed.org/",
     "license": "AGPL-3.0-or-later",
     "maintainer": {
@@ -28,15 +28,6 @@
                     "en": "Choose a domain for Pixelfed"
                 },
                 "example": "domain.org"
-            },
-            {
-                "name": "path",
-                "type": "path",
-                "ask": {
-                    "en": "Choose a path for Pixelfed"
-                },
-                "example": "/pixelfed",
-                "default": "/pixelfed"
             },
             {
                 "name": "is_public",
