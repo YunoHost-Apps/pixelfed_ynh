@@ -35,6 +35,14 @@ SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE p
 ynh_psql_remove_db "$db_user" "$db_name"
 
 #=================================================
+# REMOVE NGINX CONFIGURATION
+#=================================================
+ynh_print_info "Removing nginx web server configuration"
+
+# Remove the dedicated nginx config
+ynh_remove_nginx_config
+
+#=================================================
 # REMOVE PHP-FPM CONFIGURATION
 #=================================================
 ynh_print_info "Removing php-fpm configuration"
@@ -42,6 +50,7 @@ ynh_print_info "Removing php-fpm configuration"
 #Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
 mv "/etc/php/7.2/fpm/pool.d/$app.conf" "/etc/php/7.0/fpm/pool.d/$app.conf"
 systemctl reload php7.2-fpm
+systemctl reload php7.0-fpm
 
 # Remove the dedicated php-fpm config
 ynh_remove_fpm_config
@@ -52,8 +61,8 @@ ynh_remove_fpm_config
 ynh_print_info "Removing dependencies"
 
 # Remove metapackage and its dependencies
-ynh_remove_php
 ynh_remove_app_dependencies
+ynh_remove_php
 
 #=================================================
 # REMOVE APP MAIN DIR
@@ -62,14 +71,6 @@ ynh_print_info "Removing app main directory"
 
 # Remove the app directory securely
 ynh_secure_remove "$final_path"
-
-#=================================================
-# REMOVE NGINX CONFIGURATION
-#=================================================
-ynh_print_info "Removing nginx web server configuration"
-
-# Remove the dedicated nginx config
-ynh_remove_nginx_config
 
 #=================================================
 # GENERIC FINALIZATION

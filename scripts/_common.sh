@@ -8,7 +8,7 @@
 pkg_dependencies="php7.2-pgsql php7.2-mbstring php7.2-bcmath php7.2-simplexml php7.2-curl postgresql redis-server \
 php7.2-intl php7.2-exif \
 libfreetype6 libjpeg62-turbo libpng16-16 libxpm4 libvpx4 libwebp6 libmagickwand-6.q16-3 \
-php7.2-imagick imagick \
+php7.2-gd \
 pngquant jpegoptim gifsicle"
 
 #=================================================
@@ -349,7 +349,7 @@ ynh_install_extra_repo () {
 		else
 			local key_ext=gpg
 		fi
-		wget -q "$key" -O - | $wget_append /etc/apt/trusted.gpg.d/$name.$key_ext
+		wget -q "$key" -O - | gpg --dearmor | $wget_append /etc/apt/trusted.gpg.d/$name.$key_ext > /dev/null
 	fi
 
 	# Update the list of package with the new repo
