@@ -52,9 +52,21 @@ ynh_app_setting_set "$app" is_public "$is_public"
 #=================================================
 ynh_print_info "Installing dependencies..."
 
+ynh_install_app_dependencies "$pkg_dependencies"
+
+#=================================================
+# INSTALL PHP
+#=================================================
+ynh_print_info "Installing php..."
+
 ynh_install_php --phpversion="7.2"
 
-ynh_install_app_dependencies "$pkg_dependencies"
+#=================================================
+# INSTALL PHP DEPENDENCIES
+#=================================================
+ynh_print_info "Installing php dependencies..."
+
+ynh_install_extra_app_dependencies --repo="https://packages.sury.org/php/ $(lsb_release -sc) main" --key="https://packages.sury.org/php/apt.gpg" --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
