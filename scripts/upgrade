@@ -106,14 +106,7 @@ ynh_install_app_dependencies "$pkg_dependencies"
 #=================================================
 ynh_print_info "Upgrading php..."
 
-ynh_install_php --phpversion="7.2"
-
-#=================================================
-# UPGRADE PHP DEPENDENCIES
-#=================================================
-ynh_print_info "Upgrading php dependencies..."
-
-ynh_install_extra_app_dependencies --repo="https://packages.sury.org/php/ $(lsb_release -sc) main" --key="https://packages.sury.org/php/apt.gpg" --package="$extra_pkg_dependencies"
+ynh_install_php --phpversion="7.2" --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE DEDICATED USER

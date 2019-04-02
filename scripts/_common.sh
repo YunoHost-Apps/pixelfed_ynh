@@ -62,18 +62,20 @@ ynh_install_composer () {
 		|| ynh_die "Unable to update core dependencies with Composer."
 }
 
-
 # Install another version of php.
 #
-# usage: ynh_install_php --phpversion=phpversion
+# usage: ynh_install_php --phpversion=phpversion [--package=packages]
 # | arg: -v, --phpversion - Version of php to install. Can be one of 7.1, 7.2 or 7.3
+# | arg: -p, --package - Additionnal php packages to install
 ynh_install_php () {
 	# Declare an array to define the options of this helper.
-	local legacy_args=v
-	declare -Ar args_array=( [v]=phpversion= )
+	local legacy_args=vp
+	declare -Ar args_array=( [v]=phpversion= [p]=package= )
 	local phpversion
+	local package
 	# Manage arguments with getopts
 	ynh_handle_getopts_args "$@"
+	package=${package:-}
 
 	# Store php_version into the config of this app
 	ynh_app_setting_set $app php_version $phpversion
@@ -86,7 +88,16 @@ ynh_install_php () {
 	# Store the ID of this app and the version of php requested for it
 	echo "$YNH_APP_INSTANCE_NAME:$phpversion" | tee --append "/etc/php/ynh_app_version"
 
-	ynh_install_extra_app_dependencies --repo="https://packages.sury.org/php/ $(lsb_release -sc) main" --key="https://packages.sury.org/php/apt.gpg" --package="php$phpversion php${phpversion}-fpm php${phpversion}-common"
+	# Add an extra repository for those packages
+	ynh_install_extra_repo --repo="https://packages.sury.org/php/ $(lsb_release -sc) main" --key="https://packages.sury.org/php/apt.gpg" --priority=995 --name=extra_php_version
+
+	# Install requested dependencies from this extra repository.
+	# Install php-fpm first, otherwise php will install apache as a dependency.
+	ynh_add_app_dependencies --package="php${phpversion}-fpm"
+	ynh_add_app_dependencies --package="php$phpversion php${phpversion}-common $package"
+
+	# Remove this extra repository after packages are installed
+	ynh_remove_extra_repo --name=extra_php_version
 
 	# Advertise service in admin panel
 	yunohost service add php${phpversion}-fpm --log "/var/log/php${phpversion}-fpm.log"
@@ -123,8 +134,6 @@ ynh_remove_php () {
 		ynh_secure_remove /etc/php/ynh_app_version
 	fi
 }
-
-
 
 #=================================================
 # FUTURE OFFICIAL HELPERS
