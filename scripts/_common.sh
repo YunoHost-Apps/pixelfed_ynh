@@ -6,17 +6,11 @@
 
 # dependencies used by the app
 pkg_dependencies="postgresql redis-server \
-libfreetype6 libjpeg62-turbo libpng16-16 libxpm4 libvpx4 libwebp6 libmagickwand-6.q16-3\
+libfreetype6 libjpeg62-turbo libpng16-16 libxpm4 libvpx4 libmagickwand-6.q16-3 libwebp6 \
 pngquant jpegoptim gifsicle"
 
-extra_pkg_dependencies="php7.2-pgsql php7.2-mbstring php7.2-bcmath php7.2-simplexml php7.2-curl php7.2-intl php7.2-exif php7.2-gd"
-#
-#
-#
-#
-#
-#
-#
+extra_pkg_dependencies="php7.2-bcmath php7.2-cli php7.2-curl php7.2-exif php7.2-gd php7.2-intl php7.2-json php7.2-mbstring php7.2-pgsql php7.2-simplexml php7.2-xml php7.2-zip"
+
 #=================================================
 # PERSONAL HELPERS
 #=================================================
