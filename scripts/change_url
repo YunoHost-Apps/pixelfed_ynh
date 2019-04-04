@@ -14,10 +14,10 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 old_domain=$YNH_APP_OLD_DOMAIN
-old_path=$YNH_APP_OLD_PATH
+old_path="/"
 
 new_domain=$YNH_APP_NEW_DOMAIN
-new_path=$YNH_APP_NEW_PATH
+new_path="/"
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -43,12 +43,6 @@ then
 	change_domain=1
 fi
 
-change_path=0
-if [ "$old_path" != "$new_path" ]
-then
-	change_path=1
-fi
-
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
@@ -57,18 +51,6 @@ fi
 ynh_print_info "Updating nginx web server configuration..."
 
 nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
-
-# Change the path in the nginx config file
-if [ $change_path -eq 1 ]
-then
-	# Make a backup of the original nginx config file if modified
-	ynh_backup_if_checksum_is_different "$nginx_conf_path"
-	# Set global variables for nginx helper
-	domain="$old_domain"
-	path_url="$new_path"
-	# Create a dedicated nginx config
-	ynh_add_nginx_config
-fi
 
 # Change the domain for nginx
 if [ $change_domain -eq 1 ]
@@ -83,9 +65,33 @@ fi
 #=================================================
 # SPECIFIC MODIFICATIONS
 #=================================================
-# ...
+# UPDATE CONFIG FILE
 #=================================================
 
+config="$final_path/.env"
+ynh_replace_string "APP_URL=.*"  "APP_URL=https://$new_domain"   "$config"
+ynh_replace_string "ADMIN_DOMAIN=.*"  "ADMIN_DOMAIN=\"$new_domain\""   "$config"
+ynh_replace_string "APP_DOMAIN=.*"  "APP_DOMAIN=\"$new_domain\""   "$config"
+ynh_replace_string "MAIL_FROM_ADDRESS=.*"  "MAIL_FROM_ADDRESS=\"pixelfed@$new_domain\""   "$config"
+
+#=================================================
+# STORE THE CHECKSUM OF THE CONFIG FILE
+#=================================================
+
+# Calculate and store the config file checksum into the app settings
+ynh_store_file_checksum "$config"
+
+#=================================================
+# APPLY CHANGES
+#=================================================
+
+pushd "$final_path"
+	php7.2 artisan config:clear
+	php7.2 artisan config:cache
+	php7.2 artisan route:clear
+	php7.2 artisan route:cache
+	php7.2 artisan horizon:purge
+popd
 #=================================================
 # GENERIC FINALISATION
 #=================================================
