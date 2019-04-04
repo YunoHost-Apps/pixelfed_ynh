@@ -83,6 +83,14 @@ ynh_print_info "Removing the dedicated system user"
 ynh_system_user_delete "$app"
 
 #=================================================
+# START PHP-FPM 7.0 FPM
+#=================================================
+ynh_print_info "Start php7.0-fpm"
+
+#Sometimes with package_check php7.0-fpm fail to reload and stop. So starting the service, just in case.
+systemctl start php7.0-fpm
+
+#=================================================
 # END OF SCRIPT
 #=================================================
 
