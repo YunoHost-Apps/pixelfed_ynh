@@ -42,6 +42,11 @@ After being first registered, you need to execute the folloing command to promot
 
 and respond yes to the question ` Add admin privileges to this user?`
 
+### Allow/Close registration
+
+Registrations are open by default.
+To change that setting, edit `/var/www/pixelfed/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
+
 ## Documentation
 
  * [Official documentation](https://docs.pixelfed.org/master/)
