@@ -156,8 +156,6 @@ pushd "$final_path"
 	php7.2 artisan horizon:purge
 popd
 
-
-
 ynh_backup_if_checksum_is_different "$final_path/CONFIG_FILE"
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum "$final_path/.env"
