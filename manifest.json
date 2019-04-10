@@ -5,7 +5,7 @@
     "description": {
         "en": "ActivityPub Federated Image Sharing"
     },
-    "version": "0.8.4~ynh3",
+    "version": "0.8.6~ynh1",
     "url": "https://pixelfed.org/",
     "license": "AGPL-3.0-or-later",
     "maintainer": {
