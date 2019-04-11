@@ -9,7 +9,7 @@
     "url": "https://pixelfed.org/",
     "license": "AGPL-3.0-or-later",
     "maintainer": {
-        "name": "jibec",
+        "name": "Jean-Baptiste Holcroft",
         "email": "jean-baptiste@holcroft.fr"
     },
     "requirements": {
