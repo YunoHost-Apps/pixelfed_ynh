@@ -47,11 +47,6 @@ ynh_remove_nginx_config
 #=================================================
 ynh_print_info "Removing php-fpm configuration"
 
-#Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
-mv "/etc/php/7.2/fpm/pool.d/$app.conf" "/etc/php/7.0/fpm/pool.d/$app.conf"
-systemctl reload php7.2-fpm
-systemctl reload php7.0-fpm
-
 # Remove the dedicated php-fpm config
 ynh_remove_fpm_config
 
@@ -81,6 +76,14 @@ ynh_print_info "Removing the dedicated system user"
 
 # Delete a system user
 ynh_system_user_delete "$app"
+
+#=================================================
+# START PHP-FPM 7.0 FPM
+#=================================================
+ynh_print_info "Start php7.0-fpm"
+
+#Sometimes with package_check php7.0-fpm fail to reload and stop. So starting the service, just in case.
+systemctl start php7.0-fpm
 
 #=================================================
 # END OF SCRIPT
