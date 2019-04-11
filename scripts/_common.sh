@@ -5,11 +5,11 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="php7.2-pgsql php7.2-mbstring php7.2-bcmath php7.2-simplexml php7.2-curl postgresql redis-server \
-php7.2-intl php7.2-exif \
-libfreetype6 libjpeg62-turbo libpng16-16 libxpm4 libvpx4 libwebp6 libmagickwand-6.q16-3 \
-php7.2-gd \
+pkg_dependencies="postgresql redis-server \
+libfreetype6 libjpeg62-turbo libpng16-16 libxpm4 libvpx4 libmagickwand-6.q16-3 libwebp6 \
 pngquant jpegoptim gifsicle"
+
+extra_pkg_dependencies="php7.2-bcmath php7.2-cli php7.2-curl php7.2-exif php7.2-gd php7.2-intl php7.2-json php7.2-mbstring php7.2-pgsql php7.2-simplexml php7.2-xml php7.2-zip"
 
 #=================================================
 # PERSONAL HELPERS
@@ -62,83 +62,42 @@ ynh_install_composer () {
 		|| ynh_die "Unable to update core dependencies with Composer."
 }
 
-
 # Install another version of php.
 #
-# usage: ynh_install_php --phpversion=phpversion
+# usage: ynh_install_php --phpversion=phpversion [--package=packages]
 # | arg: -v, --phpversion - Version of php to install. Can be one of 7.1, 7.2 or 7.3
+# | arg: -p, --package - Additionnal php packages to install
 ynh_install_php () {
 	# Declare an array to define the options of this helper.
-	local legacy_args=v
-	declare -Ar args_array=( [v]=phpversion= )
+	local legacy_args=vp
+	declare -Ar args_array=( [v]=phpversion= [p]=package= )
 	local phpversion
+	local package
 	# Manage arguments with getopts
 	ynh_handle_getopts_args "$@"
+	package=${package:-}
 
 	# Store php_version into the config of this app
 	ynh_app_setting_set $app php_version $phpversion
 
-	# Install an extra repo to get multiple php versions
-	ynh_install_extra_repo --repo="https://packages.sury.org/php/ $(lsb_release -sc) main" --key="https://packages.sury.org/php/apt.gpg" --name=php
-
-	if [ "$phpversion" == "7.0" ]; then
+	if [ "$phpversion" == "7.0" ]
+	then
 		ynh_die "Do not use ynh_install_php to install php7.0"
-
-	# Php 7.1
-	elif [ "$phpversion" == "7.1" ]; then
-		# Get the current version available for libpcre3 on packages.sury.org
-		local libpcre3_version=$(apt-cache madison "libpcre3" | grep "packages.sury.org" | tail -n1 | awk '{print $3}')
-
-		# equivs doesn't handle correctly this dependence.
-		# Force the upgrade of libpcre3 for php7.1
-		ynh_package_install "libpcre3=$libpcre3_version"
-
-		local php_dependencies="php7.1, php7.1-fpm"
-
-	# Php 7.2
-	elif [ "$phpversion" == "7.2" ]; then
-		# Get the current version available for libpcre3 on packages.sury.org
-		local libpcre3_version=$(apt-cache madison "libpcre3" | grep "packages.sury.org" | tail -n1 | awk '{print $3}')
-
-		# equivs doesn't handle correctly this dependence.
-		# Force the upgrade of libpcre3 for php7.2
-		ynh_package_install "libpcre3=$libpcre3_version"
-
-		local php_dependencies="php7.2, php7.2-fpm"
-
-	# Php 7.3
-	elif [ "$phpversion" == "7.3" ]; then
-		# Get the current version available for libpcre2-8-0 on packages.sury.org
-		local libpcre2_version=$(apt-cache madison "libpcre2-8-0" | grep "packages.sury.org" | tail -n1 | awk '{print $3}')
-
-		# equivs doesn't handle correctly this dependence.
-		# Force the upgrade of libpcre2-8-0 for php7.3
-		ynh_package_install "libpcre2-8-0=$libpcre2_version"
-
-		local php_dependencies="php7.3, php7.3-fpm"
-
-	else
-		ynh_die "The version $phpversion of php isn't handle by this helper."
 	fi
 
 	# Store the ID of this app and the version of php requested for it
-	echo "$YNH_APP_ID:$phpversion" | tee --append "/etc/php/ynh_app_version"
+	echo "$YNH_APP_INSTANCE_NAME:$phpversion" | tee --append "/etc/php/ynh_app_version"
 
-	# Build a control file for equivs-build
-    echo "Section: misc
-Priority: optional
-Package: php${phpversion}-ynh-deps
-Version: 1.0
-Depends: $php_dependencies
-Architecture: all
-Description: Fake package for php_$phpversion dependencies
- This meta-package is only responsible of installing its dependencies." \
-	> /tmp/php_${phpversion}-ynh-deps.control
+	# Add an extra repository for those packages
+	ynh_install_extra_repo --repo="https://packages.sury.org/php/ $(lsb_release -sc) main" --key="https://packages.sury.org/php/apt.gpg" --priority=995 --name=extra_php_version
 
-	# Install the fake package for php
-	ynh_package_install_from_equivs /tmp/php_${phpversion}-ynh-deps.control \
-        || ynh_die --message="Unable to install dependencies"
-	ynh_secure_remove /tmp/php_${phpversion}-ynh-deps.control
+	# Install requested dependencies from this extra repository.
+	# Install php-fpm first, otherwise php will install apache as a dependency.
+	ynh_add_app_dependencies --package="php${phpversion}-fpm"
+	ynh_add_app_dependencies --package="php$phpversion php${phpversion}-common $package"
+
+	# Remove this extra repository after packages are installed
+	ynh_remove_extra_repo --name=extra_php_version
 
 	# Advertise service in admin panel
 	yunohost service add php${phpversion}-fpm --log "/var/log/php${phpversion}-fpm.log"
@@ -158,37 +117,13 @@ ynh_remove_php () {
 	fi
 
 	# Remove the line for this app
-	sed --in-place "/$YNH_APP_ID:$phpversion/d" "/etc/php/ynh_app_version"
+	sed --in-place "/$YNH_APP_INSTANCE_NAME:$phpversion/d" "/etc/php/ynh_app_version"
 
 	# If no other app uses this version of php, remove it.
 	if ! grep --quiet "$phpversion" "/etc/php/ynh_app_version"
 	then
-		# Remove the metapackage for php
-		ynh_package_autopurge php${phpversion}-ynh-deps
-		# Then remove php-fpm php-cli for this version.
-		# The previous command won't remove them, but we have to remove those package to clean php
-		ynh_package_autopurge php${phpversion}-fpm php${phpversion}-cli
-
-		if [ "$phpversion" == "7.1" ] || [ "$phpversion" == "7.2" ]
-		then
-			# Do not restore libpcre3 if php7.1 or 7.2 is still used.
-			if ! grep --quiet --extended-regexp "7.1|7.2" "/etc/php/ynh_app_version"
-			then
-				# Get the current version available for libpcre3 on the standard repo
-				local libpcre3_version=$(apt-cache madison "libpcre3" | grep "debian.org" | tail -n1 | awk '{print $3}')
-
-				# Force to reinstall the standard version of libpcre3
-				ynh_package_install --allow-downgrades libpcre3=$libpcre3_version >&2
-			fi
-		elif [ "$phpversion" == "7.3" ]
-		then
-			# Get the current version available for libpcre2-8-0 on the standard repo
-			local libpcre2_version=$(apt-cache madison "libpcre2-8-0" | grep "debian.org" | tail -n1 | awk '{print $3}')
-
-			# Force to reinstall the standard version of libpcre2-8-0
-			ynh_package_install --allow-downgrades libpcre2-8-0=$libpcre2_version
-		fi
-
+		# Purge php dependences for this version.
+		ynh_package_autopurge "php$phpversion php${phpversion}-fpm php${phpversion}-common"
 		# Remove the service from the admin panel
 		yunohost service remove php${phpversion}-fpm
 	fi
@@ -196,19 +131,16 @@ ynh_remove_php () {
 	# If no other app uses alternate php versions, remove the extra repo for php
 	if [ ! -s "/etc/php/ynh_app_version" ]
 	then
-		ynh_remove_extra_repo --name=php
 		ynh_secure_remove /etc/php/ynh_app_version
 	fi
 }
-
-
 
 #=================================================
 # FUTURE OFFICIAL HELPERS
 #=================================================
 # Pin a repository.
 #
-# usage: ynh_pin_repo --package=packages --pin=pin_filter --priority=priority_value [--name=name] [--append]
+# usage: ynh_pin_repo --package=packages --pin=pin_filter [--priority=priority_value] [--name=name] [--append]
 # | arg: -p, --package - Packages concerned by the pin. Or all, *.
 # | arg: -i, --pin - Filter for the pin.
 # | arg: -p, --priority - Priority for the pin
@@ -289,17 +221,19 @@ ynh_add_repo () {
 
 # Add an extra repository correctly, pin it and get the key.
 #
-# usage: ynh_install_extra_repo --repo="repo" [--key=key_url] [--name=name] [--append]
+# usage: ynh_install_extra_repo --repo="repo" [--key=key_url] [--priority=priority_value] [--name=name] [--append]
 # | arg: -r, --repo - Complete url of the extra repository.
 # | arg: -k, --key - url to get the public key.
+# | arg: -p, --priority - Priority for the pin
 # | arg: -n, --name - Name for the files for this repo, $app as default value.
 # | arg: -a, --append - Do not overwrite existing files.
 ynh_install_extra_repo () {
 	# Declare an array to define the options of this helper.
-	local legacy_args=rkna
-	declare -Ar args_array=( [r]=repo= [k]=key= [n]=name= [a]=append )
+	local legacy_args=rkpna
+	declare -Ar args_array=( [r]=repo= [k]=key= [p]=priority= [n]=name= [a]=append )
 	local repo
 	local key
+	local priority
 	local name
 	local append
 	# Manage arguments with getopts
@@ -307,6 +241,7 @@ ynh_install_extra_repo () {
 	name="${name:-$app}"
 	append=${append:-0}
 	key=${key:-0}
+	priority=${priority:-}
 
 	if [ $append -eq 1 ]
 	then
@@ -337,19 +272,18 @@ ynh_install_extra_repo () {
 	# Build $pin from the uri without http and any sub path
 	local pin="${uri#*://}"
 	pin="${pin%%/*}"
-	ynh_pin_repo --package="*" --pin="origin \"$pin\"" --name="$name" $append
+	# Set a priority only if asked
+	if [ -n "$priority" ]
+	then
+		priority="--priority=$priority"
+	fi
+	ynh_pin_repo --package="*" --pin="origin \"$pin\"" $priority --name="$name" $append
 
 	# Get the public key for the repo
 	if [ -n "$key" ]
 	then
 		mkdir -p "/etc/apt/trusted.gpg.d"
-		if [[ "$(basename "$key")" =~ ".asc" ]]
-		then
-			local key_ext=asc
-		else
-			local key_ext=gpg
-		fi
-		wget -q "$key" -O - | gpg --dearmor | $wget_append /etc/apt/trusted.gpg.d/$name.$key_ext > /dev/null
+		wget -q "$key" -O - | gpg --dearmor | $wget_append /etc/apt/trusted.gpg.d/$name.gpg > /dev/null
 	fi
 
 	# Update the list of package with the new repo
@@ -376,4 +310,123 @@ ynh_remove_extra_repo () {
 
 	# Update the list of package to exclude the old repo
 	ynh_package_update
+}
+
+# Install packages from an extra repository properly.
+#
+# usage: ynh_install_extra_app_dependencies --repo="repo" --package="dep1 dep2" [--key=key_url] [--name=name]
+# | arg: -r, --repo - Complete url of the extra repository.
+# | arg: -p, --package - The packages to install from this extra repository
+# | arg: -k, --key - url to get the public key.
+# | arg: -n, --name - Name for the files for this repo, $app as default value.
+ynh_install_extra_app_dependencies () {
+	# Declare an array to define the options of this helper.
+	local legacy_args=rpkn
+	declare -Ar args_array=( [r]=repo= [p]=package= [k]=key= [n]=name= )
+	local repo
+	local package
+	local key
+	local name
+	# Manage arguments with getopts
+	ynh_handle_getopts_args "$@"
+	name="${name:-$app}"
+	key=${key:-0}
+
+	# Set a key only if asked
+	if [ -n "$key" ]
+	then
+		key="--key=$key"
+	fi
+	# Add an extra repository for those packages
+	ynh_install_extra_repo --repo="$repo" $key --priority=995 --name=$name
+
+	# Install requested dependencies from this extra repository.
+	ynh_add_app_dependencies --package="$package"
+
+	# Remove this extra repository after packages are installed
+	ynh_remove_extra_repo --name=$app
+}
+
+#=================================================
+
+# patched version of ynh_install_app_dependencies to be used with ynh_add_app_dependencies
+
+# Define and install dependencies with a equivs control file
+# This helper can/should only be called once per app
+#
+# usage: ynh_install_app_dependencies dep [dep [...]]
+# | arg: dep - the package name to install in dependence
+#   You can give a choice between some package with this syntax : "dep1|dep2"
+#   Example : ynh_install_app_dependencies dep1 dep2 "dep3|dep4|dep5"
+#   This mean in the dependence tree : dep1 & dep2 & (dep3 | dep4 | dep5)
+#
+# Requires YunoHost version 2.6.4 or higher.
+ynh_install_app_dependencies () {
+    local dependencies=$@
+    dependencies="$(echo "$dependencies" | sed 's/\([^\<=\>]\)\ \([^(]\)/\1, \2/g')"
+    dependencies=${dependencies//|/ | }
+    local manifest_path="../manifest.json"
+    if [ ! -e "$manifest_path" ]; then
+    	manifest_path="../settings/manifest.json"	# Into the restore script, the manifest is not at the same place
+    fi
+
+    local version=$(grep '\"version\": ' "$manifest_path" | cut -d '"' -f 4)	# Retrieve the version number in the manifest file.
+    if [ ${#version} -eq 0 ]; then
+        version="1.0"
+    fi
+    local dep_app=${app//_/-}	# Replace all '_' by '-'
+
+    # Handle specific versions
+    if [[ "$dependencies" =~ [\<=\>] ]]
+    then
+        # Replace version specifications by relationships syntax
+        # https://www.debian.org/doc/debian-policy/ch-relationships.html
+        # Sed clarification
+        # [^(\<=\>] ignore if it begins by ( or < = >. To not apply twice.
+        # [\<=\>] matches < = or >
+        # \+ matches one or more occurence of the previous characters, for >= or >>.
+        # [^,]\+ matches all characters except ','
+        # Ex: package>=1.0 will be replaced by package (>= 1.0)
+        dependencies="$(echo "$dependencies" | sed 's/\([^(\<=\>]\)\([\<=\>]\+\)\([^,]\+\)/\1 (\2 \3)/g')"
+    fi
+
+    cat > /tmp/${dep_app}-ynh-deps.control << EOF	# Make a control file for equivs-build
+Section: misc
+Priority: optional
+Package: ${dep_app}-ynh-deps
+Version: ${version}
+Depends: ${dependencies}
+Architecture: all
+Description: Fake package for $app (YunoHost app) dependencies
+ This meta-package is only responsible of installing its dependencies.
+EOF
+    ynh_package_install_from_equivs /tmp/${dep_app}-ynh-deps.control \
+        || ynh_die --message="Unable to install dependencies"	# Install the fake package and its dependencies
+    rm /tmp/${dep_app}-ynh-deps.control
+    ynh_app_setting_set --app=$app --key=apt_dependencies --value="$dependencies"
+}
+
+ynh_add_app_dependencies () {
+	# Declare an array to define the options of this helper.
+	local legacy_args=pr
+	declare -Ar args_array=( [p]=package= [r]=replace)
+	local package
+	local replace
+	# Manage arguments with getopts
+	ynh_handle_getopts_args "$@"
+	replace=${replace:-0}
+
+	local current_dependencies=""
+	if [ $replace -eq 0 ]
+	then
+		local dep_app=${app//_/-}	# Replace all '_' by '-'
+		if ynh_package_is_installed --package="${dep_app}-ynh-deps"
+		then
+			current_dependencies="$(dpkg-query --show --showformat='${Depends}' ${dep_app}-ynh-deps) "
+		fi
+
+		current_dependencies=${current_dependencies// | /|}
+	fi
+
+	ynh_install_app_dependencies "${current_dependencies}${package}"
 }

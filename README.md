@@ -9,7 +9,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 ## Overview
 The federated image sharing service Pixelfed, for YunoHost
 
-**Shipped version:** 0.8.4
+**Shipped version:** 0.8.6
 
 I'm waiting for an official release (alpha/beta or stable) to invest more time on this package. 
 Don't hesitate to give a hand if you wish, I assume only the nginx file needs improvments.
@@ -41,6 +41,11 @@ After being first registered, you need to execute the folloing command to promot
     $ (cd /var/www/pixelfed && php artisan user:admin 1)
 
 and respond yes to the question ` Add admin privileges to this user?`
+
+### Allow/Close registration
+
+Registrations are open by default.
+To change that setting, edit `/var/www/pixelfed/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
 
 ## Documentation
 

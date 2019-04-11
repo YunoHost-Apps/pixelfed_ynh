@@ -47,11 +47,6 @@ ynh_remove_nginx_config
 #=================================================
 ynh_print_info "Removing php-fpm configuration"
 
-#Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
-mv "/etc/php/7.2/fpm/pool.d/$app.conf" "/etc/php/7.0/fpm/pool.d/$app.conf"
-systemctl reload php7.2-fpm
-systemctl reload php7.0-fpm
-
 # Remove the dedicated php-fpm config
 ynh_remove_fpm_config
 
