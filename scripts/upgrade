@@ -169,10 +169,8 @@ popd
 # STORE THE CHECKSUM OF THE CONFIG FILE
 #=================================================
 
-# Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$config"
-
 ynh_backup_if_checksum_is_different "$config"
+
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum "$config"
 
