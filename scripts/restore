@@ -73,14 +73,18 @@ chown -R "$app": "$final_path"
 #=================================================
 # SPECIFIC RESTORATION
 #=================================================
-# REINSTALL DEPENDENCIES
+# INSTALL DEPENDENCIES
 #=================================================
-ynh_print_info "Reinstalling dependencies..."
-
-# Define and install dependencies
-ynh_install_php --phpversion="7.2"
+ynh_print_info "Installing dependencies..."
 
 ynh_install_app_dependencies "$pkg_dependencies"
+
+#=================================================
+# INSTALL PHP
+#=================================================
+ynh_print_info "Installing php..."
+
+ynh_install_php --phpversion="7.2" --package="$extra_pkg_dependencies"
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE
@@ -88,7 +92,7 @@ ynh_install_app_dependencies "$pkg_dependencies"
 ynh_print_info "Restoring the PostgreSQL database..."
 
 ynh_psql_test_if_first_run
-ynh_psql_create_db "$db_name" "$db_name" "$db_pwd"
+ynh_psql_setup_db "$db_name" "$db_name" "$db_pwd"
 ynh_psql_execute_file_as_root ./db.sql "$db_name"
 
 #=================================================
