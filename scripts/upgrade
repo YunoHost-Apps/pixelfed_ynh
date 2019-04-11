@@ -23,6 +23,8 @@ is_public=$(ynh_app_setting_get "$app" is_public)
 final_path=$(ynh_app_setting_get "$app" final_path)
 language=$(ynh_app_setting_get "$app" language)
 db_name=$(ynh_app_setting_get "$app" db_name)
+db_user=$db_name
+db_pwd=$(ynh_app_setting_get "$app" db_pwd)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -135,6 +137,20 @@ chown -R "$app": "$final_path"
 ynh_install_composer --workdir="$final_path"
 
 #=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+config="$final_path/.env"
+cp -f ../conf/.env "$config"
+
+ynh_replace_string "__APP__"     "$app"      "$config"
+ynh_replace_string "__DOMAIN__"  "$domain"   "$config"
+ynh_replace_string "__PATH__"    "$path_url" "$config"
+ynh_replace_string "__DB_NAME__" "$db_name"  "$config"
+ynh_replace_string "__DB_USER__" "$db_user"  "$config"
+ynh_replace_string "__DB_PWD__"  "$db_pwd"   "$config"
+
+#=================================================
 # DEPLOYMENT
 #=================================================
 
@@ -149,9 +165,14 @@ pushd "$final_path"
 	php7.2 artisan horizon:purge
 popd
 
-ynh_backup_if_checksum_is_different "$final_path/CONFIG_FILE"
+#=================================================
+# STORE THE CHECKSUM OF THE CONFIG FILE
+#=================================================
+
+ynh_backup_if_checksum_is_different "$config"
+
 # Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum "$final_path/.env"
+ynh_store_file_checksum "$config"
 
 #=================================================
 # GENERIC FINALIZATION
