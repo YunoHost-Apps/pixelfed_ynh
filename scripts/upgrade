@@ -99,9 +99,14 @@ ynh_add_nginx_config
 #=================================================
 ynh_print_info "Upgrading dependencies..."
 
-ynh_install_php --phpversion="7.2"
-
 ynh_install_app_dependencies "$pkg_dependencies"
+
+#=================================================
+# UPGRADE PHP
+#=================================================
+ynh_print_info "Upgrading php..."
+
+ynh_install_php --phpversion="7.2" --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE DEDICATED USER
@@ -116,20 +121,8 @@ ynh_system_user_create "$app"
 #=================================================
 ynh_print_info "Upgrading php-fpm configuration..."
 
-#Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
-mv -f "/etc/php/7.2/fpm/pool.d/$app.conf" "/etc/php/7.0/fpm/pool.d/$app.conf"
-sleep 5
-systemctl reload php7.2-fpm
-systemctl reload php7.0-fpm
-
 # Create a dedicated php-fpm config
 ynh_add_fpm_config --phpversion="7.2"
-
-#Ugly move waiting 'ynh_add_fpm_config --phpversion='' released
-mv -f "/etc/php/7.0/fpm/pool.d/$app.conf" "/etc/php/7.2/fpm/pool.d/$app.conf"
-sleep 5
-systemctl reload php7.0-fpm
-systemctl reload php7.2-fpm
 
 #=================================================
 # SPECIFIC UPGRADE
