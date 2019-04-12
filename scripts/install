@@ -23,7 +23,8 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 is_public=$YNH_APP_ARG_IS_PUBLIC
-app_key=$(ynh_string_random 32)
+app_key=$(ynh_string_random 32 | base64)
+app_key="base64:$app_key"
 
 app=$YNH_APP_INSTANCE_NAME
 

@@ -25,6 +25,7 @@ language=$(ynh_app_setting_get "$app" language)
 db_name=$(ynh_app_setting_get "$app" db_name)
 db_user=$db_name
 db_pwd=$(ynh_app_setting_get "$app" db_pwd)
+app_key=$(ynh_app_setting_get "$app" app_key)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -50,6 +51,12 @@ fi
 if [ -z "$final_path" ]; then
 	final_path=/var/www/$app
 	ynh_app_setting_set "$app" final_path "$final_path"
+fi
+
+# If app_key doesn't exist, retrieve it
+if [ -z "$app_key" ]; then
+	app_key=$(grep -oP "APP_KEY=\Kbase64.*" "$final_path/.env")
+	ynh_app_setting_set "$app" app_key "$app_key"
 fi
 
 #=================================================
@@ -141,9 +148,10 @@ ynh_install_composer --workdir="$final_path"
 #=================================================
 
 config="$final_path/.env"
-cp -f ../conf/.env "$config"
+cp ../conf/.env "$config"
 
 ynh_replace_string "__APP__"     "$app"      "$config"
+ynh_replace_string "__APP_KEY__"     "$app_key"      "$config"
 ynh_replace_string "__DOMAIN__"  "$domain"   "$config"
 ynh_replace_string "__PATH__"    "$path_url" "$config"
 ynh_replace_string "__DB_NAME__" "$db_name"  "$config"
