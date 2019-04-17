@@ -96,6 +96,9 @@ ynh_install_php () {
 	ynh_add_app_dependencies --package="php${phpversion}-fpm"
 	ynh_add_app_dependencies --package="php$phpversion php${phpversion}-common $package"
 
+	# Set php7.0 back as the default version for php-cli.
+	update-alternatives --set php /usr/bin/php7.0
+
 	# Remove this extra repository after packages are installed
 	ynh_remove_extra_repo --name=extra_php_version
 
