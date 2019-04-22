@@ -23,6 +23,8 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 is_public=$YNH_APP_ARG_IS_PUBLIC
+app_key=$(ynh_string_random 32 | base64)
+app_key="base64:$app_key"
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -44,6 +46,7 @@ ynh_webpath_register "$app" "$domain" "$path_url"
 ynh_app_setting_set "$app" domain "$domain"
 ynh_app_setting_set "$app" path "$path_url"
 ynh_app_setting_set "$app" is_public "$is_public"
+ynh_app_setting_set "$app" app_key "$app_key"
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -129,6 +132,7 @@ config="$final_path/.env"
 cp ../conf/.env "$config"
 
 ynh_replace_string "__APP__"     "$app"      "$config"
+ynh_replace_string "__APP_KEY__"     "$app_key"      "$config"
 ynh_replace_string "__DOMAIN__"  "$domain"   "$config"
 ynh_replace_string "__PATH__"    "$path_url" "$config"
 ynh_replace_string "__DB_NAME__" "$db_name"  "$config"
