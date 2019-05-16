@@ -57,11 +57,11 @@ ynh_install_composer () {
 	curl -sS https://getcomposer.org/installer \
 		| COMPOSER_HOME="$workdir/.composer" \
 		php${phpversion} -- --quiet --install-dir="$workdir" \
-		|| ynh_die "Unable to install Composer."
+		|| ynh_die --message="Unable to install Composer."
 
 	# update dependencies to create composer.lock
 	ynh_composer_exec --phpversion="${phpversion}" --workdir="$workdir" --commands="install --no-dev" \
-		|| ynh_die "Unable to update core dependencies with Composer."
+		|| ynh_die --message="Unable to update core dependencies with Composer."
 }
 
 
@@ -85,7 +85,7 @@ ynh_install_php () {
 
 	if [ "$phpversion" == "7.0" ]
 	then
-		ynh_die "Do not use ynh_install_php to install php7.0"
+		ynh_die --message="Do not use ynh_install_php to install php7.0"
 	fi
 
 	# Store the ID of this app and the version of php requested for it

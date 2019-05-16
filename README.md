@@ -11,19 +11,6 @@ The federated image sharing service Pixelfed, for YunoHost
 
 **Shipped version:** 0.9.0
 
-I'm waiting for an official release (alpha/beta or stable) to invest more time on this package. 
-Don't hesitate to give a hand if you wish, I assume only the nginx file needs improvments.
-
-# State of this package
-
-* works fine:
-
-  * [x] basic install/remove process
-  * [x] backup/restore
-
-* to be confirmed
-  * [ ] fail2ban support
-
 ## Screenshots
 
 ![](https://camo.githubusercontent.com/c1c2e74057dcff57e103fcbb3239840802fcf752/68747470733a2f2f706978656c6665642e6e7963332e63646e2e6469676974616c6f6365616e7370616365732e636f6d2f6d656469612f53637265656e25323053686f74253230323031392d30322d30352532306174253230362e33342e3539253230504d2e706e67)
@@ -53,15 +40,15 @@ To change that setting, edit `/var/www/pixelfed/.env` and set `OPEN_REGISTRATION
 
 #### Supported architectures
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/pixelfed%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/pixelfed%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/pixelfed/)
-* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/pixelfed%20%28Community%29.svg)](https://ci-stretch.nohost.me/ci/apps/pixelfed/)
+* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/pixelfed/)
+* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-stretch.nohost.me/ci/apps/pixelfed/)
 
 ## Links
 
  * Report a bug about this package: https://github.com/YunoHost-Apps/pixelfed_ynh
  * Pixelfed website: https://pixelfed.org
- * Pixelfed github website: https://github.com/pixelfed/pixelfed
+ * Upstream app repository: https://github.com/pixelfed/pixelfed
  * YunoHost website: https://yunohost.org
 
 ---
