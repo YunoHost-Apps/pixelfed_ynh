@@ -159,6 +159,21 @@ ynh_replace_string "__DB_USER__" "$db_user"  "$config"
 ynh_replace_string "__DB_PWD__"  "$db_pwd"   "$config"
 
 #=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+config="$final_path/.env"
+cp ../conf/.env "$config"
+
+ynh_replace_string "__APP__"     "$app"      "$config"
+ynh_replace_string "__APP_KEY__"     "$app_key"      "$config"
+ynh_replace_string "__DOMAIN__"  "$domain"   "$config"
+ynh_replace_string "__PATH__"    "$path_url" "$config"
+ynh_replace_string "__DB_NAME__" "$db_name"  "$config"
+ynh_replace_string "__DB_USER__" "$db_user"  "$config"
+ynh_replace_string "__DB_PWD__"  "$db_pwd"   "$config"
+
+#=================================================
 # DEPLOYMENT
 #=================================================
 
