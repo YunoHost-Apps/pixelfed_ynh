@@ -19,12 +19,10 @@ Don't hesitate to give a hand if you wish, I assume only the nginx file needs im
 * works fine:
 
   * [x] basic install/remove process
+  * [x] backup/restore
 
 * to be confirmed
-  * [ ] 
-
-* to be added:
-  * [ ] everything
+  * [ ] fail2ban support
 
 ## Screenshots
 
