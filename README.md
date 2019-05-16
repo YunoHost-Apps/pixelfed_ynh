@@ -9,7 +9,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 ## Overview
 The federated image sharing service Pixelfed, for YunoHost
 
-**Shipped version:** 0.8.6
+**Shipped version:** 0.9.0
 
 I'm waiting for an official release (alpha/beta or stable) to invest more time on this package. 
 Don't hesitate to give a hand if you wish, I assume only the nginx file needs improvments.

@@ -21,13 +21,14 @@ extra_pkg_dependencies="php7.2-bcmath php7.2-cli php7.2-curl php7.2-exif php7.2-
 
 # Execute a command with Composer
 #
-# usage: ynh_composer_exec [--workdir=$final_path] --commands="commands"
+# usage: ynh_composer_exec --phpversion=phpversion [--workdir=$final_path] --commands="commands"
 # | arg: -w, --workdir - The directory from where the command will be executed. Default $final_path.
 # | arg: -c, --commands - Commands to execute.
 ynh_composer_exec () {
 	# Declare an array to define the options of this helper.
-	local legacy_args=wc
-	declare -Ar args_array=( [w]=workdir= [c]=commands= )
+	local legacy_args=vwc
+	declare -Ar args_array=( [v]=phpversion= [w]=workdir= [c]=commands= )
+	local phpversion
 	local workdir
 	local commands
 	# Manage arguments with getopts
@@ -35,18 +36,19 @@ ynh_composer_exec () {
 	workdir="${workdir:-$final_path}"
 
 	COMPOSER_HOME="$workdir/.composer" \
-		php "$workdir/composer.phar" $commands \
+		php${phpversion} "$workdir/composer.phar" $commands \
 		-d "$workdir" --quiet --no-interaction
 }
 
 # Install and initialize Composer in the given directory
 #
-# usage: ynh_install_composer [--workdir=$final_path]
+# usage: ynh_install_composer --phpversion=phpversion [--workdir=$final_path]
 # | arg: -w, --workdir - The directory from where the command will be executed. Default $final_path.
 ynh_install_composer () {
 	# Declare an array to define the options of this helper.
-	local legacy_args=w
-	declare -Ar args_array=( [w]=workdir= )
+	local legacy_args=vw
+	declare -Ar args_array=( [v]=phpversion= [w]=workdir= )
+	local phpversion
 	local workdir
 	# Manage arguments with getopts
 	ynh_handle_getopts_args "$@"
@@ -54,13 +56,14 @@ ynh_install_composer () {
 
 	curl -sS https://getcomposer.org/installer \
 		| COMPOSER_HOME="$workdir/.composer" \
-		php -- --quiet --install-dir="$workdir" \
+		php${phpversion} -- --quiet --install-dir="$workdir" \
 		|| ynh_die "Unable to install Composer."
 
 	# update dependencies to create composer.lock
-	ynh_composer_exec --workdir="$workdir" --commands="install --no-dev" \
+	ynh_composer_exec --phpversion="${phpversion}" --workdir="$workdir" --commands="install --no-dev" \
 		|| ynh_die "Unable to update core dependencies with Composer."
 }
+
 
 # Install another version of php.
 #
@@ -95,6 +98,9 @@ ynh_install_php () {
 	# Install php-fpm first, otherwise php will install apache as a dependency.
 	ynh_add_app_dependencies --package="php${phpversion}-fpm"
 	ynh_add_app_dependencies --package="php$phpversion php${phpversion}-common $package"
+
+	# Set php7.0 back as the default version for php-cli.
+	update-alternatives --set php /usr/bin/php7.0
 
 	# Remove this extra repository after packages are installed
 	ynh_remove_extra_repo --name=extra_php_version
