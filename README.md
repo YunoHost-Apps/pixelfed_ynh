@@ -38,7 +38,7 @@ After being first registered, you need to execute the folloing command to promot
 
 **Run:**
 
-    $ (cd /var/www/pixelfed && php artisan user:admin 1)
+    $ (cd /var/www/pixelfed && php7.2 artisan user:admin 1)
 
 and respond yes to the question ` Add admin privileges to this user?`
 
