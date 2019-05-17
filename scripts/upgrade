@@ -121,7 +121,7 @@ ynh_install_php --phpversion="7.2" --package="$extra_pkg_dependencies"
 ynh_print_info --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create "$app"
+ynh_system_user_create --username="$app"
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -195,7 +195,7 @@ chown -R "$app": "$final_path"
 ynh_print_info --message="Upgrading SSOwat configuration..."
 
 # Make app public if necessary
-if [ $is_public -eq 1 ]
+if [ "$is_public" -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway
 	ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/"
