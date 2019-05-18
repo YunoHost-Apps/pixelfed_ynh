@@ -72,16 +72,6 @@ ynh_system_user_create --username="$app"
 chown -R "$app": "$final_path"
 
 #=================================================
-# SPECIFIC RESTORATION
-#=================================================
-# REINSTALL DEPENDENCIES
-#=================================================
-ynh_print_info --message="Reinstalling dependencies..."
-
-# Define and install dependencies
-ynh_install_app_dependencies "$pkg_dependencies"
-
-#=================================================
 # INSTALL PHP
 #=================================================
 ynh_print_info --message="Installing php..."
@@ -93,6 +83,16 @@ ynh_install_php --phpversion="7.2" --package="$extra_pkg_dependencies"
 #=================================================
 
 ynh_restore_file --origin_path="/etc/php/7.2/fpm/pool.d/$app.conf"
+
+#=================================================
+# SPECIFIC RESTORATION
+#=================================================
+# REINSTALL DEPENDENCIES
+#=================================================
+ynh_print_info --message="Reinstalling dependencies..."
+
+# Define and install dependencies
+ynh_install_app_dependencies "$pkg_dependencies"
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE
