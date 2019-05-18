@@ -23,7 +23,7 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 is_public=$YNH_APP_ARG_IS_PUBLIC
-app_key=$(ynh_string_random 32 | base64)
+app_key=$(ynh_string_random --length=32 | base64)
 app_key="base64:$app_key"
 
 app=$YNH_APP_INSTANCE_NAME
@@ -31,69 +31,67 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_print_info "Validating installation parameters..."
+ynh_print_info --message="Validating installation parameters..."
 
 final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die "This path already contains a folder"
+test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
 # Register (book) web path
-ynh_webpath_register "$app" "$domain" "$path_url"
+ynh_webpath_register --app="$app" --domain="$domain" --path_url="$path_url"
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
 
-ynh_app_setting_set "$app" domain "$domain"
-ynh_app_setting_set "$app" path "$path_url"
-ynh_app_setting_set "$app" is_public "$is_public"
-ynh_app_setting_set "$app" app_key "$app_key"
+ynh_app_setting_set --app="$app" --key=domain --value="$domain"
+ynh_app_setting_set --app="$app" --key=path --value="$path_url"
+ynh_app_setting_set --app="$app" --key=is_public --value="$is_public"
+ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_print_info "Installing dependencies..."
+ynh_print_info --message="Installing dependencies..."
 
 ynh_install_app_dependencies "$pkg_dependencies"
 
 #=================================================
 # INSTALL PHP
 #=================================================
-ynh_print_info "Installing php..."
+ynh_print_info --message="Installing php..."
 
 ynh_install_php --phpversion="7.2" --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
 #=================================================
-ynh_print_info "Creating a PostgreSQL database..."
+ynh_print_info --message="Creating a PostgreSQL database..."
 
 ynh_psql_test_if_first_run
 
 db_name=$(ynh_sanitize_dbid "$app")
 db_user=$db_name
 db_pwd=$(ynh_string_random)
-ynh_app_setting_set "$app" db_name "$db_name"
-ynh_app_setting_set "$app" db_pwd  "$db_pwd"
+ynh_app_setting_set --app="$app" --key=db_name --value="$db_name"
+ynh_app_setting_set --app="$app" --key=db_pwd  --value="$db_pwd"
 
 # Initialize database and store postgres password for upgrade
-ynh_psql_setup_db "$db_user" "$db_name" "$db_pwd"
-
-systemctl reload postgresql
+ynh_psql_setup_db --db_user="$db_user" --db_name="$db_name" --db_pwd="$db_pwd"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
-ynh_app_setting_set "$app" final_path "$final_path"
+ynh_app_setting_set --app="$app" --key=final_path --value="$final_path"
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
+ynh_setup_source --dest_dir="$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info "Configuring nginx web server..."
+ynh_print_info --message="Configuring nginx web server..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -101,15 +99,15 @@ ynh_add_nginx_config
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_print_info "Configuring system user..."
+ynh_print_info --message="Configuring system user..."
 
 # Create a system user
-ynh_system_user_create "$app"
+ynh_system_user_create --username="$app"
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_print_info "Configuring php-fpm..."
+ynh_print_info --message="Configuring php-fpm..."
 
 # Create a dedicated php-fpm config
 ynh_add_fpm_config --phpversion="7.2"
@@ -131,20 +129,20 @@ ynh_install_composer --phpversion="7.2" --workdir="$final_path"
 config="$final_path/.env"
 cp ../conf/.env "$config"
 
-ynh_replace_string "__APP__"     "$app"      "$config"
-ynh_replace_string "__APP_KEY__"     "$app_key"      "$config"
-ynh_replace_string "__DOMAIN__"  "$domain"   "$config"
-ynh_replace_string "__PATH__"    "$path_url" "$config"
-ynh_replace_string "__DB_NAME__" "$db_name"  "$config"
-ynh_replace_string "__DB_USER__" "$db_user"  "$config"
-ynh_replace_string "__DB_PWD__"  "$db_pwd"   "$config"
+ynh_replace_string --match_string="__APP__"     --replace_string="$app"      --target_file="$config"
+ynh_replace_string --match_string="__APP_KEY__" --replace_string="$app_key"  --target_file="$config"
+ynh_replace_string --match_string="__DOMAIN__"  --replace_string="$domain"   --target_file="$config"
+ynh_replace_string --match_string="__PATH__"    --replace_string="$path_url" --target_file="$config"
+ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name"  --target_file="$config"
+ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user"  --target_file="$config"
+ynh_replace_string --match_string="__DB_PWD__"  --replace_string="$db_pwd"   --target_file="$config"
 
 #=================================================
 # STORE THE CHECKSUM OF THE CONFIG FILE
 #=================================================
 
 # Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$config"
+ynh_store_file_checksum --file="$config"
 
 #=================================================
 # DEPLOYMENT
@@ -174,24 +172,24 @@ chown -R "$app": "$final_path/storage/"
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_print_info "Configuring SSOwat..."
+ynh_print_info --message="Configuring SSOwat..."
 
 # Make app public if necessary
 if [ "$is_public" -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set "$app" unprotected_uris "/"
+	ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info "Reloading nginx web server..."
+ynh_print_info --message="Reloading nginx web server..."
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info "Installation of $app completed"
+ynh_print_info --message="Installation of $app completed"

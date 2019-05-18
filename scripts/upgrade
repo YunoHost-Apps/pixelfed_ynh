@@ -12,57 +12,63 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_print_info "Loading installation settings..."
+ynh_print_info --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_app_setting_get "$app" path)
-admin=$(ynh_app_setting_get "$app" admin)
-is_public=$(ynh_app_setting_get "$app" is_public)
-final_path=$(ynh_app_setting_get "$app" final_path)
-language=$(ynh_app_setting_get "$app" language)
-db_name=$(ynh_app_setting_get "$app" db_name)
+domain=$(ynh_app_setting_get --app="$app" --key=domain)
+path_url=$(ynh_app_setting_get --app="$app" --key=path)
+admin=$(ynh_app_setting_get --app="$app" --key=admin)
+is_public=$(ynh_app_setting_get --app="$app" --key=is_public)
+final_path=$(ynh_app_setting_get --app="$app" --key=final_path)
+language=$(ynh_app_setting_get --app="$app" --key=language)
+db_name=$(ynh_app_setting_get --app="$app" --key=db_name)
 db_user=$db_name
-db_pwd=$(ynh_app_setting_get "$app" db_pwd)
-app_key=$(ynh_app_setting_get "$app" app_key)
+db_pwd=$(ynh_app_setting_get --app="$app" --key=db_pwd)
+app_key=$(ynh_app_setting_get --app="$app" --key=app_key)
+
+#=================================================
+# CHECK VERSION
+#=================================================
+
+upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_print_info "Ensuring downward compatibility..."
+ynh_print_info --message="Ensuring downward compatibility..."
 
 # Fix is_public as a boolean value
 if [ "$is_public" = "Yes" ]; then
-	ynh_app_setting_set "$app" is_public 1
+	ynh_app_setting_set --app="$app" --key=is_public --value=1
 	is_public=1
 elif [ "$is_public" = "No" ]; then
-	ynh_app_setting_set "$app" is_public 0
+	ynh_app_setting_set --app="$app" --key=is_public --value=0
 	is_public=0
 fi
 
 # If db_name doesn't exist, create it
 if [ -z "$db_name" ]; then
-	db_name=$(ynh_sanitize_dbid "$app")
-	ynh_app_setting_set "$app" db_name "$db_name"
+	db_name=$(ynh_sanitize_dbid --db_name="$app")
+	ynh_app_setting_set --app="$app" --key=db_name --value="$db_name"
 fi
 
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
 	final_path=/var/www/$app
-	ynh_app_setting_set "$app" final_path "$final_path"
+	ynh_app_setting_set --app="$app" --key=final_path --value="$final_path"
 fi
 
 # If app_key doesn't exist, retrieve it
 if [ -z "$app_key" ]; then
 	app_key=$(grep -oP "APP_KEY=\Kbase64.*" "$final_path/.env")
-	ynh_app_setting_set "$app" app_key "$app_key"
+	ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 fi
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_print_info "Backing up the app before upgrading (may take a while)..."
+ynh_print_info --message="Backing up the app before upgrading (may take a while)..."
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -74,31 +80,23 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 #=================================================
-# CHECK THE PATH
-#=================================================
-
-# Normalize the URL path syntax
-# N.B. : this is for app installations before YunoHost 2.7
-# where this value might be something like /foo/ or foo/
-# instead of /foo ....
-# If nobody installed your app before 2.7, then you may
-# safely remove this line
-path_url=$(ynh_normalize_url_path "$path_url")
-
-#=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_print_info "Upgrading source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_print_info --message="Upgrading source files..."
+
+	# Download, check integrity, uncompress and patch the source from app.src
+	ynh_setup_source --dest_dir="$final_path"
+fi
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info "Upgrading nginx web server configuration..."
+ynh_print_info --message="Upgrading nginx web server configuration..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -106,29 +104,29 @@ ynh_add_nginx_config
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_print_info "Upgrading dependencies..."
+ynh_print_info --message="Upgrading dependencies..."
 
 ynh_install_app_dependencies "$pkg_dependencies"
 
 #=================================================
 # UPGRADE PHP
 #=================================================
-ynh_print_info "Upgrading php..."
+ynh_print_info --message="Upgrading php..."
 
 ynh_install_php --phpversion="7.2" --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_print_info "Making sure dedicated system user exists..."
+ynh_print_info --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create "$app"
+ynh_system_user_create --username="$app"
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_print_info "Upgrading php-fpm configuration..."
+ynh_print_info --message="Upgrading php-fpm configuration..."
 
 # Create a dedicated php-fpm config
 ynh_add_fpm_config --phpversion="7.2"
@@ -150,28 +148,13 @@ ynh_install_composer --phpversion="7.2" --workdir="$final_path"
 config="$final_path/.env"
 cp ../conf/.env "$config"
 
-ynh_replace_string "__APP__"     "$app"      "$config"
-ynh_replace_string "__APP_KEY__"     "$app_key"      "$config"
-ynh_replace_string "__DOMAIN__"  "$domain"   "$config"
-ynh_replace_string "__PATH__"    "$path_url" "$config"
-ynh_replace_string "__DB_NAME__" "$db_name"  "$config"
-ynh_replace_string "__DB_USER__" "$db_user"  "$config"
-ynh_replace_string "__DB_PWD__"  "$db_pwd"   "$config"
-
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-
-config="$final_path/.env"
-cp ../conf/.env "$config"
-
-ynh_replace_string "__APP__"     "$app"      "$config"
-ynh_replace_string "__APP_KEY__"     "$app_key"      "$config"
-ynh_replace_string "__DOMAIN__"  "$domain"   "$config"
-ynh_replace_string "__PATH__"    "$path_url" "$config"
-ynh_replace_string "__DB_NAME__" "$db_name"  "$config"
-ynh_replace_string "__DB_USER__" "$db_user"  "$config"
-ynh_replace_string "__DB_PWD__"  "$db_pwd"   "$config"
+ynh_replace_string --match_string="__APP__"     --replace_string="$app"      --target_file="$config"
+ynh_replace_string --match_string="__APP_KEY__" --replace_string="$app_key"  --target_file="$config"
+ynh_replace_string --match_string="__DOMAIN__"  --replace_string="$domain"   --target_file="$config"
+ynh_replace_string --match_string="__PATH__"    --replace_string="$path_url" --target_file="$config"
+ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name"  --target_file="$config"
+ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user"  --target_file="$config"
+ynh_replace_string --match_string="__DB_PWD__"  --replace_string="$db_pwd"   --target_file="$config"
 
 #=================================================
 # DEPLOYMENT
@@ -189,13 +172,13 @@ pushd "$final_path"
 popd
 
 #=================================================
-# STORE THE CHECKSUM OF THE CONFIG FILE
+# STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
-ynh_backup_if_checksum_is_different "$config"
+ynh_backup_if_checksum_is_different --file="$config"
 
 # Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum "$config"
+ynh_store_file_checksum --file="$config"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -209,24 +192,24 @@ chown -R "$app": "$final_path"
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_print_info "Upgrading SSOwat configuration..."
+ynh_print_info --message="Upgrading SSOwat configuration..."
 
 # Make app public if necessary
-if [ $is_public -eq 1 ]
+if [ "$is_public" -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway
-	ynh_app_setting_set "$app" unprotected_uris "/"
+	ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info "Reloading nginx web server..."
+ynh_print_info --message="Reloading nginx web server..."
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info "Upgrade of $app completed"
+ynh_print_info --message="Upgrade of $app completed"
