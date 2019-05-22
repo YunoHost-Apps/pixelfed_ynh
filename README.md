@@ -9,22 +9,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 ## Overview
 The federated image sharing service Pixelfed, for YunoHost
 
-**Shipped version:** 0.8.4
-
-I'm waiting for an official release (alpha/beta or stable) to invest more time on this package. 
-Don't hesitate to give a hand if you wish, I assume only the nginx file needs improvments.
-
-# State of this package
-
-* works fine:
-
-  * [x] basic install/remove process
-
-* to be confirmed
-  * [ ] 
-
-* to be added:
-  * [ ] everything
+**Shipped version:** 0.9.0
 
 ## Screenshots
 
@@ -38,9 +23,14 @@ After being first registered, you need to execute the folloing command to promot
 
 **Run:**
 
-    $ (cd /var/www/pixelfed && php artisan user:admin 1)
+    $ (cd /var/www/pixelfed && php7.2 artisan user:admin 1)
 
 and respond yes to the question ` Add admin privileges to this user?`
+
+### Allow/Close registration
+
+Registrations are open by default.
+To change that setting, edit `/var/www/pixelfed/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
 
 ## Documentation
 
@@ -50,15 +40,15 @@ and respond yes to the question ` Add admin privileges to this user?`
 
 #### Supported architectures
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/pixelfed%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/pixelfed%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/pixelfed/)
-* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/pixelfed%20%28Community%29.svg)](https://ci-stretch.nohost.me/ci/apps/pixelfed/)
+* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/pixelfed/)
+* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-stretch.nohost.me/ci/apps/pixelfed/)
 
 ## Links
 
  * Report a bug about this package: https://github.com/YunoHost-Apps/pixelfed_ynh
  * Pixelfed website: https://pixelfed.org
- * Pixelfed github website: https://github.com/pixelfed/pixelfed
+ * Upstream app repository: https://github.com/pixelfed/pixelfed
  * YunoHost website: https://yunohost.org
 
 ---
