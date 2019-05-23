@@ -8,10 +8,15 @@
     "version": "0.9.0~ynh2",
     "url": "https://pixelfed.org/",
     "license": "AGPL-3.0-or-later",
-    "maintainer": {
-        "name": "Jean-Baptiste Holcroft",
-        "email": "jean-baptiste@holcroft.fr"
-    },
+    "maintainer": [
+        {
+            "name": "Jean-Baptiste Holcroft",
+            "email": "jean-baptiste@holcroft.fr"
+        },
+        {
+            "name": "yalh76"
+        }
+    ],
     "requirements": {
         "yunohost": ">= 3.5"
     },
