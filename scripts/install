@@ -123,6 +123,14 @@ ynh_install_composer --phpversion="7.2" --workdir="$final_path"
 #=================================================
 # SPECIFIC SETUP
 #=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_print_info --message="Configuring a systemd service..."
+
+# Create a dedicated systemd config
+ynh_add_systemd_config --service="${app}-horizon" --template=horizon
+
+#=================================================
 # MODIFY A CONFIG FILE
 #=================================================
 
@@ -168,6 +176,20 @@ popd
 # Set permissions to app files
 chown -R root: "$final_path"
 chown -R "$app": "$final_path/storage/"
+
+#=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
+
+yunohost service add "${app}-horizon" --description "${app}-horizon daemon for $app" --log "/var/log/$app/${app}-horizon.log"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_print_info --message="Starting a systemd service..."
+
+# Start a systemd service
+ynh_systemd_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # SETUP SSOWAT

@@ -1,0 +1,14 @@
+[Unit]
+Description=__APP__ Horizon Service
+After=network.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+WorkingDirectory=__FINALPATH__/
+ExecStart=/usr/bin/php7.2 __FINALPATH__/artisan horizon >> /var/log/__APP__/__APP__-horizon.log 2>&1
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
