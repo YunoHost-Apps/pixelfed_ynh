@@ -33,7 +33,7 @@ db_name=$(ynh_app_setting_get --app="$app" --key=db_name)
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a systemd service..." --time --weight=1
+ynh_print_info --message="Stopping a systemd service..."
 
 ynh_systemd_action --service_name="${app}-horizon" --action="stop" --log_path="/var/log/$app/${app}-horizon.log"
 
