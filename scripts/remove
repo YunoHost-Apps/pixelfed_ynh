@@ -24,6 +24,25 @@ final_path=$(ynh_app_setting_get --app="$app" --key=final_path)
 #=================================================
 # STANDARD REMOVE
 #=================================================
+# REMOVE SERVICE FROM ADMIN PANEL
+#=================================================
+
+# Remove a service from the admin panel, added by `yunohost service add`
+if ynh_exec_warn_less yunohost service status ${app}-horizon >/dev/null
+then
+	ynh_print_info --message="Removing ${app}-horizon service..."
+	yunohost service remove "${app}-horizon"
+fi
+
+#=================================================
+# STOP AND REMOVE SERVICE
+#=================================================
+ynh_print_info --message="Stopping and removing the systemd service..."
+
+# Remove the dedicated systemd config
+ynh_remove_systemd_config --service="${app}-horizon"
+
+#=================================================
 # REMOVE THE POSTGRESQL DATABASE
 #=================================================
 ynh_print_info --message="Removing the PostgreSQL database..."
