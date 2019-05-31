@@ -65,6 +65,10 @@ if [ -z "$app_key" ]; then
 	ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 fi
 
+if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
+	ynh_add_systemd_config --service="${app}-horizon" --template=horizon.service
+fi
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -73,6 +77,7 @@ ynh_print_info --message="Backing up the app before upgrading (may take a while)
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
+	read -p "key"
 	# restore it if the upgrade fails
 	ynh_restore_upgradebackup
 }
@@ -81,6 +86,13 @@ ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
+#=================================================
+# STOP SYSTEMD SERVICE
+#=================================================
+ynh_print_info --message="Stopping a systemd service..."
+
+ynh_systemd_action --service_name="${app}-horizon" --action="stop" --log_path=systemd
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
@@ -181,6 +193,20 @@ ynh_backup_if_checksum_is_different --file="$config"
 ynh_store_file_checksum --file="$config"
 
 #=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_print_info --message="Upgrading systemd configuration..."
+
+# Create a dedicated systemd config
+ynh_add_systemd_config --service="${app}-horizon" --template=horizon.service
+
+#=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
+
+yunohost service add "${app}-horizon" --description "${app}-horizon daemon for $app" --log "/var/log/$app/${app}-horizon.log"
+
+#=================================================
 # GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES
@@ -200,6 +226,13 @@ then
 	# unprotected_uris allows SSO credentials to be passed anyway
 	ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/"
 fi
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_print_info --message="Starting a systemd service..."
+
+ynh_systemd_action --service_name="${app}-horizon" --action="start" --log_path=systemd
 
 #=================================================
 # RELOAD NGINX

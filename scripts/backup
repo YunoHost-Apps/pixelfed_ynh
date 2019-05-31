@@ -31,6 +31,13 @@ db_name=$(ynh_app_setting_get --app="$app" --key=db_name)
 #=================================================
 # STANDARD BACKUP STEPS
 #=================================================
+# STOP SYSTEMD SERVICE
+#=================================================
+ynh_print_info --message="Stopping a systemd service..."
+
+ynh_systemd_action --service_name="${app}-horizon" --action="stop" --log_path=systemd
+
+#=================================================
 # BACKUP THE APP MAIN DIR
 #=================================================
 ynh_print_info --message="Backing up the main app directory..."
@@ -57,6 +64,22 @@ ynh_backup --src_path="/etc/php/7.2/fpm/pool.d/$app.conf"
 ynh_print_info --message="Backing up the PostgreSQL database..."
 
 ynh_psql_dump_db --database="$db_name" > db.sql
+
+#=================================================
+# SPECIFIC BACKUP
+#=================================================
+# BACKUP SYSTEMD
+#=================================================
+ynh_print_info --message="Backing up systemd configuration..."
+
+ynh_backup --src_path="/etc/systemd/system/${app}-horizon.service"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_print_info --message="Starting a systemd service..."
+
+ynh_systemd_action --service_name="${app}-horizon" --action="start" --log_path=systemd
 
 #=================================================
 # END OF SCRIPT
