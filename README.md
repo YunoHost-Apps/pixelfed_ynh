@@ -35,6 +35,13 @@ and respond yes to the question ` Add admin privileges to this user?`
 
 Registrations are open by default.
 To change that setting, edit `/var/www/pixelfed/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
+Then run `php7.2 artisan config:cache` to reload the settings.
+
+### Pixelfed php commands and php version
+
+Pixelfed might require some command line instructions if you want to make manual changes to your configuration.
+By default php 7.0 is currently used when you type `php`. You need to use `php7.2 [command]` instead.
+Those commands can be found in the official documentation.
 
 ## Documentation
 
