@@ -122,7 +122,7 @@ yunohost service add "${app}-horizon" --log "/var/log/$app/${app}-horizon.log"
 #=================================================
 ynh_print_info --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
+ynh_systemd_action --service_name="${app}-horizon" --action="start" --log_path=systemd
 
 #=================================================
 # GENERIC FINALIZATION
