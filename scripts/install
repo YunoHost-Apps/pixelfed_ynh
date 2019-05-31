@@ -128,7 +128,7 @@ ynh_install_composer --phpversion="7.2" --workdir="$final_path"
 ynh_print_info --message="Configuring a systemd service..."
 
 # Create a dedicated systemd config
-ynh_add_systemd_config --service="${app}-horizon" --template=horizon
+ynh_add_systemd_config --service="${app}-horizon" --template=horizon.service
 
 #=================================================
 # MODIFY A CONFIG FILE

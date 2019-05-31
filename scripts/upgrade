@@ -193,7 +193,7 @@ ynh_store_file_checksum --file="$config"
 ynh_print_info --message="Upgrading systemd configuration..."
 
 # Create a dedicated systemd config
-ynh_add_systemd_config --service="${app}-horizon" --template=horizon
+ynh_add_systemd_config --service="${app}-horizon" --template=horizon.service
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
