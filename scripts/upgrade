@@ -77,7 +77,6 @@ ynh_print_info --message="Backing up the app before upgrading (may take a while)
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
-	read -p "key"
 	# restore it if the upgrade fails
 	ynh_restore_upgradebackup
 }
