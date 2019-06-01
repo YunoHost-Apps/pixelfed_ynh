@@ -158,13 +158,17 @@ ynh_store_file_checksum --file="$config"
 
 pushd "$final_path"
 	php7.2 artisan -n key:generate --force
+	php7.2 artisan horizon:install
+	php7.2 artisan queue:failed-table
 	php7.2 artisan config:clear
 	php7.2 artisan config:cache
 	php7.2 artisan route:cache
+	php7.2 artisan view:cache
 	php7.2 artisan storage:link
 	php7.2 artisan migrate --force
 	php7.2 artisan update
 	php7.2 artisan horizon:purge
+	php7.2 artisan horizon:assets
 popd
 
 #=================================================
