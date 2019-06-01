@@ -77,7 +77,6 @@ ynh_print_info --message="Backing up the app before upgrading (may take a while)
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
-	read -p "key"
 	# restore it if the upgrade fails
 	ynh_restore_upgradebackup
 }
@@ -177,14 +176,18 @@ ynh_store_file_checksum --file="$config"
 #=================================================
 
 pushd "$final_path"
+	php7.2 artisan horizon:install
 	php7.2 artisan config:clear
 	php7.2 artisan config:cache
 	php7.2 artisan route:clear
 	php7.2 artisan route:cache
+	php7.2 artisan view:clear
+	php7.2 artisan view:cache
 	php7.2 artisan storage:link
 	php7.2 artisan migrate --force
 	php7.2 artisan update
 	php7.2 artisan horizon:purge
+	php7.2 artisan horizon:assets
 popd
 
 #=================================================
