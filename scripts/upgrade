@@ -65,7 +65,7 @@ if [ -z "$app_key" ]; then
 	ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 fi
 
-if dpkg --compare-versions "0.9.4~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
+if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
 	ynh_add_systemd_config --service="${app}-horizon" --template=horizon.service
 fi
 
