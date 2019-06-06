@@ -145,12 +145,17 @@ ynh_add_fpm_config --phpversion="7.2"
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
-# INSTALL PHP DEPENDENCIES
+# UPDATE PHP DEPENDENCIES
 #=================================================
 
 chown -R "$app": "$final_path"
 
-ynh_install_composer --phpversion="7.2" --workdir="$final_path"
+# Fix Google Recaptcha removal
+ynh_secure_remove --file="$final_path/bootstrap/cache"
+mkdir -p "$final_path/bootstrap/cache"
+ynh_composer_exec --phpversion="7.2" --workdir="$final_path" --commands="dump-autoload"
+
+ynh_composer_exec --phpversion="7.2" --workdir="$final_path" --commands="update"
 
 #=================================================
 # MODIFY A CONFIG FILE
