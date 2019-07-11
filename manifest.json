@@ -3,7 +3,8 @@
     "id": "pixelfed",
     "packaging_format": 1,
     "description": {
-        "en": "ActivityPub Federated Image Sharing"
+        "en": "ActivityPub Federated Image Sharing",
+        "fr": "Logiciel de partage d'image fédéré via ActivityPub"
     },
     "version": "0.9.6~ynh1",
     "url": "https://pixelfed.org/",
