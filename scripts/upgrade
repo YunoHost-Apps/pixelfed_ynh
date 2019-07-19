@@ -124,7 +124,7 @@ ynh_install_app_dependencies "$pkg_dependencies"
 #=================================================
 ynh_print_info --message="Upgrading php..."
 
-ynh_install_php --phpversion="7.2" --package="$extra_pkg_dependencies"
+ynh_install_php --phpversion="7.3" --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE DEDICATED USER
@@ -140,7 +140,7 @@ ynh_system_user_create --username="$app"
 ynh_print_info --message="Upgrading php-fpm configuration..."
 
 # Create a dedicated php-fpm config
-ynh_add_fpm_config --phpversion="7.2"
+ynh_add_fpm_config --phpversion="7.3"
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -153,9 +153,9 @@ chown -R "$app": "$final_path"
 # Fix Google Recaptcha removal
 ynh_secure_remove --file="$final_path/bootstrap/cache"
 mkdir -p "$final_path/bootstrap/cache"
-ynh_composer_exec --phpversion="7.2" --workdir="$final_path" --commands="dump-autoload"
+ynh_composer_exec --phpversion="7.3" --workdir="$final_path" --commands="dump-autoload"
 
-ynh_composer_exec --phpversion="7.2" --workdir="$final_path" --commands="update"
+ynh_composer_exec --phpversion="7.3" --workdir="$final_path" --commands="update"
 
 #=================================================
 # MODIFY A CONFIG FILE
@@ -181,18 +181,18 @@ ynh_store_file_checksum --file="$config"
 #=================================================
 
 pushd "$final_path"
-	php7.2 artisan horizon:install
-	php7.2 artisan config:clear
-	php7.2 artisan config:cache
-	php7.2 artisan route:clear
-	php7.2 artisan route:cache
-	php7.2 artisan view:clear
-	php7.2 artisan view:cache
-	php7.2 artisan storage:link
-	php7.2 artisan migrate --force
-	php7.2 artisan update
-	php7.2 artisan horizon:purge
-	php7.2 artisan horizon:assets
+	php7.3 artisan horizon:install
+	php7.3 artisan config:clear
+	php7.3 artisan config:cache
+	php7.3 artisan route:clear
+	php7.3 artisan route:cache
+	php7.3 artisan view:clear
+	php7.3 artisan view:cache
+	php7.3 artisan storage:link
+	php7.3 artisan migrate --force
+	php7.3 artisan update
+	php7.3 artisan horizon:purge
+	php7.3 artisan horizon:assets
 popd
 
 #=================================================
