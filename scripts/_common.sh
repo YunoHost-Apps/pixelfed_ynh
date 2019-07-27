@@ -9,7 +9,7 @@ pkg_dependencies="postgresql redis-server \
 libfreetype6 libjpeg62-turbo libpng16-16 libxpm4 libvpx4 libmagickwand-6.q16-3 libwebp6 \
 pngquant jpegoptim gifsicle"
 
-extra_pkg_dependencies="php7.2-bcmath php7.2-cli php7.2-curl php7.2-exif php7.2-gd php7.2-intl php7.2-json php7.2-mbstring php7.2-pgsql php7.2-simplexml php7.2-xml php7.2-zip"
+extra_pkg_dependencies="php7.3-bcmath php7.3-cli php7.3-curl php7.3-exif php7.3-gd php7.3-intl php7.3-json php7.3-mbstring php7.3-pgsql php7.3-simplexml php7.3-xml php7.3-zip"
 
 #=================================================
 # PERSONAL HELPERS
@@ -68,7 +68,7 @@ ynh_install_composer () {
 # Install another version of php.
 #
 # usage: ynh_install_php --phpversion=phpversion [--package=packages]
-# | arg: -v, --phpversion - Version of php to install. Can be one of 7.1, 7.2 or 7.3
+# | arg: -v, --phpversion - Version of php to install. Can be one of 7.1, 7.3 or 7.3
 # | arg: -p, --package - Additionnal php packages to install
 ynh_install_php () {
 	# Declare an array to define the options of this helper.

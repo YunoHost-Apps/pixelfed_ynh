@@ -56,7 +56,7 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 ynh_print_info --message="Backing up php-fpm configuration..."
 
-ynh_backup --src_path="/etc/php/7.2/fpm/pool.d/$app.conf"
+ynh_backup --src_path="/etc/php/7.3/fpm/pool.d/$app.conf"
 
 #=================================================
 # BACKUP THE POSTGRESQL DATABASE
