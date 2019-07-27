@@ -7,7 +7,7 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__FINALPATH__/
-ExecStart=/usr/bin/php7.2 __FINALPATH__/artisan horizon
+ExecStart=/usr/bin/php7.3 __FINALPATH__/artisan horizon
 Restart=on-failure
 
 [Install]
