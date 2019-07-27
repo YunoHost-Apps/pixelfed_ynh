@@ -124,6 +124,7 @@ ynh_install_app_dependencies "$pkg_dependencies"
 #=================================================
 ynh_print_info --message="Upgrading php..."
 
+ynh_remove_php
 ynh_install_php --phpversion="7.3" --package="$extra_pkg_dependencies"
 
 #=================================================
