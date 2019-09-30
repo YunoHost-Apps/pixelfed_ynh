@@ -9,7 +9,7 @@ pkg_dependencies="postgresql redis-server \
 libfreetype6 libjpeg62-turbo libpng16-16 libxpm4 libvpx4 libmagickwand-6.q16-3 libwebp6 \
 pngquant jpegoptim gifsicle"
 
-extra_pkg_dependencies="php7.3-bcmath php7.3-cli php7.3-curl php7.3-exif php7.3-gd php7.3-intl php7.3-json php7.3-mbstring php7.3-pgsql php7.3-simplexml php7.3-xml php7.3-zip"
+extra_pkg_dependencies="php7.3-bcmath php7.3-cli php7.3-curl php7.3-exif php7.3-gd php7.3-intl php7.3-json php7.3-mbstring php7.3-pgsql php7.3-simplexml php7.3-xml php7.3-zip php7.3-intl"
 
 #=================================================
 # PERSONAL HELPERS
