@@ -68,7 +68,7 @@ ynh_install_composer () {
 # Install another version of php.
 #
 # usage: ynh_install_php --phpversion=phpversion [--package=packages]
-# | arg: -v, --phpversion - Version of php to install. Can be one of 7.1, 7.3 or 7.3
+# | arg: -v, --phpversion - Version of php to install. Can be one of 7.1, 7.2 or 7.3
 # | arg: -p, --package - Additionnal php packages to install
 ynh_install_php () {
 	# Declare an array to define the options of this helper.
