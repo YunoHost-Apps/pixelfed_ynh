@@ -102,8 +102,9 @@ ynh_install_php () {
 	# Set php7.0 back as the default version for php-cli.
 	update-alternatives --set php /usr/bin/php7.0
 
-	# Remove this extra repository after packages are installed
-	ynh_remove_extra_repo --name=extra_php_version
+	# Pin this extra repository after packages are installed to prevent sury of doing shit
+	ynh_pin_repo --package="*" --pin="origin \"packages.sury.org\"" 200 --name=extra_php_version
+	ynh_pin_repo --package="php7.0*" --pin="origin \"packages.sury.org\"" 600 --name=extra_php_version $append
 
 	# Advertise service in admin panel
 	yunohost service add php${phpversion}-fpm --log "/var/log/php${phpversion}-fpm.log"
