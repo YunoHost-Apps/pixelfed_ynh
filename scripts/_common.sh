@@ -104,7 +104,7 @@ ynh_install_php () {
 
 	# Pin this extra repository after packages are installed to prevent sury of doing shit
 	ynh_pin_repo --package="*" --pin="origin \"packages.sury.org\"" 200 --name=extra_php_version
-	ynh_pin_repo --package="php7.0*" --pin="origin \"packages.sury.org\"" 600 --name=extra_php_version $append
+	ynh_pin_repo --package="php7.0*" --pin="origin \"packages.sury.org\"" 600 --name=extra_php_version --append
 
 	# Advertise service in admin panel
 	yunohost service add php${phpversion}-fpm --log "/var/log/php${phpversion}-fpm.log"
