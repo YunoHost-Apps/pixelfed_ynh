@@ -37,6 +37,15 @@ Registrations are open by default.
 To change that setting, edit `/var/www/pixelfed/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
 Then run `php7.3 artisan config:cache` to reload the settings.
 
+### Disable search engine indexing
+
+If you don't want your Pixelfed instance to be indexed in search engine (and so on), edit `/var/www/pixelfed/public/robots.txt` like this:
+```
+User-agent: *
+Disallow: /
+```
+Note: search engines will see that files and may or may not respect its content.
+
 ### Pixelfed php commands and php version
 
 Pixelfed might require some command line instructions if you want to make manual changes to your configuration.
