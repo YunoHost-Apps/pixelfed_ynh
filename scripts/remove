@@ -24,10 +24,11 @@ final_path=$(ynh_app_setting_get --app="$app" --key=final_path)
 #=================================================
 # STANDARD REMOVE
 #=================================================
-# REMOVE SERVICE FROM ADMIN PANEL
+# REMOVE SERVICE INTEGRATION IN YUNOHOST
 #=================================================
+ynh_print_info --message="Removing service integration in YunoHost..."
 
-# Remove a service from the admin panel, added by `yunohost service add`
+# Remove the service from the list of services known by Yunohost (added from `yunohost service add`)
 if ynh_exec_warn_less yunohost service status ${app}-horizon >/dev/null
 then
 	ynh_print_info --message="Removing ${app}-horizon service..."
@@ -89,7 +90,7 @@ ynh_remove_fpm_config
 ynh_print_info --message="Start php7.0-fpm..."
 
 #Sometimes with package_check php7.0-fpm fail to reload and stop. So starting the service, just in case.
-ynh_systemd_action --service_name=php7.0-fpm --action=start
+ynh_systemd_action --service_name=php7.0-fpm --action="start"
 
 #=================================================
 # GENERIC FINALIZATION

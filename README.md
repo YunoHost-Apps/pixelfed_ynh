@@ -62,11 +62,10 @@ Those commands can be found in the official documentation.
 
 * x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/pixelfed/)
-* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-stretch.nohost.me/ci/apps/pixelfed/)
 
 ## Links
 
- * Report a bug about this package: https://github.com/YunoHost-Apps/pixelfed_ynh
+ * Report a bug: https://github.com/YunoHost-Apps/pixelfed_ynh
  * Pixelfed website: https://pixelfed.org
  * Upstream app repository: https://github.com/pixelfed/pixelfed
  * YunoHost website: https://yunohost.org
