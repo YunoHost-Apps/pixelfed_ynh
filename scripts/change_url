@@ -12,6 +12,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # RETRIEVE ARGUMENTS
 #=================================================
+ynh_print_info --message="Retrieve arguments from the manifest"
 
 old_domain=$YNH_APP_OLD_DOMAIN
 old_path="/"
@@ -31,7 +32,25 @@ final_path=$(ynh_app_setting_get --app="$app" --key=final_path)
 
 # Add settings here as needed by your application
 #db_name=$(ynh_app_setting_get --app="$app" --key=db_name)
+#db_user=$db_name
 #db_pwd=$(ynh_app_setting_get --app="$app" --key=db_pwd)
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+ynh_print_info --message="Backing up the app before changing its url (may take a while)..."
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+	# Remove the new domain config file, the remove script won't do it as it doesn't know yet its location.
+	ynh_secure_remove --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
+
+	# restore it if the upgrade fails
+	ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 #=================================================
 # CHECK WHICH PARTS SHOULD BE CHANGED
@@ -67,6 +86,7 @@ fi
 #=================================================
 # UPDATE CONFIG FILE
 #=================================================
+ynh_print_info --message="Updating config file..."
 
 config="$final_path/.env"
 ynh_replace_string --match_string="APP_URL=.*"           --replace_string="APP_URL=https://$new_domain"                --target_file="$config"
@@ -77,6 +97,7 @@ ynh_replace_string --match_string="MAIL_FROM_ADDRESS=.*" --replace_string="MAIL_
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
+ynh_print_info --message="Storing the config file checksum..."
 
 ynh_backup_if_checksum_is_different --file="$config"
 
@@ -86,6 +107,7 @@ ynh_store_file_checksum --file="$config"
 #=================================================
 # APPLY CHANGES
 #=================================================
+ynh_print_info --message="Applying changes..."
 
 pushd "$final_path"
 	php7.3 artisan config:clear

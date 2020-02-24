@@ -12,13 +12,18 @@ source /usr/share/yunohost/helpers
 #=================================================
 # MANAGE SCRIPT FAILURE
 #=================================================
+ynh_print_info --message="Managing script failure..."
 
+ynh_clean_setup () {
+	true
+}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
+ynh_print_info --message="Retrieving arguments from the manifest..."
 
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
@@ -42,6 +47,7 @@ ynh_webpath_register --app="$app" --domain="$domain" --path_url="$path_url"
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
+ynh_print_info --message="Storing installation settings..."
 
 ynh_app_setting_set --app="$app" --key=domain --value="$domain"
 ynh_app_setting_set --app="$app" --key=path --value="$path_url"
@@ -83,6 +89,7 @@ ynh_psql_setup_db --db_user="$db_user" --db_name="$db_name" --db_pwd="$db_pwd"
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+ynh_print_info --message="Setting up source files..."
 
 ynh_app_setting_set --app="$app" --key=final_path --value="$final_path"
 # Download, check integrity, uncompress and patch the source from app.src
@@ -115,6 +122,7 @@ ynh_add_fpm_config --phpversion="7.3"
 #=================================================
 # INSTALL PHP DEPENDENCIES
 #=================================================
+ynh_print_info --message="Installing php dependencies..."
 
 chown -R "$app": "$final_path"
 
@@ -138,6 +146,7 @@ ynh_add_systemd_config --service="${app}-horizon" --template=horizon.service
 #=================================================
 # MODIFY A CONFIG FILE
 #=================================================
+ynh_print_info --message="Modifying a config file..."
 
 config="$final_path/.env"
 cp ../conf/.env "$config"
@@ -153,6 +162,7 @@ ynh_replace_string --match_string="__DB_PWD__"  --replace_string="$db_pwd"   --t
 #=================================================
 # STORE THE CHECKSUM OF THE CONFIG FILE
 #=================================================
+ynh_print_info --message="Storing the config file checksum..."
 
 # Calculate and store the config file checksum into the app settings
 ynh_store_file_checksum --file="$config"
@@ -160,6 +170,7 @@ ynh_store_file_checksum --file="$config"
 #=================================================
 # DEPLOYMENT
 #=================================================
+ynh_print_info --message="Deploying..."
 
 pushd "$final_path"
 	php7.3 artisan -n key:generate --force
@@ -180,14 +191,16 @@ popd
 #=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
+ynh_print_info --message="Securing files and directories..."
 
 # Set permissions to app files
 chown -R root: "$final_path"
 chown -R "$app": "$final_path/storage/"
 
 #=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
+# INTEGRATE SERVICE IN YUNOHOST
 #=================================================
+ynh_print_info --message="Integrating service in YunoHost..."
 
 yunohost service add "${app}-horizon" --description "${app}-horizon daemon for $app" --log "/var/log/$app/${app}-horizon.log"
 
