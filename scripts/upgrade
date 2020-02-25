@@ -30,6 +30,7 @@ app_key=$(ynh_app_setting_get --app="$app" --key=app_key)
 #=================================================
 # CHECK VERSION
 #=================================================
+ynh_print_info --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
 
@@ -148,6 +149,7 @@ ynh_add_fpm_config --phpversion="7.3"
 #=================================================
 # UPDATE PHP DEPENDENCIES
 #=================================================
+ynh_print_info --message="Updating php dependencies..."
 
 chown -R "$app": "$final_path"
 
@@ -161,6 +163,7 @@ ynh_composer_exec --phpversion="7.3" --workdir="$final_path" --commands="update"
 #=================================================
 # MODIFY A CONFIG FILE
 #=================================================
+ynh_print_info --message="Modifying a config file..."
 
 config="$final_path/.env"
 ynh_backup_if_checksum_is_different --file="$config"
@@ -180,6 +183,7 @@ ynh_store_file_checksum --file="$config"
 #=================================================
 # DEPLOYMENT
 #=================================================
+ynh_print_info --message="Deploying..."
 
 pushd "$final_path"
 	php7.3 artisan horizon:install
@@ -205,16 +209,11 @@ ynh_print_info --message="Upgrading systemd configuration..."
 ynh_add_systemd_config --service="${app}-horizon" --template=horizon.service
 
 #=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
-#=================================================
-
-yunohost service add "${app}-horizon" --description "${app}-horizon daemon for $app" --log "/var/log/$app/${app}-horizon.log"
-
-#=================================================
 # GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
+ynh_print_info --message="Securing files and directories..."
 
 # Set permissions on app files
 chown -R "$app": "$final_path"
