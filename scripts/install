@@ -57,18 +57,22 @@ ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
+# INSTALL PHP7.3 when on Stretch
+#=================================================
+
+if [ "$(lsb_release --codename --short)" = "stretch" ]; then
+	ynh_print_info --message="Installing php7.3..."
+	ynh_install_php --phpversion="7.3" --package="$extra_pkg_dependencies"
+else
+	pkg_dependencies="$pkg_dependencies $extra_pkg_dependencies"
+fi
+
+#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
 ynh_print_info --message="Installing dependencies..."
 
 ynh_install_app_dependencies "$pkg_dependencies"
-
-#=================================================
-# INSTALL PHP
-#=================================================
-ynh_print_info --message="Installing php..."
-
-ynh_install_php --phpversion="7.3" --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
