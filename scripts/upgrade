@@ -114,19 +114,22 @@ ynh_print_info --message="Upgrading nginx web server configuration..."
 ynh_add_nginx_config
 
 #=================================================
+# UPGRADE PHP7.3
+#=================================================
+
+if [ "$(lsb_release --codename --short)" = "buster" ]; then
+	pkg_dependencies="$pkg_dependencies $extra_pkg_dependencies"
+else
+	ynh_print_info --message="Upgrading php7.3..."
+	ynh_install_php --phpversion="7.3" --package="$extra_pkg_dependencies"
+fi
+
+#=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
 ynh_print_info --message="Upgrading dependencies..."
 
 ynh_install_app_dependencies "$pkg_dependencies"
-
-#=================================================
-# UPGRADE PHP
-#=================================================
-ynh_print_info --message="Upgrading php..."
-
-ynh_remove_php
-ynh_install_php --phpversion="7.3" --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE DEDICATED USER
