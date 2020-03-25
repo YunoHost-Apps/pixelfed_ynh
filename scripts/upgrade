@@ -161,11 +161,6 @@ if [ ${PACKAGE_CHECK_EXEC:-0} -eq 1 ]; then
 	sleep 3600
 fi
 
-# Fix Google Recaptcha removal
-ynh_secure_remove --file="$final_path/bootstrap/cache"
-mkdir -p "$final_path/bootstrap/cache"
-ynh_composer_exec --phpversion="7.3" --workdir="$final_path" --commands="dump-autoload"
-
 ynh_composer_exec --phpversion="7.3" --workdir="$final_path" --commands="update"
 
 #=================================================
