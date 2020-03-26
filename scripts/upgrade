@@ -156,11 +156,6 @@ ynh_print_info --message="Updating php dependencies..."
 
 chown -R "$app": "$final_path"
 
-# Bypass composer issue and GitHub Rate Limit https://developer.github.com/v3/#rate-limiting
-if [ ${PACKAGE_CHECK_EXEC:-0} -eq 1 ]; then
-	sleep 3600
-fi
-
 ynh_composer_exec --phpversion="7.3" --workdir="$final_path" --commands="update"
 
 #=================================================
