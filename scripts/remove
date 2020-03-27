@@ -58,7 +58,9 @@ ynh_print_info --message="Removing dependencies..."
 
 # Remove metapackage and its dependencies
 ynh_remove_app_dependencies
-ynh_remove_php
+if [ "$(lsb_release --codename --short)" != "buster" ]; then
+	ynh_remove_php
+fi
 
 #=================================================
 # REMOVE APP MAIN DIR
