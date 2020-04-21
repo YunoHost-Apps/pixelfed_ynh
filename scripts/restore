@@ -10,6 +10,7 @@
 source ../settings/scripts/_common.sh
 source ../settings/scripts/ynh_add_extra_apt_repos__3
 source ../settings/scripts/ynh_install_php__3
+source ../settings/scripts/ynh_supervisor
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -117,12 +118,21 @@ ynh_psql_setup_db --db_user="$db_user" --db_name="$db_name" --db_pwd="$db_pwd"
 ynh_psql_execute_file_as_root --file="./db.sql" --database="$db_name"
 
 #=================================================
-# RESTORE SYSTEMD
+# CREATE LOG FILE
 #=================================================
-ynh_print_info --message="Restoring the systemd configuration..."
+ynh_print_info --message="Creating log file..."
 
-ynh_restore_file --origin_path="/etc/systemd/system/${app}-horizon.service"
-systemctl enable ${app}-horizon.service
+mkdir -p "/var/log/$app/"
+touch "/var/log/$app/${app}-horizon.log"
+chown -R root: "/var/log/$app/"
+
+#=================================================
+# RESTORE SUPERVISOR
+#=================================================
+ynh_print_info --message="Restoring the supervisor configuration..."
+
+ynh_restore_file --origin_path="/etc/supervisor/conf.d/${app}-horizon.conf"
+supervisorctl reread && supervisorctl update
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -132,11 +142,18 @@ ynh_print_info --message="Integrating service in YunoHost..."
 yunohost service add "${app}-horizon" --log "/var/log/$app/${app}-horizon.log"
 
 #=================================================
-# START SYSTEMD SERVICE
+# START SUPERVISOR SERVICE
 #=================================================
-ynh_print_info --message="Starting a systemd service..."
+ynh_print_info --message="Starting a supervisor service..."
 
-ynh_systemd_action --service_name="${app}-horizon" --action="start" --log_path=systemd
+ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
+
+#=================================================
+# RESTORE THE LOGROTATE CONFIGURATION
+#=================================================
+ynh_print_info --message="Restoring the logrotate configuration..."
+
+ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION

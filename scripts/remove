@@ -9,6 +9,7 @@
 source _common.sh
 source ynh_add_extra_apt_repos__3
 source ynh_install_php__3
+source ynh_supervisor
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -40,10 +41,10 @@ fi
 #=================================================
 # STOP AND REMOVE SERVICE
 #=================================================
-ynh_print_info --message="Stopping and removing the systemd service..."
+ynh_print_info --message="Stopping and removing the supervisor service..."
 
-# Remove the dedicated systemd config
-ynh_remove_systemd_config --service="${app}-horizon"
+# Remove the dedicated supervisor config
+ynh_remove_supervisor_config --service="${app}-horizon"
 
 #=================================================
 # REMOVE THE POSTGRESQL DATABASE
@@ -87,6 +88,24 @@ ynh_print_info --message="Removing php-fpm configuration..."
 
 # Remove the dedicated php-fpm config
 ynh_remove_fpm_config
+
+#=================================================
+# REMOVE LOGROTATE CONFIGURATION
+#=================================================
+ynh_print_info --message="Removing logrotate configuration..."
+
+# Remove the app-specific logrotate config
+ynh_remove_logrotate
+
+#=================================================
+# SPECIFIC REMOVE
+#=================================================
+# REMOVE THE LOG FILE
+#=================================================
+ynh_print_info --message="Removing the log file..."
+
+# Remove the log files
+ynh_secure_remove --file="/var/log/$app"
 
 #=================================================
 # GENERIC FINALIZATION
