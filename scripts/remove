@@ -100,6 +100,14 @@ ynh_remove_logrotate
 #=================================================
 # SPECIFIC REMOVE
 #=================================================
+# REMOVE THE CRON FILE
+#=================================================
+ynh_print_info --message="Removing the cron file..."
+
+# Remove a cron file
+ynh_secure_remove --file="/etc/cron.d/$app"
+
+#=================================================
 # REMOVE THE LOG FILE
 #=================================================
 ynh_print_info --message="Removing the log file..."

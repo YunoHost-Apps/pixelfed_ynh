@@ -199,6 +199,14 @@ pushd "$final_path"
 popd
 
 #=================================================
+# INSTALL THE CRON FILE
+#=================================================
+ynh_print_info --message="Installing cron file..."
+
+cp ../conf/cron "/etc/cron.d/$app"
+ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path" --target_file="/etc/cron.d/$app"
+
+#=================================================
 # GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES
@@ -222,7 +230,7 @@ ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
 #=================================================
 ynh_print_info --message="Integrating service in YunoHost..."
 
-yunohost service add "${app}-horizon" --description "${app}-horizon daemon for $app" --log "/var/log/$app/${app}-horizon.log"
+yunohost service add "supervisor" --description "${app}-horizon daemon for $app" --log "/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE

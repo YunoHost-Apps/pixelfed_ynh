@@ -139,7 +139,7 @@ supervisorctl reread && supervisorctl update
 #=================================================
 ynh_print_info --message="Integrating service in YunoHost..."
 
-yunohost service add "${app}-horizon" --log "/var/log/$app/${app}-horizon.log"
+yunohost service add "supervisor" --log "/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
@@ -147,6 +147,13 @@ yunohost service add "${app}-horizon" --log "/var/log/$app/${app}-horizon.log"
 ynh_print_info --message="Starting a supervisor service..."
 
 ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
+
+#=================================================
+# RESTORE THE CRON FILE
+#=================================================
+ynh_print_info --message="Restoring the cron file..."
+
+ynh_restore_file --origin_path="/etc/cron.d/$app"
 
 #=================================================
 # RESTORE THE LOGROTATE CONFIGURATION

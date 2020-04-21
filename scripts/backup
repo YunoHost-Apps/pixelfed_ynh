@@ -87,6 +87,13 @@ ynh_print_info --message="Backing up supervisor configuration..."
 ynh_backup --src_path="/etc/supervisor/conf.d/${app}-horizon.conf"
 
 #=================================================
+# BACKUP A CRON FILE
+#=================================================
+ynh_print_info --message="Backing up a cron file..."
+
+ynh_backup --src_path="/etc/cron.d/$app"
+
+#=================================================
 # START SUPERVISOR SERVICE
 #=================================================
 ynh_print_info --message="Starting a supervisor service..."

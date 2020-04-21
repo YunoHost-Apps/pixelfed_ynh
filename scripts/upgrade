@@ -227,6 +227,14 @@ touch "/var/log/$app/${app}-horizon.log"
 chown -R root: "/var/log/$app/"
 
 #=================================================
+# UPGRADE THE CRON FILE
+#=================================================
+ynh_print_info --message="Upgrading cron file..."
+
+cp ../conf/cron "/etc/cron.d/$app"
+ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path" --target_file="/etc/cron.d/$app"
+
+#=================================================
 # SETUP LOGROTATE
 #=================================================
 ynh_script_progression --message="Upgrading logrotate configuration..." --time --weight=1
