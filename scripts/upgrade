@@ -90,7 +90,7 @@ if [ -z "$app_key" ]; then
 fi
 
 if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
-	ynh_add_systemd_config --service="${app}-horizon" --template=horizon.service
+	ynh_add_systemd_config --service="${app}-horizon" --template=horizon.conf
 fi
 
 if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
@@ -248,7 +248,7 @@ ynh_use_logrotate --non-append
 ynh_print_info --message="Upgrading supervisor configuration..."
 
 # Create a dedicated supervisor config
-ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.service
+ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
 
 #=================================================
 # GENERIC FINALIZATION
