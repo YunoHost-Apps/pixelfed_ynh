@@ -8,6 +8,7 @@
 
 #Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
 source ../settings/scripts/_common.sh
+source ../settings/scripts/ynh_supervisor
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -35,11 +36,11 @@ db_name=$(ynh_app_setting_get --app="$app" --key=db_name)
 #=================================================
 # STANDARD BACKUP STEPS
 #=================================================
-# STOP SYSTEMD SERVICE
+# STOP SUPERVISOR SERVICE
 #=================================================
-ynh_print_info --message="Stopping a systemd service..."
+ynh_print_info --message="Stopping a supervisor service..."
 
-ynh_systemd_action --service_name="${app}-horizon" --action="stop" --log_path=systemd
+ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # BACKUP THE APP MAIN DIR
@@ -72,18 +73,32 @@ ynh_psql_dump_db --database="$db_name" > db.sql
 #=================================================
 # SPECIFIC BACKUP
 #=================================================
-# BACKUP SYSTEMD
+# BACKUP LOGROTATE
 #=================================================
-ynh_print_info --message="Backing up systemd configuration..."
+ynh_print_info --message="Backing up logrotate configuration..."
 
-ynh_backup --src_path="/etc/systemd/system/${app}-horizon.service"
+ynh_backup --src_path="/etc/logrotate.d/$app"
 
 #=================================================
-# START SYSTEMD SERVICE
+# BACKUP SUPERVISOR
 #=================================================
-ynh_print_info --message="Starting a systemd service..."
+ynh_print_info --message="Backing up supervisor configuration..."
 
-ynh_systemd_action --service_name="${app}-horizon" --action="start" --log_path=systemd
+ynh_backup --src_path="/etc/supervisor/conf.d/${app}-horizon.conf"
+
+#=================================================
+# BACKUP A CRON FILE
+#=================================================
+ynh_print_info --message="Backing up a cron file..."
+
+ynh_backup --src_path="/etc/cron.d/$app"
+
+#=================================================
+# START SUPERVISOR SERVICE
+#=================================================
+ynh_print_info --message="Starting a supervisor service..."
+
+ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # END OF SCRIPT
