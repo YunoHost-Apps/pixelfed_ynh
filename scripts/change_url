@@ -65,6 +65,13 @@ fi
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
+# STOP SUPERVISOR SERVICE
+#=================================================
+ynh_print_info --message="Stopping a supervisor service..."
+
+ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="/var/log/$app/${app}-horizon.log"
+
+#=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
 ynh_print_info --message="Updating nginx web server configuration..."
@@ -119,6 +126,13 @@ popd
 
 #=================================================
 # GENERIC FINALISATION
+#=================================================
+# START SUPERVISOR SERVICE
+#=================================================
+ynh_print_info --message="Starting a supervisor service..."
+
+ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
+
 #=================================================
 # RELOAD NGINX
 #=================================================
