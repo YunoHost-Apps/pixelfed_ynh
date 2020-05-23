@@ -230,7 +230,7 @@ ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
 #=================================================
 ynh_print_info --message="Integrating service in YunoHost..."
 
-yunohost service add "supervisor" --description "${app}-horizon daemon for $app" --log "/var/log/$app/${app}-horizon.log"
+yunohost service add "supervisor" --description "Supervisor daemon for $app" --log "/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE

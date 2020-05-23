@@ -103,6 +103,11 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/et
 	ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
 fi
 
+if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
+	yunohost service remove "${app}-horizon"
+	yunohost service add "supervisor" --description "Supervisor daemon for $app" --log "/var/log/$app/${app}-horizon.log"
+fi
+
 #=================================================
 # STANDARD UPGRADE STEPS
 #=================================================

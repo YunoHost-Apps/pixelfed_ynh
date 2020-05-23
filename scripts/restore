@@ -139,7 +139,7 @@ supervisorctl reread && supervisorctl update
 #=================================================
 ynh_print_info --message="Integrating service in YunoHost..."
 
-yunohost service add "supervisor" --log "/var/log/$app/${app}-horizon.log"
+yunohost service add "supervisor" --description "Supervisor daemon for $app" --log "/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
