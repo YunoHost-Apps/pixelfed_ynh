@@ -85,15 +85,18 @@ ynh_print_info --message="Ensuring upgrade compatibility..."
 
 # If app_key doesn't exist, retrieve it
 if [ -z "$app_key" ]; then
+	ynh_print_info --message="Retrieving app_key..."
 	app_key=$(grep -oP "APP_KEY=\Kbase64.*" "$final_path/.env")
 	ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 fi
 
 if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
+	ynh_print_info --message="Ensuring upgrade compatibility to 0.9.0~ynh3..."
 	ynh_add_systemd_config --service="${app}-horizon" --template=horizon.conf
 fi
 
 if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
+	ynh_print_info --message="Ensuring upgrade compatibility to 0.10.9~ynh2..."
 	ynh_remove_systemd_config --service="${app}-horizon"
 	ynh_install_app_dependencies "$pkg_dependencies"
 	mkdir -p "/var/log/$app/"
@@ -104,6 +107,7 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/et
 fi
 
 if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
+	ynh_print_info --message="Ensuring upgrade compatibility to 0.10.9~ynh3..."
 	yunohost service remove "${app}-horizon"
 	yunohost service add "supervisor" --description "Supervisor daemon for $app" --log "/var/log/$app/${app}-horizon.log"
 fi
