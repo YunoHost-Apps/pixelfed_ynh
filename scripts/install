@@ -8,15 +8,12 @@
 
 source _common.sh
 source ynh_composer__2
-source ynh_add_extra_apt_repos__3
-source ynh_install_php__3
 source ynh_supervisor
 source /usr/share/yunohost/helpers
 
 #=================================================
 # MANAGE SCRIPT FAILURE
 #=================================================
-ynh_print_info --message="Managing script failure..."
 
 ynh_clean_setup () {
 	true
@@ -27,7 +24,6 @@ ynh_abort_if_errors
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
-ynh_print_info --message="Retrieving arguments from the manifest..."
 
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
@@ -40,73 +36,62 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_print_info --message="Validating installation parameters..."
+ynh_script_progression --message="Validating installation parameters..."
 
 final_path=/var/www/$app
 test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
 # Register (book) web path
-ynh_webpath_register --app="$app" --domain="$domain" --path_url="$path_url"
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
-ynh_print_info --message="Storing installation settings..."
+ynh_script_progression --message="Storing installation settings..."
 
-ynh_app_setting_set --app="$app" --key=domain --value="$domain"
-ynh_app_setting_set --app="$app" --key=path --value="$path_url"
-ynh_app_setting_set --app="$app" --key=is_public --value="$is_public"
-ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path_url
+ynh_app_setting_set --app=$app --key=is_public --value=$is_public
+ynh_app_setting_set --app=$app --key=app_key --value=$app_key
 
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
-# INSTALL PHP7.3
-#=================================================
-
-if [ "$(lsb_release --codename --short)" = "buster" ]; then
-	pkg_dependencies="$pkg_dependencies $extra_pkg_dependencies"
-else
-	ynh_print_info --message="Installing php7.3..."
-	ynh_install_php --phpversion="7.3" --package="$extra_pkg_dependencies"
-fi
-
-#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_print_info --message="Installing dependencies..."
+ynh_script_progression --message="Installing dependencies..."
 
-ynh_install_app_dependencies "$pkg_dependencies"
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
 #=================================================
-ynh_print_info --message="Creating a PostgreSQL database..."
+ynh_script_progression --message="Creating a PostgreSQL database..."
 
 ynh_psql_test_if_first_run
 
 db_name=$(ynh_sanitize_dbid --db_name=$app)
 db_user=$db_name
 db_pwd=$(ynh_string_random --length=32)
-ynh_app_setting_set --app="$app" --key=db_name --value="$db_name"
-ynh_app_setting_set --app="$app" --key=db_pwd --value="$db_pwd"
+ynh_app_setting_set --app=$app --key=db_name --value=$db_name
+ynh_app_setting_set --app=$app --key=db_pwd --value=$db_pwd
 
 # Initialize database and store postgres password for upgrade
-ynh_psql_setup_db --db_user="$db_user" --db_name="$db_name" --db_pwd="$db_pwd"
+ynh_psql_setup_db --db_user=$db_user --db_name=$db_name --db_pwd=$db_pwd
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_print_info --message="Setting up source files..."
+ynh_script_progression --message="Setting up source files..."
 
-ynh_app_setting_set --app="$app" --key=final_path --value="$final_path"
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info --message="Configuring nginx web server..."
+ynh_script_progression --message="Configuring nginx web server..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -114,34 +99,33 @@ ynh_add_nginx_config
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_print_info --message="Configuring system user..."
+ynh_script_progression --message="Configuring system user..."
 
 # Create a system user
-ynh_system_user_create --username="$app"
+ynh_system_user_create --username=$app
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_print_info --message="Configuring php-fpm..."
+ynh_script_progression --message="Configuring php-fpm..."
 
 # Create a dedicated php-fpm config
-ynh_add_fpm_config --phpversion="7.3"
-
-#=================================================
-# INSTALL PHP DEPENDENCIES
-#=================================================
-ynh_print_info --message="Installing php dependencies..."
-
-chown -R "$app": "$final_path"
-
-ynh_install_composer --phpversion="7.3" --workdir="$final_path"
+ynh_add_fpm_config --usage=low --footprint=low --package="$extra_php_dependencies"
+phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
+# INSTALL COMPOSER DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Installing composer dependencies..."
+
+ynh_install_composer --phpversion="$phpversion" --workdir="$final_path"
+
+#=================================================
 # CREATE LOG FILE
 #=================================================
-ynh_print_info --message="Creating log file..."
+ynh_script_progression --message="Creating log file..."
 
 mkdir -p "/var/log/$app/"
 touch "/var/log/$app/${app}-horizon.log"
@@ -150,15 +134,15 @@ chown -R root: "/var/log/$app/"
 #=================================================
 # SETUP SUPERVISOR
 #=================================================
-ynh_print_info --message="Configuring a supervisor service..."
+ynh_script_progression --message="Configuring a supervisor service..."
 
 # Create a dedicated supervisor config
-ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
+ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --others_var="phpversion"
 
 #=================================================
 # MODIFY A CONFIG FILE
 #=================================================
-ynh_print_info --message="Modifying a config file..."
+ynh_script_progression --message="Modifying a config file..."
 
 config="$final_path/.env"
 cp ../conf/.env "$config"
@@ -172,55 +156,56 @@ ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user"  --t
 ynh_replace_string --match_string="__DB_PWD__"  --replace_string="$db_pwd"   --target_file="$config"
 
 #=================================================
-# STORE THE CHECKSUM OF THE CONFIG FILE
+# STORE THE CONFIG FILE CHECKSUM
 #=================================================
-ynh_print_info --message="Storing the config file checksum..."
+ynh_script_progression --message="Storing the config file checksum..."
 
 # Calculate and store the config file checksum into the app settings
 ynh_store_file_checksum --file="$config"
 
 #=================================================
-# DEPLOYMENT
+# DEPLOY
 #=================================================
-ynh_print_info --message="Deploying..."
+ynh_script_progression --message="Deploying..."
 
 pushd "$final_path"
-	php7.3 artisan -n key:generate --force
-	php7.3 artisan horizon:install
-	php7.3 artisan config:clear
-	php7.3 artisan config:cache
-	php7.3 artisan route:cache
-	php7.3 artisan view:cache
-	php7.3 artisan storage:link
-	php7.3 artisan migrate --force
-	php7.3 artisan update
-	php7.3 artisan horizon:purge
-	php7.3 artisan horizon:assets
+	php$phpversion artisan -n key:generate --force
+	php$phpversion artisan horizon:install
+	php$phpversion artisan config:clear
+	php$phpversion artisan config:cache
+	php$phpversion artisan route:cache
+	php$phpversion artisan view:cache
+	php$phpversion artisan storage:link
+	php$phpversion artisan migrate --force
+	php$phpversion artisan update
+	php$phpversion artisan horizon:purge
+	php$phpversion artisan horizon:assets
 popd
 
 #=================================================
 # INSTALL THE CRON FILE
 #=================================================
-ynh_print_info --message="Installing cron file..."
+ynh_script_progression --message="Installing the cron file..."
 
 cp ../conf/cron "/etc/cron.d/$app"
 ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path" --target_file="/etc/cron.d/$app"
+ynh_replace_string --match_string="__PHPVERSION__" --replace_string="$phpversion" --target_file="/etc/cron.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
-ynh_print_info --message="Securing files and directories..."
+ynh_script_progression --message="Securing files and directories..."
 
 # Set permissions to app files
-chown -R root: "$final_path"
+chown -R root: $final_path
 chown -R "$app": "$final_path/storage/"
 
 #=================================================
 # SETUP LOGROTATE
 #=================================================
-ynh_print_info --message="Configuring log rotation..."
+ynh_script_progression --message="Configuring log rotation..."
 
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
@@ -228,14 +213,14 @@ ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-ynh_print_info --message="Integrating service in YunoHost..."
+ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add "supervisor" --description "${app}-horizon daemon for $app" --log "/var/log/$app/${app}-horizon.log"
+yunohost service add "supervisor" --description "Supervisor daemon for $app" --log "/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
 #=================================================
-ynh_print_info --message="Starting a supervisor service..."
+ynh_script_progression --message="Starting a supervisor service..."
 
 # Start a supervisor service
 ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log" --line_match="Horizon started successfully"
@@ -243,19 +228,19 @@ ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_pat
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_print_info --message="Configuring SSOwat..."
+ynh_script_progression --message="Configuring SSOwat..."
 
 # Make app public if necessary
-if [ "$is_public" -eq 1 ]
+if [ $is_public -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/"
+	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading nginx web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -263,4 +248,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info --message="Installation of $app completed"
+ynh_script_progression --message="Installation of $app completed"

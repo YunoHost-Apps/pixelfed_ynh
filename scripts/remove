@@ -7,41 +7,38 @@
 #=================================================
 
 source _common.sh
-source ynh_add_extra_apt_repos__3
-source ynh_install_php__3
 source ynh_supervisor
 source /usr/share/yunohost/helpers
 
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_print_info --message="Loading installation settings..."
+ynh_script_progression --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app="$app" --key=domain)
-db_name=$(ynh_app_setting_get --app="$app" --key=db_name)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
-final_path=$(ynh_app_setting_get --app="$app" --key=final_path)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
 #=================================================
 # STANDARD REMOVE
 #=================================================
 # REMOVE SERVICE INTEGRATION IN YUNOHOST
 #=================================================
-ynh_print_info --message="Removing service integration in YunoHost..."
 
 # Remove the service from the list of services known by Yunohost (added from `yunohost service add`)
-if ynh_exec_warn_less yunohost service status ${app}-horizon >/dev/null
+if ynh_exec_warn_less yunohost service status "supervisor" >/dev/null
 then
-	ynh_print_info --message="Removing ${app}-horizon service..."
-	yunohost service remove "${app}-horizon"
+	ynh_script_progression --message="Removing supervisor service..."
+	yunohost service remove "supervisor"
 fi
 
 #=================================================
 # STOP AND REMOVE SERVICE
 #=================================================
-ynh_print_info --message="Stopping and removing the supervisor service..."
+ynh_script_progression --message="Stopping and removing the supervisor service..."
 
 # Remove the dedicated supervisor config
 ynh_remove_supervisor_config --service="${app}-horizon"
@@ -49,26 +46,23 @@ ynh_remove_supervisor_config --service="${app}-horizon"
 #=================================================
 # REMOVE THE POSTGRESQL DATABASE
 #=================================================
-ynh_print_info --message="Removing the PostgreSQL database..."
+ynh_script_progression --message="Removing the PostgreSQL database..."
 
 # Remove a database if it exists, along with the associated user
-ynh_psql_remove_db --db_user="$db_user" --db_name="$db_name"
+ynh_psql_remove_db --db_user=$db_user --db_name=$db_name
 
 #=================================================
 # REMOVE DEPENDENCIES
 #=================================================
-ynh_print_info --message="Removing dependencies..."
+ynh_script_progression --message="Removing dependencies..."
 
 # Remove metapackage and its dependencies
 ynh_remove_app_dependencies
-if [ "$(lsb_release --codename --short)" != "buster" ]; then
-	ynh_remove_php
-fi
 
 #=================================================
 # REMOVE APP MAIN DIR
 #=================================================
-ynh_print_info --message="Removing app main directory..."
+ynh_script_progression --message="Removing app main directory..."
 
 # Remove the app directory securely
 ynh_secure_remove --file="$final_path"
@@ -76,7 +70,7 @@ ynh_secure_remove --file="$final_path"
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
-ynh_print_info --message="Removing nginx web server configuration..."
+ynh_script_progression --message="Removing nginx web server configuration..."
 
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
@@ -84,7 +78,7 @@ ynh_remove_nginx_config
 #=================================================
 # REMOVE PHP-FPM CONFIGURATION
 #=================================================
-ynh_print_info --message="Removing php-fpm configuration..."
+ynh_script_progression --message="Removing php-fpm configuration..."
 
 # Remove the dedicated php-fpm config
 ynh_remove_fpm_config
@@ -92,7 +86,7 @@ ynh_remove_fpm_config
 #=================================================
 # REMOVE LOGROTATE CONFIGURATION
 #=================================================
-ynh_print_info --message="Removing logrotate configuration..."
+ynh_script_progression --message="Removing logrotate configuration..."
 
 # Remove the app-specific logrotate config
 ynh_remove_logrotate
@@ -102,7 +96,7 @@ ynh_remove_logrotate
 #=================================================
 # REMOVE THE CRON FILE
 #=================================================
-ynh_print_info --message="Removing the cron file..."
+ynh_script_progression --message="Removing the cron file..."
 
 # Remove a cron file
 ynh_secure_remove --file="/etc/cron.d/$app"
@@ -110,7 +104,7 @@ ynh_secure_remove --file="/etc/cron.d/$app"
 #=================================================
 # REMOVE THE LOG FILE
 #=================================================
-ynh_print_info --message="Removing the log file..."
+ynh_script_progression --message="Removing the log file..."
 
 # Remove the log files
 ynh_secure_remove --file="/var/log/$app"
@@ -120,13 +114,13 @@ ynh_secure_remove --file="/var/log/$app"
 #=================================================
 # REMOVE DEDICATED USER
 #=================================================
-ynh_print_info --message="Removing the dedicated system user..."
+ynh_script_progression --message="Removing the dedicated system user..."
 
 # Delete a system user
-ynh_system_user_delete --username="$app"
+ynh_system_user_delete --username=$app
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info --message="Removal of $app completed"
+ynh_script_progression --message="Removal of $app completed"

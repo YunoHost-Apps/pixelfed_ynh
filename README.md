@@ -1,10 +1,10 @@
 # Pixelfed for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed)  
-[![Install pixelfed with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=pixelfed)
+[![Integration level](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed) ![](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)  
+[![Install Pixelfed with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=pixelfed)
 
-> *This package allow you to install pixelfed quickly and simply on a YunoHost server.  
-If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to know how to install and enjoy it.*
+> *This package allows you to install Pixelfed quickly and simply on a YunoHost server.  
+If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
 
 ## Overview
 The federated image sharing service Pixelfed, for YunoHost
@@ -60,7 +60,7 @@ Those commands can be found in the official documentation.
 
 #### Supported architectures
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/pixelfed%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/pixelfed/)
 
 ## Links
@@ -72,10 +72,10 @@ Those commands can be found in the official documentation.
 
 ---
 
-Developers info
+Developer info
 ----------------
 
-Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing).
+Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
 ```

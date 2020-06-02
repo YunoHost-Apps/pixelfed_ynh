@@ -16,7 +16,7 @@ ynh_composer_exec () {
 	# Manage arguments with getopts
 	ynh_handle_getopts_args "$@"
 	workdir="${workdir:-$final_path}"
-	phpversion="${phpversion:-7.0}"
+	phpversion="${phpversion:-$YNH_PHP_VERSION}"
 
 	COMPOSER_HOME="$workdir/.composer" \
 		php${phpversion} "$workdir/composer.phar" $commands \
@@ -39,7 +39,7 @@ ynh_install_composer () {
 	# Manage arguments with getopts
 	ynh_handle_getopts_args "$@"
 	workdir="${workdir:-$final_path}"
-	phpversion="${phpversion:-7.0}"
+	phpversion="${phpversion:-$YNH_PHP_VERSION}"
 	install_args="${install_args:-}"
 
 	curl -sS https://getcomposer.org/installer \
