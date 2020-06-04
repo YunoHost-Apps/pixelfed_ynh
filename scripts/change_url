@@ -125,7 +125,7 @@ popd
 #=================================================
 ynh_script_progression --message="Starting a supervisor service..."
 
-ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
+ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
 
 #=================================================
 # RELOAD NGINX

@@ -16,7 +16,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 ynh_clean_setup () {
-	true
+	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -137,7 +137,7 @@ yunohost service add "supervisor" --description "Supervisor daemon for $app" --l
 #=================================================
 ynh_script_progression --message="Starting a supervisor service..."
 
-ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
+ynh_supervisor_action --service_name="${app}-horizon" --action="reload" --log_path="systemd" --line_match="success: ${app}-horizon"
 
 #=================================================
 # RESTORE THE CRON FILE

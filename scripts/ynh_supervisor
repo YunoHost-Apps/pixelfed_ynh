@@ -118,9 +118,9 @@ ynh_supervisor_action() {
     then
         local templog="$(mktemp)"
         # Following the starting of the app in its log
-        if [ "$log_path" == "supervisor" ] ; then
+        if [ "$log_path" == "systemd" ] ; then
             # Read the supervisor journal
-            journalctl --unit=$service_name --follow --since=-0 --quiet > "$templog" &
+            journalctl --unit=supervisor --follow --since=-0 --quiet > "$templog" &
             # Get the PID of the journalctl command
             local pid_tail=$!
         else

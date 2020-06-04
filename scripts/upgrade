@@ -70,6 +70,7 @@ ynh_script_progression --message="Backing up the app before upgrading (may take 
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
+	ynh_clean_check_starting
 	# restore it if the upgrade fails
 	ynh_restore_upgradebackup
 }
@@ -115,7 +116,7 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/et
 	ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --others_var="phpversion"
 	
 	ynh_script_progression --message="Starting a supervisor service..."
-	ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
+	ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
 fi
 
 if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
@@ -138,7 +139,7 @@ fi
 #=================================================
 ynh_script_progression --message="Stopping a supervisor service..."
 
-ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="/var/log/$app/${app}-horizon.log"
+ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="systemd" --line_match="stopped: ${app}-horizon"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -193,7 +194,7 @@ ynh_script_progression --message="Updating php dependencies..."
 
 chown -R "$app": "$final_path"
 
-ynh_composer_exec --phpversion="$phpversion" --workdir="$final_path" --commands="update"
+ynh_exec_warn_less ynh_composer_exec --phpversion="$phpversion" --workdir="$final_path" --commands="update"
 
 #=================================================
 # MODIFY A CONFIG FILE
@@ -296,7 +297,7 @@ fi
 #=================================================
 ynh_script_progression --message="Starting a supervisor service..."
 
-ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log"
+ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
 
 #=================================================
 # RELOAD NGINX

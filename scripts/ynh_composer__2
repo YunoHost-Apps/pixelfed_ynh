@@ -20,7 +20,7 @@ ynh_composer_exec () {
 
 	COMPOSER_HOME="$workdir/.composer" \
 		php${phpversion} "$workdir/composer.phar" $commands \
-		-d "$workdir" --quiet --no-interaction
+		-d "$workdir" --no-interaction
 }
 
 # Install and initialize Composer in the given directory
@@ -44,7 +44,7 @@ ynh_install_composer () {
 
 	curl -sS https://getcomposer.org/installer \
 		| COMPOSER_HOME="$workdir/.composer" \
-		php${phpversion} -- --quiet --install-dir="$workdir" \
+		php${phpversion} -- --install-dir="$workdir" \
 		|| ynh_die "Unable to install Composer."
 
 	# update dependencies to create composer.lock

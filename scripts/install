@@ -16,7 +16,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 ynh_clean_setup () {
-	true
+	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -120,7 +120,7 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 #=================================================
 ynh_script_progression --message="Installing composer dependencies..."
 
-ynh_install_composer --phpversion="$phpversion" --workdir="$final_path"
+ynh_exec_warn_less ynh_install_composer --phpversion="$phpversion" --workdir="$final_path"
 
 #=================================================
 # CREATE LOG FILE
@@ -223,7 +223,7 @@ yunohost service add "supervisor" --description "Supervisor daemon for $app" --l
 ynh_script_progression --message="Starting a supervisor service..."
 
 # Start a supervisor service
-ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="/var/log/$app/${app}-horizon.log" --line_match="Horizon started successfully"
+ynh_supervisor_action --service_name="${app}-horizon" --action="reload" --log_path="systemd" --line_match="success: ${app}-horizon"
 
 #=================================================
 # SETUP SSOWAT
