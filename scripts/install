@@ -147,13 +147,13 @@ ynh_script_progression --message="Modifying a config file..."
 config="$final_path/.env"
 cp ../conf/.env "$config"
 
-ynh_replace_string --match_string="__APP__"     --replace_string="$app"      --target_file="$config"
-ynh_replace_string --match_string="__APP_KEY__" --replace_string="$app_key"  --target_file="$config"
-ynh_replace_string --match_string="__DOMAIN__"  --replace_string="$domain"   --target_file="$config"
-ynh_replace_string --match_string="__PATH__"    --replace_string="$path_url" --target_file="$config"
-ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name"  --target_file="$config"
-ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user"  --target_file="$config"
-ynh_replace_string --match_string="__DB_PWD__"  --replace_string="$db_pwd"   --target_file="$config"
+ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="$config"
+ynh_replace_string --match_string="__APP_KEY__" --replace_string="$app_key" --target_file="$config"
+ynh_replace_string --match_string="__DOMAIN__"  --replace_string="$domain" --target_file="$config"
+ynh_replace_string --match_string="__PATH__" --replace_string="$path_url" --target_file="$config"
+ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$config"
+ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$config"
+ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$config"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
