@@ -71,7 +71,7 @@ ynh_backup --src_path="/etc/logrotate.d/$app"
 ynh_backup --src_path="/etc/supervisor/conf.d/${app}-horizon.conf"
 
 #=================================================
-# BACKUP A CRON FILE
+# BACKUP VARIOUS FILES
 #=================================================
 
 ynh_backup --src_path="/etc/cron.d/$app"
