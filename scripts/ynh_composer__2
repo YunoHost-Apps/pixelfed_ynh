@@ -16,11 +16,11 @@ ynh_composer_exec () {
 	# Manage arguments with getopts
 	ynh_handle_getopts_args "$@"
 	workdir="${workdir:-$final_path}"
-	phpversion="${phpversion:-7.0}"
+	phpversion="${phpversion:-$YNH_PHP_VERSION}"
 
 	COMPOSER_HOME="$workdir/.composer" \
 		php${phpversion} "$workdir/composer.phar" $commands \
-		-d "$workdir" --quiet --no-interaction
+		-d "$workdir" --no-interaction
 }
 
 # Install and initialize Composer in the given directory
@@ -39,12 +39,12 @@ ynh_install_composer () {
 	# Manage arguments with getopts
 	ynh_handle_getopts_args "$@"
 	workdir="${workdir:-$final_path}"
-	phpversion="${phpversion:-7.0}"
+	phpversion="${phpversion:-$YNH_PHP_VERSION}"
 	install_args="${install_args:-}"
 
 	curl -sS https://getcomposer.org/installer \
 		| COMPOSER_HOME="$workdir/.composer" \
-		php${phpversion} -- --quiet --install-dir="$workdir" \
+		php${phpversion} -- --install-dir="$workdir" \
 		|| ynh_die "Unable to install Composer."
 
 	# update dependencies to create composer.lock

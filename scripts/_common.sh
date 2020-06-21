@@ -7,7 +7,9 @@
 # dependencies used by the app
 pkg_dependencies="postgresql redis-server imagemagick jpegoptim optipng pngquant supervisor"
 
-extra_pkg_dependencies="php7.3-bcmath php7.3-cli php7.3-ctype php7.3-curl php7.3-exif php7.3-gd php7.3-iconv php7.3-intl php7.3-json php7.3-mbstring php7.3-tokenizer php7.3-simplexml php7.3-xml php7.3-zip php7.3-pgsql php7.3-fileinfo php7.3-pdo"
+YNH_PHP_VERSION="7.3"
+
+extra_php_dependencies="php${YNH_PHP_VERSION}-bcmath php${YNH_PHP_VERSION}-cli php${YNH_PHP_VERSION}-ctype php${YNH_PHP_VERSION}-curl php${YNH_PHP_VERSION}-exif php${YNH_PHP_VERSION}-gd php${YNH_PHP_VERSION}-iconv php${YNH_PHP_VERSION}-intl php${YNH_PHP_VERSION}-json php${YNH_PHP_VERSION}-mbstring php${YNH_PHP_VERSION}-tokenizer php${YNH_PHP_VERSION}-simplexml php${YNH_PHP_VERSION}-xml php${YNH_PHP_VERSION}-zip php${YNH_PHP_VERSION}-pgsql php${YNH_PHP_VERSION}-fileinfo php${YNH_PHP_VERSION}-pdo"
 
 #=================================================
 # PERSONAL HELPERS
