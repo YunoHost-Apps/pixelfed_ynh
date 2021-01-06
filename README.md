@@ -54,7 +54,7 @@ Those commands can be found in the official documentation.
 
 ## Documentation
 
- * [Official documentation](https://docs.pixelfed.org/master/)
+ * [Official documentation](https://docs.pixelfed.org/)
 
 ## YunoHost specific features
 
