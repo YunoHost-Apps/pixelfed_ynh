@@ -1,7 +1,7 @@
 # Pixelfed for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed) ![](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)  
-[![Install Pixelfed with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=pixelfed)
+[![Install Pixelfed with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 
 > *This package allows you to install Pixelfed quickly and simply on a YunoHost server.  
 If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
