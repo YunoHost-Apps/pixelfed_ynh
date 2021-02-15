@@ -234,7 +234,6 @@ pushd "$final_path"
 	php$phpversion artisan migrate --force
 	php$phpversion artisan update
 	php$phpversion artisan horizon:purge
-	php$phpversion artisan horizon:assets
 	php$phpversion artisan import:cities
 	php$phpversion artisan instance:actor
 popd
