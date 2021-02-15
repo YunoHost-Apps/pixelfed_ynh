@@ -171,6 +171,7 @@ ynh_script_progression --message="Deploying..."
 pushd "$final_path"
 	php$phpversion artisan -n key:generate --force
 	php$phpversion artisan horizon:install
+	php$phpversion artisan horizon:publish
 	php$phpversion artisan config:clear
 	php$phpversion artisan config:cache
 	php$phpversion artisan route:cache
@@ -180,6 +181,8 @@ pushd "$final_path"
 	php$phpversion artisan update
 	php$phpversion artisan horizon:purge
 	php$phpversion artisan horizon:assets
+	php$phpversion artisan import:cities
+	php$phpversion artisan instance:actor
 popd
 
 #=================================================

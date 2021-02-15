@@ -5,7 +5,7 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="postgresql redis-server imagemagick jpegoptim optipng pngquant supervisor"
+pkg_dependencies="postgresql redis-server libgd3 jpegoptim optipng pngquant ffmpeg imagemagick supervisor"
 
 YNH_PHP_VERSION="7.3"
 
