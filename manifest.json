@@ -22,17 +22,20 @@
     }
   ],
   "requirements": {
-    "yunohost": ">= 3.5"
+        "yunohost": ">= 4.1.3"
   },
   "multi_instance": true,
-  "services": ["nginx"],
-  "arguments": {
+    "services": [
+        "nginx",
+        "php7.3-fpm"
+    ],
+    "arguments": {
     "install": [
       {
         "name": "domain",
         "type": "domain",
         "ask": {
-          "en": "Choose a domain for Pixelfed"
+          "en": "Choose a domain name for Pixelfed"
         },
         "example": "domain.org"
       },
