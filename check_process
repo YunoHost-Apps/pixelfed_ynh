@@ -19,7 +19,7 @@
 		# 0.10.9~ynh1
 		# upgrade=1	from_commit=8c5e710060da43a946336d66a30b9c311cfdbc37
 		# 0.10.9~ynh2
-		upgrade=1	from_commit=c81ed6b760a1a68b8993917e808434166766a37a
+		# upgrade=1	from_commit=c81ed6b760a1a68b8993917e808434166766a37a
 		# 0.10.9~ynh3
 		upgrade=1	from_commit=9c7d0ff114bb0bd3482901fde4bd82b494aa2e6d
 		backup_restore=1
