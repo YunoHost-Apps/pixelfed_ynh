@@ -31,7 +31,7 @@ After being first registered, you need to execute the folloing command to promot
 
 and respond yes to the question ` Add admin privileges to this user?`
 
-### Allow/Close registration
+### Allow/Close registrations
 
 Registrations are open by default.
 To change that setting, edit `/var/www/pixelfed/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
@@ -66,14 +66,13 @@ Those commands can be found in the official documentation.
 ## Links
 
  * Report a bug: https://github.com/YunoHost-Apps/pixelfed_ynh
- * Pixelfed website: https://pixelfed.org
+ * App website: https://pixelfed.org
  * Upstream app repository: https://github.com/pixelfed/pixelfed
  * YunoHost website: https://yunohost.org
 
 ---
 
-Developer info
-----------------
+## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing).
 

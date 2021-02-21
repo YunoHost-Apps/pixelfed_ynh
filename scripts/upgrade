@@ -41,25 +41,11 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..."
 
-# Fix is_public as a boolean value
-if [ "$is_public" = "Yes" ]; then
-	ynh_app_setting_set --app=$app --key=is_public --value=1
-	is_public=1
-elif [ "$is_public" = "No" ]; then
-	ynh_app_setting_set --app=$app --key=is_public --value=0
-	is_public=0
-fi
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
 
-# If db_name doesn't exist, create it
-if [ -z "$db_name" ]; then
-	db_name=$(ynh_sanitize_dbid --db_name="$app")
-	ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-fi
-
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set --app="$app" --key=final_path --value="$final_path"
+	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
 #=================================================
@@ -109,7 +95,6 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/et
 	mkdir -p "/var/log/$app/"
 	touch "/var/log/$app/${app}-horizon.log"
 	chown -R root: "/var/log/$app/"
-
 
 	ynh_script_progression --message="Configuring a supervisor service..."
 	phpversion=$YNH_PHP_VERSION
@@ -166,7 +151,7 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..."
 
-ynh_install_app_dependencies "$pkg_dependencies"
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
@@ -188,9 +173,9 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
-# UPDATE PHP DEPENDENCIES
+# UPDATE COMPOSER DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Updating php dependencies..."
+ynh_script_progression --message="Updating composer dependencies..."
 
 chown -R "$app": "$final_path"
 
@@ -201,20 +186,7 @@ ynh_exec_warn_less ynh_composer_exec --phpversion="$phpversion" --workdir="$fina
 #=================================================
 ynh_script_progression --message="Modifying a config file..."
 
-config="$final_path/.env"
-ynh_backup_if_checksum_is_different --file="$config"
-cp ../conf/.env "$config"
-
-ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="$config"
-ynh_replace_string --match_string="__APP_KEY__" --replace_string="$app_key" --target_file="$config"
-ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$config"
-ynh_replace_string --match_string="__PATH__" --replace_string="$path_url" --target_file="$config"
-ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$config"
-ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$config"
-ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$config"
-
-# Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file="$config"
+ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
 
 #=================================================
 # DEPLOYMENT
@@ -250,17 +222,7 @@ chown -R root: "/var/log/$app/"
 #=================================================
 ynh_script_progression --message="Upgrading cron file..."
 
-cp ../conf/cron "/etc/cron.d/$app"
-ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path" --target_file="/etc/cron.d/$app"
-ynh_replace_string --match_string="__PHPVERSION__" --replace_string="$phpversion" --target_file="/etc/cron.d/$app"
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..."
-
-# Use logrotate to manage app-specific logfile(s)
-ynh_use_logrotate --non-append
+ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 
 #=================================================
 # SETUP SUPERVISOR
@@ -281,16 +243,19 @@ ynh_script_progression --message="Securing files and directories..."
 chown -R $app: $final_path
 
 #=================================================
-# SETUP SSOWAT
+# SETUP LOGROTATE
 #=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..."
+ynh_script_progression --message="Upgrading logrotate configuration..."
 
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway
-	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
-fi
+# Use logrotate to manage app-specific logfile(s)
+ynh_use_logrotate --non-append
+
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
+
+yunohost service add "supervisor" --description "Supervisor daemon for $app" --log "/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
