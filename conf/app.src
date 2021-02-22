@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/pixelfed/pixelfed/archive/v0.10.9.tar.gz
-SOURCE_SUM=d843796473858de2f0f3cda11db2f711b8303a058660d62c6696d4cb828a8a45
+SOURCE_URL=https://github.com/pixelfed/pixelfed/archive/v0.10.10.tar.gz
+SOURCE_SUM=096faddbf43c41552e9f03eb4b76b70a04e314ca6974d13c0f2a73c42a4aa617
 OURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
