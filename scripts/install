@@ -210,7 +210,7 @@ ynh_supervisor_action --service_name="${app}-horizon" --action="reload" --log_pa
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring SSOwat..."
+ynh_script_progression --message="Configuring permissions..."
 
 # Make app public if necessary
 if [ $is_public -eq 1 ]
