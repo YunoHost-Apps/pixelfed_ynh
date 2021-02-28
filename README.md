@@ -44,7 +44,9 @@ If you don't want your Pixelfed instance to be indexed in search engine (and so 
 User-agent: *
 Disallow: /
 ```
-Note: search engines will see that files and may or may not respect its content.
+Note: search engines will see that file and may or may not respect its content.
+
+Since 0.10.10, by default `/discover/places/`, `/stories/` and `/i/` are present in that file.
 
 ### Pixelfed php commands and php version
 
