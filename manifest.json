@@ -6,7 +6,7 @@
     "en": "ActivityPub Federated Image Sharing",
     "fr": "Logiciel de partage d'image fédéré via ActivityPub"
   },
-  "version": "0.10.10~ynh1",
+  "version": "0.10.10~ynh2",
   "url": "https://pixelfed.org/",
   "license": "AGPL-3.0-or-later",
   "maintainer": [
@@ -30,23 +30,17 @@
         "php7.3-fpm"
     ],
     "arguments": {
-    "install": [
-      {
-        "name": "domain",
-        "type": "domain",
-        "ask": {
-          "en": "Choose a domain name for Pixelfed"
-        },
-        "example": "domain.org"
-      },
-      {
-        "name": "is_public",
-        "type": "boolean",
-        "ask": {
-          "en": "Is it a public application?"
-        },
-        "default": true
-      }
-    ]
-  }
+        "install" : [
+            {
+                "name": "domain",
+                "type": "domain",
+                "example": "example.com"
+            },
+            {
+                "name": "is_public",
+                "type": "boolean",
+                "default": true
+            }
+        ]
+    }
 }
