@@ -97,7 +97,7 @@ ynh_setup_source --dest_dir="$final_path"
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
-chown -R root:$app "$final_path"
+chown -R $app:$app "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -132,15 +132,7 @@ ynh_script_progression --message="Creating log file..."
 
 mkdir -p "/var/log/$app/"
 touch "/var/log/$app/${app}-horizon.log"
-chown -R root: "/var/log/$app/"
-
-#=================================================
-# SETUP SUPERVISOR
-#=================================================
-ynh_script_progression --message="Configuring a supervisor service..."
-
-# Create a dedicated supervisor config
-ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --others_var="phpversion"
+chown -R $app: "/var/log/$app/"
 
 #=================================================
 # ADD A CONFIGURATION
@@ -151,6 +143,14 @@ ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
 
 chmod 400 "$final_path/.env"
 chown $app:$app "$final_path/.env"
+
+#=================================================
+# SETUP SUPERVISOR
+#=================================================
+ynh_script_progression --message="Configuring a supervisor service..."
+
+# Create a dedicated supervisor config
+ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --others_var="phpversion"
 
 #=================================================
 # DEPLOY
