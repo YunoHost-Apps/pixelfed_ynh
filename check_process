@@ -22,6 +22,8 @@
 		# upgrade=1	from_commit=c81ed6b760a1a68b8993917e808434166766a37a
 		# 0.10.9~ynh3
 		upgrade=1	from_commit=9c7d0ff114bb0bd3482901fde4bd82b494aa2e6d
+		# 0.10.10~ynh1
+		upgrade=1	from_commit=1aa406fb124b92f03b1bb69fc3462936d5227278
 		backup_restore=1
 		multi_instance=1
 		port_already_use=0
@@ -38,3 +40,5 @@ Notification=all
 		name=0.10.9~ynh2
 	; commit=9c7d0ff114bb0bd3482901fde4bd82b494aa2e6d
 		name=0.10.9~ynh3
+	; commit=1aa406fb124b92f03b1bb69fc3462936d5227278
+		name=0.10.10~ynh1

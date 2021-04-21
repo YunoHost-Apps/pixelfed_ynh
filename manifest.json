@@ -1,52 +1,46 @@
 {
-  "name": "Pixelfed",
-  "id": "pixelfed",
-  "packaging_format": 1,
-  "description": {
-    "en": "ActivityPub Federated Image Sharing",
-    "fr": "Logiciel de partage d'image fédéré via ActivityPub"
-  },
-  "version": "0.10.10~ynh1",
-  "url": "https://pixelfed.org/",
-  "license": "AGPL-3.0-or-later",
-  "maintainer": [
-    {
-      "name": "Jean-Baptiste Holcroft",
-      "email": "jean-baptiste@holcroft.fr"
+    "name": "Pixelfed",
+    "id": "pixelfed",
+    "packaging_format": 1,
+    "description": {
+        "en": "ActivityPub Federated Image Sharing",
+        "fr": "Logiciel de partage d'image fédéré via ActivityPub"
     },
-    {
-      "name": "yalh76"
-    },
-    {
-      "name": "lapineige"
-    }
-  ],
-  "requirements": {
+    "version": "0.10.10~ynh2",
+    "url": "https://pixelfed.org/",
+    "license": "AGPL-3.0-or-later",
+    "maintainer": [
+        {
+            "name": "Jean-Baptiste Holcroft",
+            "email": "jean-baptiste@holcroft.fr"
+        },
+        {
+            "name": "yalh76"
+        },
+        {
+            "name": "lapineige"
+        }
+    ],
+    "requirements": {
         "yunohost": ">= 4.1.3"
-  },
-  "multi_instance": true,
+    },
+    "multi_instance": true,
     "services": [
         "nginx",
         "php7.3-fpm"
     ],
     "arguments": {
-    "install": [
-      {
-        "name": "domain",
-        "type": "domain",
-        "ask": {
-          "en": "Choose a domain name for Pixelfed"
-        },
-        "example": "domain.org"
-      },
-      {
-        "name": "is_public",
-        "type": "boolean",
-        "ask": {
-          "en": "Is it a public application?"
-        },
-        "default": true
-      }
-    ]
-  }
+        "install" : [
+            {
+                "name": "domain",
+                "type": "domain",
+                "example": "example.com"
+            },
+            {
+                "name": "is_public",
+                "type": "boolean",
+                "default": true
+            }
+        ]
+    }
 }
