@@ -56,7 +56,7 @@ ynh_script_progression --message="Backing up the app before upgrading (may take 
 ynh_backup_before_upgrade
 ynh_clean_setup () {
 	ynh_clean_check_starting
-	# restore it if the upgrade fails
+	# Restore it if the upgrade fails
 	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
@@ -93,7 +93,7 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/et
 	ynh_script_progression --message="Creating log file..."
 	mkdir -p "/var/log/$app/"
 	touch "/var/log/$app/${app}-horizon.log"
-	chown -R root: "/var/log/$app/"
+	chown -R $app: "/var/log/$app/"
 
 	ynh_script_progression --message="Configuring a supervisor service..."
 	phpversion=$YNH_PHP_VERSION
@@ -113,7 +113,7 @@ if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/et
 	fi
 	
 	ynh_script_progression --message="Integrating service in YunoHost..."
-	yunohost service add "supervisor" --description "Supervisor daemon for $app" --log "/var/log/$app/${app}-horizon.log"
+	yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
 fi
 
 #=================================================
@@ -124,6 +124,14 @@ fi
 ynh_script_progression --message="Stopping a supervisor service..."
 
 ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="systemd" --line_match="stopped: ${app}-horizon"
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..."
+
+# Create a dedicated user (if not existing)
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -137,12 +145,16 @@ then
 	ynh_setup_source --dest_dir="$final_path"
 fi
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading nginx web server configuration..."
+ynh_script_progression --message="Upgrading NGINX web server configuration..."
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
 
 #=================================================
@@ -153,19 +165,11 @@ ynh_script_progression --message="Upgrading dependencies..."
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..."
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
-
-#=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading php-fpm configuration..."
+ynh_script_progression --message="Upgrading PHP-FPM configuration..."
 
-# Create a dedicated php-fpm config
+# Create a dedicated PHP-FPM config
 ynh_add_fpm_config --usage=low --footprint=low --package="$extra_php_dependencies"
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
@@ -181,11 +185,14 @@ chown -R "$app": "$final_path"
 ynh_exec_warn_less ynh_composer_exec --phpversion="$phpversion" --workdir="$final_path" --commands="update"
 
 #=================================================
-# MODIFY A CONFIG FILE
+# UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Modifying a config file..."
+ynh_script_progression --message="Updating a config file..."
 
 ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
+
+chmod 400 "$final_path/.env"
+chown $app:$app "$final_path/.env"
 
 #=================================================
 # DEPLOYMENT
@@ -216,7 +223,7 @@ ynh_script_progression --message="Creating log file..."
 
 mkdir -p "/var/log/$app/"
 touch "/var/log/$app/${app}-horizon.log"
-chown -R root: "/var/log/$app/"
+chown -R $app: "/var/log/$app/"
 
 #=================================================
 # UPGRADE THE CRON FILE
@@ -236,14 +243,6 @@ ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --o
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-ynh_script_progression --message="Securing files and directories..."
-
-# Set permissions on app files
-chown -R $app: $final_path
-
-#=================================================
 # SETUP LOGROTATE
 #=================================================
 ynh_script_progression --message="Upgrading logrotate configuration..."
@@ -256,7 +255,7 @@ ynh_use_logrotate --non-append
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add "supervisor" --description "Supervisor daemon for $app" --log "/var/log/$app/${app}-horizon.log"
+yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
@@ -268,7 +267,7 @@ ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_pat
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading NGINX web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
