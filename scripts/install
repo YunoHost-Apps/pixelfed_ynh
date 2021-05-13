@@ -7,7 +7,6 @@
 #=================================================
 
 source _common.sh
-source ynh_composer__3
 source ynh_supervisor
 source /usr/share/yunohost/helpers
 
