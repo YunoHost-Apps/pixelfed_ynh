@@ -96,7 +96,7 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/et
 
 	ynh_script_progression --message="Configuring a supervisor service..."
 	phpversion=$YNH_PHP_VERSION
-	ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --others_var="phpversion"
+	ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
 	
 	ynh_script_progression --message="Starting a supervisor service..."
 	ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
@@ -235,7 +235,7 @@ ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 ynh_script_progression --message="Upgrading supervisor configuration..."
 
 # Create a dedicated supervisor config
-ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --others_var="phpversion"
+ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
 
 #=================================================
 # GENERIC FINALIZATION
