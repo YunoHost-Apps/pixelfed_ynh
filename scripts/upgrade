@@ -7,7 +7,6 @@
 #=================================================
 
 source _common.sh
-source ynh_composer__3
 source ynh_supervisor
 source /usr/share/yunohost/helpers
 
@@ -36,18 +35,6 @@ ynh_script_progression --message="Checking version..."
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-#=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
 ynh_script_progression --message="Backing up the app before upgrading (may take a while)..."
@@ -61,6 +48,18 @@ ynh_clean_setup () {
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression --message="Ensuring downward compatibility..."
+
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
+fi
 
 #=================================================
 # ENSURE UPGRADE COMPATIBILITY
@@ -97,7 +96,7 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/et
 
 	ynh_script_progression --message="Configuring a supervisor service..."
 	phpversion=$YNH_PHP_VERSION
-	ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --others_var="phpversion"
+	ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
 	
 	ynh_script_progression --message="Starting a supervisor service..."
 	ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
@@ -236,7 +235,7 @@ ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 ynh_script_progression --message="Upgrading supervisor configuration..."
 
 # Create a dedicated supervisor config
-ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --others_var="phpversion"
+ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
 
 #=================================================
 # GENERIC FINALIZATION

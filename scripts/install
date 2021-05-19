@@ -7,7 +7,6 @@
 #=================================================
 
 source _common.sh
-source ynh_composer__3
 source ynh_supervisor
 source /usr/share/yunohost/helpers
 
@@ -68,7 +67,7 @@ ynh_install_app_dependencies $pkg_dependencies
 ynh_script_progression --message="Configuring system user..."
 
 # Create a system user
-ynh_system_user_create --username=$app --home_dir="$final_path"
+ynh_system_user_create --username=$app --home_dir=$final_path
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
@@ -150,7 +149,7 @@ chown $app:$app "$final_path/.env"
 ynh_script_progression --message="Configuring a supervisor service..."
 
 # Create a dedicated supervisor config
-ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf --others_var="phpversion"
+ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
 
 #=================================================
 # DEPLOY
