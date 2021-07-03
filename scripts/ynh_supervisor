@@ -109,7 +109,7 @@ ynh_supervisor_action() {
 
     # Use reload-or-restart instead of reload. So it wouldn't fail if the service isn't running.
     if [ "$action" == "reload" ]; then
-        action="reload-or-restart"
+        action="update"
     fi
 
     # If the service fails to perform the action
