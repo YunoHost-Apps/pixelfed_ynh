@@ -171,7 +171,7 @@ pushd "$final_path"
 	php$phpversion artisan horizon:purge
 	php$phpversion artisan import:cities
 	php$phpversion artisan instance:actor
-	php$phpversion artisan passport:client --personal
+	php$phpversion artisan passport:client --personal <<< "\\n"
 popd
 
 #=================================================
