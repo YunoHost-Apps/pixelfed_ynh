@@ -9,7 +9,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 The federated image sharing service Pixelfed, for YunoHost
 
-**Shipped version:** 0.11.0
+**Shipped version:** 0.11.0~ynh2
 
 ## Important points to read before installing
 
