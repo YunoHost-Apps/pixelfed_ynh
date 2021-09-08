@@ -65,9 +65,9 @@ Depuis la 0.10.10, par défaut `/discover/places/`, `/stories/` et `/i/` sont pr
 ## Documentations et ressources
 
 * Site officiel de l'app : https://pixelfed.org/
-* Documentation officielle utilisateur : https://yunohost.org/apps
-* Documentation officielle de l'admin : https://yunohost.org/packaging_apps
-* Dépôt de code officiel de l'app : https://some.forge.com/example/example
+* Documentation officielle utilisateur : https://docs.pixelfed.org/
+* Documentation officielle de l'admin : https://docs.pixelfed.org/running-pixelfed/administration.html
+* Dépôt de code officiel de l'app : https://github.com/pixelfed/pixelfed
 * Documentation YunoHost pour cette app : https://yunohost.org/app_pixelfed
 * Signaler un bug : https://github.com/YunoHost-Apps/pixelfed_ynh/issues
 
