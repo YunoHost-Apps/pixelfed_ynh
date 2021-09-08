@@ -8,6 +8,14 @@
     },
     "version": "0.11.1~ynh1",
     "url": "https://pixelfed.org/",
+    "upstream": {
+        "license": "AGPL-3.0-or-later",
+        "website": "https://pixelfed.org/",
+        "demo": "https://demo.example.com",
+        "admindoc": "https://yunohost.org/packaging_apps",
+        "userdoc": "https://yunohost.org/apps",
+        "code": "https://some.forge.com/example/example"
+    },
     "license": "AGPL-3.0-or-later",
     "maintainer": [
         {
