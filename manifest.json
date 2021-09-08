@@ -12,9 +12,9 @@
         "license": "AGPL-3.0-or-later",
         "website": "https://pixelfed.org/",
         "demo": "https://demo.example.com",
-        "admindoc": "https://yunohost.org/packaging_apps",
-        "userdoc": "https://yunohost.org/apps",
-        "code": "https://some.forge.com/example/example"
+        "admindoc": "https://docs.pixelfed.org/running-pixelfed/administration.html",
+        "userdoc": "https://docs.pixelfed.org/",
+        "code": "https://github.com/pixelfed/pixelfed"
     },
     "license": "AGPL-3.0-or-later",
     "maintainer": [
