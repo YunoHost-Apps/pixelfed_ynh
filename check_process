@@ -10,14 +10,47 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
+		# 0.10.6
+		# upgrade=1	from_commit=605a47aac7553fdcc6012531ee67add8dbe37b97
+		# 0.10.7
+		# upgrade=1	from_commit=7fa86c3e6e6db6668be0a165213d554850b9fce8
+		# 0.10.8
+		# upgrade=1	from_commit=10c3703567d1e9504ea4f298778464c7dd561470
+		# 0.10.9~ynh1
+		# upgrade=1	from_commit=8c5e710060da43a946336d66a30b9c311cfdbc37
+		# 0.10.9~ynh2
+		# upgrade=1	from_commit=c81ed6b760a1a68b8993917e808434166766a37a
+		# 0.10.9~ynh3
+		# upgrade=1	from_commit=9c7d0ff114bb0bd3482901fde4bd82b494aa2e6d
+		# 0.10.10~ynh1
+		# upgrade=1	from_commit=1aa406fb124b92f03b1bb69fc3462936d5227278
+		# 0.10.10~ynh3
+		# upgrade=1	from_commit=2a796e30dd521a5022586bc7fe59d189210028a4
+		# 0.10.10~ynh4
+		# upgrade=1	from_commit=8ef41895fbd38008f3718e164d0bf3f0d97a2c03
+		# 0.11.0~ynh1
 		upgrade=1	from_commit=c7181d1c7cb6cba53bb65e622c78b0309a53b76a
 		backup_restore=1
 		multi_instance=1
 		port_already_use=0
 		change_url=1
 ;;; Options
-Email=jean-baptiste@holcroft.fr;yalh@yahoo.com
+Email=yalh@yahoo.com
 Notification=all
 ;;; Upgrade options
+	; commit=10c3703567d1e9504ea4f298778464c7dd561470
+		name=0.10.8
+	; commit=8c5e710060da43a946336d66a30b9c311cfdbc37
+		name=0.10.9~ynh1
+	; commit=c81ed6b760a1a68b8993917e808434166766a37a
+		name=0.10.9~ynh2
+	; commit=9c7d0ff114bb0bd3482901fde4bd82b494aa2e6d
+		name=0.10.9~ynh3
+	; commit=1aa406fb124b92f03b1bb69fc3462936d5227278
+		name=0.10.10~ynh1
+	; commit=2a796e30dd521a5022586bc7fe59d189210028a4
+		name=0.10.10~ynh3
+	; commit=8ef41895fbd38008f3718e164d0bf3f0d97a2c03
+		name=0.10.10~ynh4
 	; commit=c7181d1c7cb6cba53bb65e622c78b0309a53b76a
 		name=0.11.0~ynh1
