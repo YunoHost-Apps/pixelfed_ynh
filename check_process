@@ -1,7 +1,7 @@
 ;; Test complet
 	; Manifest
-		domain="domain.tld"	(DOMAIN)
-		is_public=1	(PUBLIC|public=1|private=0)
+		domain="domain.tld"
+		is_public=1
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=0
@@ -30,12 +30,14 @@
 		# upgrade=1	from_commit=8ef41895fbd38008f3718e164d0bf3f0d97a2c03
 		# 0.11.0~ynh1
 		upgrade=1	from_commit=c7181d1c7cb6cba53bb65e622c78b0309a53b76a
+		# 0.11.0~ynh2
+		upgrade=1	from_commit=d85b0b112afd19313dbf4cfba954e255789dfb88
 		backup_restore=1
 		multi_instance=1
 		port_already_use=0
 		change_url=1
 ;;; Options
-Email=jean-baptiste@holcroft.fr;yalh@yahoo.com
+Email=yalh@yahoo.com
 Notification=all
 ;;; Upgrade options
 	; commit=10c3703567d1e9504ea4f298778464c7dd561470
@@ -54,3 +56,5 @@ Notification=all
 		name=0.10.10~ynh4
 	; commit=c7181d1c7cb6cba53bb65e622c78b0309a53b76a
 		name=0.11.0~ynh1
+	; commit=d85b0b112afd19313dbf4cfba954e255789dfb88
+		name=0.11.0~ynh2

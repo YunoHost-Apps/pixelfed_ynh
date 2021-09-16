@@ -6,8 +6,16 @@
         "en": "ActivityPub Federated Image Sharing",
         "fr": "Logiciel de partage d'image fédéré via ActivityPub"
     },
-    "version": "0.11.0~ynh2",
+    "version": "0.11.1~ynh1",
     "url": "https://pixelfed.org/",
+    "upstream": {
+        "license": "AGPL-3.0-or-later",
+        "website": "https://pixelfed.org/",
+        "demo": "https://demo.example.com",
+        "admindoc": "https://docs.pixelfed.org/running-pixelfed/administration.html",
+        "userdoc": "https://docs.pixelfed.org/",
+        "code": "https://github.com/pixelfed/pixelfed"
+    },
     "license": "AGPL-3.0-or-later",
     "maintainer": [
         {
