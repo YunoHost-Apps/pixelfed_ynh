@@ -32,16 +32,16 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 if ynh_exec_warn_less yunohost service status "supervisor" >/dev/null
 then
 	ynh_script_progression --message="Removing supervisor service..."
-	yunohost service remove "supervisor"
+	yunohost service remove "$app"
 fi
 
 #=================================================
 # STOP AND REMOVE SERVICE
 #=================================================
-ynh_script_progression --message="Stopping and removing the supervisor service..."
+ynh_script_progression --message="Stopping and removing the systemd service..."
 
 # Remove the dedicated supervisor config
-ynh_remove_supervisor_config --service="${app}-horizon"
+ynh_remove_systemd_config
 
 #=================================================
 # REMOVE THE POSTGRESQL DATABASE
