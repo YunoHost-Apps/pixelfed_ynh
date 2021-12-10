@@ -132,14 +132,14 @@ systemctl enable $app.service --quiet
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
+yunohost service add $app --description="Supervisor daemon for $app" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
 #=================================================
 ynh_script_progression --message="Starting a supervisor service..."
 
-ynh_supervisor_action --service_name="${app}-horizon" --action="reload" --log_path="systemd" --line_match="success: ${app}-horizon"
+ynh_systemd_action --service_name="$app" --action="start" --log_path="systemd" #--line_match="success: ${app}-horizon"
 
 #=================================================
 # RESTORE THE LOGROTATE CONFIGURATION

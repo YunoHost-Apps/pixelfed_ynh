@@ -138,7 +138,7 @@ ynh_exec_warn_less ynh_install_composer --phpversion="$phpversion" --workdir="$f
 ynh_script_progression --message="Creating log file..."
 
 mkdir -p "/var/log/$app/"
-touch "/var/log/$app/${app}-horizon.log"
+touch "/var/log/$app/$app.log"
 chown -R $app: "/var/log/$app/"
 
 #=================================================
@@ -197,14 +197,14 @@ ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 ynh_script_progression --message="Configuring log rotation..."
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
+ynh_use_logrotate --logfile="/var/log/$app/$app.log"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description="Ethical photo sharing platform" --log="/var/log/$app/${app}-horizon.log"
+yunohost service add $app --description="Ethical photo sharing platform" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
@@ -212,7 +212,7 @@ yunohost service add $app --description="Ethical photo sharing platform" --log="
 ynh_script_progression --message="Starting a supervisor service..."
 
 # Start a supervisor service
-ynh_supervisor_action --service_name="$app" --action="reload" --log_path="systemd" #--line_match="success: ${app}-horizon"
+ynh_systemd_action --service_name="$app" --action="start" --log_path="systemd" #--line_match="success: ${app}-horizon"
 
 #=================================================
 # SETUP SSOWAT

@@ -238,7 +238,7 @@ popd
 ynh_script_progression --message="Creating log file..."
 
 mkdir -p "/var/log/$app/"
-touch "/var/log/$app/${app}-horizon.log"
+touch "/var/log/$app/$app.log"
 chown -R $app: "/var/log/$app/"
 
 #=================================================
@@ -271,7 +271,7 @@ ynh_use_logrotate --non-append
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
+yunohost service add $app --description="Supervisor daemon for $app" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
