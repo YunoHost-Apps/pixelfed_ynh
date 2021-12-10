@@ -227,7 +227,7 @@ pushd "$final_path"
 	php$phpversion artisan migrate --force
 	php$phpversion artisan update
 	php$phpversion artisan horizon:purge
-	php$phpversion artisan import:cities
+	php$phpversion artisan import:cities 2>/dev/null
 	php$phpversion artisan instance:actor
 	php$phpversion artisan passport:client --personal <<< "\\n"
 popd
