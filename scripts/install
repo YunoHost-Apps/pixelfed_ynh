@@ -59,7 +59,7 @@ ynh_app_setting_set --app=$app --key=app_key --value=$app_key
 #=================================================
 ynh_script_progression --message="Installing dependencies..."
 
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
