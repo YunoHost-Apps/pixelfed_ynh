@@ -216,7 +216,7 @@ ynh_script_progression --message="Deploying..."
 pushd "$final_path"
 	php$phpversion artisan horizon:install
 	php$phpversion artisan horizon:publish
-	php$phpversion artisan passport:keys
+	php$phpversion artisan passport:keys --force
 	php$phpversion artisan config:clear
 	php$phpversion artisan config:cache
 	php$phpversion artisan route:clear
