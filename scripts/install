@@ -86,6 +86,14 @@ ynh_app_setting_set --app=$app --key=db_pwd --value=$db_pwd
 ynh_psql_setup_db --db_user=$db_user --db_name=$db_name --db_pwd=$db_pwd
 
 #=================================================
+# CONFIGURE REDIS DATABASE
+#=================================================
+
+# Configure redis
+redis_db=$(ynh_redis_get_free_db)
+ynh_app_setting_set --app="$app" --key=redis_db --value="$redis_db"
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..."
@@ -112,7 +120,7 @@ ynh_add_nginx_config
 ynh_script_progression --message="Configuring PHP-FPM..."
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --usage=low --footprint=low --package="$extra_php_dependencies"
+ynh_add_fpm_config --usage=low --footprint=low
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================

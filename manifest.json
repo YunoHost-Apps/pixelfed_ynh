@@ -30,7 +30,7 @@
         }
     ],
     "requirements": {
-        "yunohost": ">= 4.2.0"
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": true,
     "services": [
@@ -41,8 +41,7 @@
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "example": "example.com"
+                "type": "domain"
             },
             {
                 "name": "is_public",

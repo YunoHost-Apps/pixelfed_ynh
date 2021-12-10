@@ -26,6 +26,10 @@ db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
 app_key=$(ynh_app_setting_get --app=$app --key=app_key)
+phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+
+fpm_footprint=$(ynh_app_setting_get --app=$app --key=fpm_footprint)
+fpm_usage=$(ynh_app_setting_get --app=$app --key=fpm_usage)
 
 #=================================================
 # CHECK VERSION
@@ -50,21 +54,21 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 #=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-#=================================================
 # ENSURE UPGRADE COMPATIBILITY
 #=================================================
 ynh_script_progression --message="Ensuring upgrade compatibility..."
+
+# If fpm_footprint doesn't exist, create it
+if [ -z "$fpm_footprint" ]; then
+	fpm_footprint=low
+	ynh_app_setting_set --app=$app --key=fpm_footprint --value=$fpm_footprint
+fi
+
+# If fpm_usage doesn't exist, create it
+if [ -z "$fpm_usage" ]; then
+	fpm_usage=low
+	ynh_app_setting_set --app=$app --key=fpm_usage --value=$fpm_usage
+fi
 
 # If app_key doesn't exist, retrieve it
 if [ -z "$app_key" ]; then
@@ -113,6 +117,13 @@ if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/et
 	
 	ynh_script_progression --message="Integrating service in YunoHost..."
 	yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
+fi
+
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
 #=================================================
@@ -169,8 +180,7 @@ ynh_install_app_dependencies $pkg_dependencies
 ynh_script_progression --message="Upgrading PHP-FPM configuration..."
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --usage=low --footprint=low --package="$extra_php_dependencies"
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+ynh_add_fpm_config --phpversion=$phpversion --usage=$fpm_usage --footprint=$fpm_footprint
 
 #=================================================
 # SPECIFIC UPGRADE
