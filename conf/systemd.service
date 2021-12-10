@@ -1,0 +1,14 @@
+[Unit]
+Description=Pixelfed task queueing via Laravel Horizon
+After=network.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+ExecStart=php__PHPVERSION__ __FINALPATH__/artisan horizon
+Restart=on-failure
+stdout_logfile=/var/log/__APP__/__APP__-horizon.log
+
+[Install]
+WantedBy=multi-user.target

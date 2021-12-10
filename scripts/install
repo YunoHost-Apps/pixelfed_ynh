@@ -154,10 +154,10 @@ chown $app:$app "$final_path/.env"
 #=================================================
 # SETUP SUPERVISOR
 #=================================================
-ynh_script_progression --message="Configuring a supervisor service..."
+ynh_script_progression --message="Configuring a systemd service..."
 
 # Create a dedicated supervisor config
-ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
+ynh_add_systemd_config
 
 #=================================================
 # DEPLOY
@@ -204,7 +204,7 @@ ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
+yunohost service add $app --description="Ethical photo sharing platform" --log="/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
@@ -212,7 +212,7 @@ yunohost service add "supervisor" --description="Supervisor daemon for $app" --l
 ynh_script_progression --message="Starting a supervisor service..."
 
 # Start a supervisor service
-ynh_supervisor_action --service_name="${app}-horizon" --action="reload" --log_path="systemd" --line_match="success: ${app}-horizon"
+ynh_supervisor_action --service_name="$app" --action="reload" --log_path="systemd" --line_match="success: ${app}-horizon"
 
 #=================================================
 # SETUP SSOWAT
