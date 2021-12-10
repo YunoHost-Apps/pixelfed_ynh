@@ -7,7 +7,6 @@
 #=================================================
 
 source _common.sh
-source ynh_supervisor
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -19,9 +18,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-language=$(ynh_app_setting_get --app=$app --key=language)
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
@@ -35,7 +32,6 @@ fpm_usage=$(ynh_app_setting_get --app=$app --key=fpm_usage)
 #=================================================
 # CHECK VERSION
 #=================================================
-ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
 
@@ -84,48 +80,6 @@ if [ -z "$app_key" ]; then
 	ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 fi
 
-if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
-	ynh_script_progression --message="Ensuring upgrade compatibility to 0.9.0~ynh3..."
-	
-	ynh_script_progression --message="Configuring a systemd service..."
-	ynh_add_systemd_config --service="${app}-horizon" --template=horizon.conf
-fi
-
-if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
-	ynh_script_progression --message="Ensuring upgrade compatibility to 0.10.9~ynh2..."
-	
-	ynh_script_progression --message="Stopping and removing the systemd service..."
-	ynh_remove_systemd_config --service="${app}-horizon"
-	
-	ynh_script_progression --message="Installing dependencies..."
-	ynh_install_app_dependencies "$pkg_dependencies"
-	
-	ynh_script_progression --message="Creating log file..."
-	mkdir -p "/var/log/$app/"
-	touch "/var/log/$app/${app}-horizon.log"
-	chown -R $app: "/var/log/$app/"
-
-	ynh_script_progression --message="Configuring a supervisor service..."
-	phpversion=$YNH_PHP_VERSION
-	ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
-	
-	ynh_script_progression --message="Starting a supervisor service..."
-	ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
-fi
-
-if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
-	ynh_script_progression --message="Ensuring upgrade compatibility to 0.10.9~ynh3..."
-	
-	if ynh_exec_warn_less yunohost service status ${app}-horizon >/dev/null
-	then
-		ynh_script_progression --message="Removing ${app}-horizon service..."
-		yunohost service remove "${app}-horizon"
-	fi
-	
-	ynh_script_progression --message="Integrating service in YunoHost..."
-	yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
-fi
-
 # Cleaning legacy permissions
 if ynh_legacy_permissions_exists; then
 	ynh_legacy_permissions_delete_all
@@ -138,9 +92,9 @@ fi
 #=================================================
 # STOP SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a supervisor service..."
+ynh_script_progression --message="Stopping a systemd service..."
 
-ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="systemd" --line_match="stopped: ${app}-horizon"
+ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # CREATE DEDICATED USER
@@ -227,7 +181,7 @@ pushd "$final_path"
 	php$phpversion artisan migrate --force
 	php$phpversion artisan update
 	php$phpversion artisan horizon:purge
-	php$phpversion artisan import:cities
+	php$phpversion artisan import:cities 2>/dev/null
 	php$phpversion artisan instance:actor
 	php$phpversion artisan passport:client --personal <<< "\\n"
 popd
@@ -251,7 +205,7 @@ ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 #=================================================
 # SETUP SUPERVISOR
 #=================================================
-ynh_script_progression --message="Upgrading supervisor configuration..."
+ynh_script_progression --message="Upgrading systemd configuration..."
 
 # Create a dedicated supervisor config
 ynh_add_systemd_config
@@ -271,12 +225,12 @@ ynh_use_logrotate --non-append
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description="Supervisor daemon for $app" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Ethical photo sharing platform" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Starting a supervisor service..."
+ynh_script_progression --message="Starting a systemd service..."
 
 ynh_systemd_action --service_name="$app" --action="start" --log_path="systemd"
 
