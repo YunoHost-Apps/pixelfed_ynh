@@ -212,7 +212,7 @@ yunohost service add $app --description="Ethical photo sharing platform" --log="
 ynh_script_progression --message="Starting a supervisor service..."
 
 # Start a supervisor service
-ynh_supervisor_action --service_name="$app" --action="reload" --log_path="systemd" --line_match="success: ${app}-horizon"
+ynh_supervisor_action --service_name="$app" --action="reload" --log_path="systemd" #--line_match="success: ${app}-horizon"
 
 #=================================================
 # SETUP SSOWAT
