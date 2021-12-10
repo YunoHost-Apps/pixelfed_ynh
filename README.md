@@ -26,7 +26,7 @@ It is also possible to import your data from Instagram.
 
 **Shipped version:** 0.11.1~ynh1
 
-**Demo:** https://demo.example.com
+
 
 ## Screenshots
 

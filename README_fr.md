@@ -23,7 +23,7 @@ Il est également possible d'importer ses données depuis Instagram.
 
 **Version incluse :** 0.11.1~ynh1
 
-**Démo :** https://demo.example.com
+
 
 ## Captures d'écran
 
