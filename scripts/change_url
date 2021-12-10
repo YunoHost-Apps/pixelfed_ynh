@@ -30,10 +30,6 @@ ynh_script_progression --message="Loading installation settings..."
 # Needed for helper "ynh_add_nginx_config"
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
-# Add settings here as needed by your application
-#db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-#db_user=$db_name
-#db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
