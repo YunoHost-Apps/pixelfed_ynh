@@ -27,6 +27,7 @@ db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
 app_key=$(ynh_app_setting_get --app=$app --key=app_key)
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+redis_db=$(ynh_app_setting_get --app=$app --key=redis_db)
 
 fpm_footprint=$(ynh_app_setting_get --app=$app --key=fpm_footprint)
 fpm_usage=$(ynh_app_setting_get --app=$app --key=fpm_usage)
@@ -68,6 +69,12 @@ fi
 if [ -z "$fpm_usage" ]; then
 	fpm_usage=low
 	ynh_app_setting_set --app=$app --key=fpm_usage --value=$fpm_usage
+fi
+
+# If redis_db doesn't exist, create it
+if [ -z "$redis_db" ]; then
+	redis_db=$(ynh_redis_get_free_db)
+	ynh_app_setting_set --app=$app --key=redis_db --value=$redis_db
 fi
 
 # If app_key doesn't exist, retrieve it
