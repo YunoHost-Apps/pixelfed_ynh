@@ -30,7 +30,7 @@ It is also possible to import your data from Instagram.
 
 ## Screenshots
 
-![](./doc/screenshots/screenshots.png)
+![](./doc/screenshots/screenshots.jpg)
 
 ## Disclaimers / important information
 
