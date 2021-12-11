@@ -138,7 +138,7 @@ yunohost service add $app --description="Ethical photo sharing platform" --log="
 #=================================================
 ynh_script_progression --message="Starting a supervisor service..."
 
-ynh_systemd_action --service_name="$app" --action="start" --log_path="systemd" #--line_match="success: ${app}-horizon"
+ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
 
 #=================================================
 # RESTORE THE LOGROTATE CONFIGURATION
