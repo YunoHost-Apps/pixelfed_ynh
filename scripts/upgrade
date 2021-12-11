@@ -157,7 +157,7 @@ then
 	ynh_script_progression --message="Upgrading source files..."
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path"
+	ynh_setup_source --dest_dir="$final_path" --keep="$final_path/.env"
 fi
 
 chmod 750 "$final_path"
@@ -199,12 +199,12 @@ ynh_exec_warn_less ynh_composer_exec --phpversion="$phpversion" --workdir="$fina
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a config file..."
+# ynh_script_progression --message="Updating a config file..."
 
-ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
+# ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
 
-chmod 400 "$final_path/.env"
-chown $app:$app "$final_path/.env"
+# chmod 400 "$final_path/.env"
+# chown $app:$app "$final_path/.env"
 
 #=================================================
 # DEPLOYMENT
