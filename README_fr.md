@@ -27,7 +27,7 @@ Il est également possible d'importer ses données depuis Instagram.
 
 ## Captures d'écran
 
-![](./doc/screenshots/screenshots.png)
+![](./doc/screenshots/screenshots.jpg)
 
 ## Avertissements / informations importantes
 
