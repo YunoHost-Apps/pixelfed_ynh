@@ -134,9 +134,9 @@ ynh_script_progression --message="Integrating service in YunoHost..."
 yunohost service add $app --description="Ethical photo sharing platform" --log="/var/log/$app/$app.log"
 
 #=================================================
-# START SUPERVISOR SERVICE
+# START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a supervisor service..."
+ynh_script_progression --message="Starting a systemd service..."
 
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
 
@@ -146,6 +146,8 @@ ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
 ynh_script_progression --message="Restoring the logrotate configuration..."
 
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION

@@ -26,8 +26,7 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 is_public=$YNH_APP_ARG_IS_PUBLIC
-app_key=$(ynh_string_random --length=32 | base64)
-app_key="base64:$app_key"
+app_key="base64:$(ynh_string_random --length=32 | base64)"
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -73,22 +72,17 @@ ynh_system_user_create --username=$app --home_dir=$final_path
 #=================================================
 ynh_script_progression --message="Creating a PostgreSQL database..."
 
-ynh_psql_test_if_first_run
-
 db_name=$(ynh_sanitize_dbid --db_name=$app)
 db_user=$db_name
-db_pwd=$(ynh_string_random --length=32)
 ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-ynh_app_setting_set --app=$app --key=db_pwd --value=$db_pwd
-
-# Initialize database and store postgres password for upgrade
-ynh_psql_setup_db --db_user=$db_user --db_name=$db_name --db_pwd=$db_pwd
+ynh_psql_test_if_first_run
+ynh_psql_setup_db --db_user=$db_name --db_name=$db_name
 
 #=================================================
 # CONFIGURE REDIS DATABASE
 #=================================================
+ynh_script_progression --message="Creating a Redis database..."
 
-# Configure redis
 redis_db=$(ynh_redis_get_free_db)
 ynh_app_setting_set --app="$app" --key=redis_db --value="$redis_db"
 
@@ -187,6 +181,8 @@ popd
 ynh_script_progression --message="Installing the cron file..."
 
 ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -206,9 +202,9 @@ ynh_script_progression --message="Integrating service in YunoHost..."
 yunohost service add $app --description="Ethical photo sharing platform" --log="/var/log/$app/$app.log"
 
 #=================================================
-# START SUPERVISOR SERVICE
+# START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting $app service..."
+ynh_script_progression --message="Starting systemd service..."
 
 # Start a supervisor service
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
@@ -221,8 +217,6 @@ ynh_script_progression --message="Configuring permissions..."
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
 	ynh_permission_update --permission="main" --add="visitors"
 fi
 

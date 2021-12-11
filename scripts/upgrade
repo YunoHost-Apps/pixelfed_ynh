@@ -201,6 +201,8 @@ chown -R $app: "/var/log/$app/"
 ynh_script_progression --message="Upgrading cron file..."
 
 ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
 #=================================================
 # SETUP SUPERVISOR
@@ -228,7 +230,7 @@ ynh_script_progression --message="Integrating service in YunoHost..."
 yunohost service add $app --description="Ethical photo sharing platform" --log="/var/log/$app/$app.log"
 
 #=================================================
-# START SUPERVISOR SERVICE
+# START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
