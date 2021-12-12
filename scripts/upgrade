@@ -19,13 +19,16 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-language=$(ynh_app_setting_get --app=$app --key=language)
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
-db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
+db_pwd=$(ynh_app_setting_get --app=$app --key=psqlpwd)
 app_key=$(ynh_app_setting_get --app=$app --key=app_key)
+phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+redis_db=$(ynh_app_setting_get --app=$app --key=redis_db)
+
+fpm_footprint=$(ynh_app_setting_get --app=$app --key=fpm_footprint)
+fpm_usage=$(ynh_app_setting_get --app=$app --key=fpm_usage)
 
 #=================================================
 # CHECK VERSION
@@ -50,21 +53,27 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 #=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-#=================================================
 # ENSURE UPGRADE COMPATIBILITY
 #=================================================
 ynh_script_progression --message="Ensuring upgrade compatibility..."
+
+# If fpm_footprint doesn't exist, create it
+if [ -z "$fpm_footprint" ]; then
+	fpm_footprint=low
+	ynh_app_setting_set --app=$app --key=fpm_footprint --value=$fpm_footprint
+fi
+
+# If fpm_usage doesn't exist, create it
+if [ -z "$fpm_usage" ]; then
+	fpm_usage=low
+	ynh_app_setting_set --app=$app --key=fpm_usage --value=$fpm_usage
+fi
+
+# If redis_db doesn't exist, create it
+if [ -z "$redis_db" ]; then
+	redis_db=$(ynh_redis_get_free_db)
+	ynh_app_setting_set --app=$app --key=redis_db --value=$redis_db
+fi
 
 # If app_key doesn't exist, retrieve it
 if [ -z "$app_key" ]; then
@@ -115,6 +124,13 @@ if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/et
 	yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
 fi
 
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
+fi
+
 #=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
@@ -141,7 +157,7 @@ then
 	ynh_script_progression --message="Upgrading source files..."
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path"
+	ynh_setup_source --dest_dir="$final_path" --keep="$final_path/.env"
 fi
 
 chmod 750 "$final_path"
@@ -161,7 +177,7 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..."
 
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -169,8 +185,7 @@ ynh_install_app_dependencies $pkg_dependencies
 ynh_script_progression --message="Upgrading PHP-FPM configuration..."
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --usage=low --footprint=low --package="$extra_php_dependencies"
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+ynh_add_fpm_config --phpversion=$phpversion --usage=$fpm_usage --footprint=$fpm_footprint
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -184,12 +199,12 @@ ynh_exec_warn_less ynh_composer_exec --phpversion="$phpversion" --workdir="$fina
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a config file..."
+# ynh_script_progression --message="Updating a config file..."
 
-ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
+# ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
 
-chmod 400 "$final_path/.env"
-chown $app:$app "$final_path/.env"
+# chmod 400 "$final_path/.env"
+# chown $app:$app "$final_path/.env"
 
 #=================================================
 # DEPLOYMENT
@@ -199,7 +214,7 @@ ynh_script_progression --message="Deploying..."
 pushd "$final_path"
 	php$phpversion artisan horizon:install
 	php$phpversion artisan horizon:publish
-	php$phpversion artisan passport:keys
+	php$phpversion artisan passport:keys --force
 	php$phpversion artisan config:clear
 	php$phpversion artisan config:cache
 	php$phpversion artisan route:clear
@@ -210,7 +225,7 @@ pushd "$final_path"
 	php$phpversion artisan migrate --force
 	php$phpversion artisan update
 	php$phpversion artisan horizon:purge
-	php$phpversion artisan import:cities
+	php$phpversion artisan import:cities 2>/dev/null
 	php$phpversion artisan instance:actor
 	php$phpversion artisan passport:client --personal <<< "\\n"
 popd
@@ -230,6 +245,9 @@ chown -R $app: "/var/log/$app/"
 ynh_script_progression --message="Upgrading cron file..."
 
 ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
 #=================================================
 # SETUP SUPERVISOR
