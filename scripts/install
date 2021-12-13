@@ -27,8 +27,7 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 is_public=$YNH_APP_ARG_IS_PUBLIC
-app_key=$(ynh_string_random --length=32 | base64)
-app_key="base64:$app_key"
+app_key="base64:$(ynh_string_random --length=32 | base64)"
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -59,7 +58,7 @@ ynh_app_setting_set --app=$app --key=app_key --value=$app_key
 #=================================================
 ynh_script_progression --message="Installing dependencies..."
 
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
@@ -74,16 +73,19 @@ ynh_system_user_create --username=$app --home_dir=$final_path
 #=================================================
 ynh_script_progression --message="Creating a PostgreSQL database..."
 
-ynh_psql_test_if_first_run
-
 db_name=$(ynh_sanitize_dbid --db_name=$app)
 db_user=$db_name
-db_pwd=$(ynh_string_random --length=32)
 ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-ynh_app_setting_set --app=$app --key=db_pwd --value=$db_pwd
+ynh_psql_test_if_first_run
+ynh_psql_setup_db --db_user=$db_name --db_name=$db_name
 
-# Initialize database and store postgres password for upgrade
-ynh_psql_setup_db --db_user=$db_user --db_name=$db_name --db_pwd=$db_pwd
+#=================================================
+# CONFIGURE REDIS DATABASE
+#=================================================
+ynh_script_progression --message="Creating a Redis database..."
+
+redis_db=$(ynh_redis_get_free_db)
+ynh_app_setting_set --app="$app" --key=redis_db --value="$redis_db"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -112,7 +114,7 @@ ynh_add_nginx_config
 ynh_script_progression --message="Configuring PHP-FPM..."
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --usage=low --footprint=low --package="$extra_php_dependencies"
+ynh_add_fpm_config --usage=low --footprint=low
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
@@ -169,7 +171,7 @@ pushd "$final_path"
 	php$phpversion artisan migrate --force
 	php$phpversion artisan update
 	php$phpversion artisan horizon:purge
-	php$phpversion artisan import:cities
+	php$phpversion artisan import:cities 2>/dev/null
 	php$phpversion artisan instance:actor
 	php$phpversion artisan passport:client --personal <<< "\\n"
 popd
@@ -180,6 +182,9 @@ popd
 ynh_script_progression --message="Installing the cron file..."
 
 ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION
