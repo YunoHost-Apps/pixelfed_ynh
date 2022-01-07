@@ -43,7 +43,8 @@ fpm_usage=$(ynh_app_setting_get --app=$app --key=fpm_usage)
 #=================================================
 ynh_script_progression --message="Validating restoration parameters..."
 
-test ! -d $final_path || ynh_die --message="There is already a directory: $final_path "
+test ! -d $final_path \
+	|| ynh_die --message="There is already a directory: $final_path "
 
 #=================================================
 # STANDARD RESTORATION STEPS
@@ -86,25 +87,6 @@ ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint --phpversion=$p
 #=================================================
 # SPECIFIC RESTORATION
 #=================================================
-# RESTORE THE CRON FILE
-#=================================================
-ynh_script_progression --message="Restoring the cron file..."
-
-ynh_restore_file --origin_path="/etc/cron.d/$app"
-
-chown root: "/etc/cron.d/$app"
-chmod 644 "/etc/cron.d/$app"
-
-#=================================================
-# CREATE LOG FILE
-#=================================================
-ynh_script_progression --message="Creating log file..."
-
-mkdir -p "/var/log/$app/"
-touch "/var/log/$app/${app}-horizon.log"
-chown -R $app: "/var/log/$app/"
-
-#=================================================
 # REINSTALL DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Reinstalling dependencies..."
@@ -123,12 +105,32 @@ ynh_psql_setup_db --db_user=$db_user --db_name=$db_name --db_pwd=$db_pwd
 ynh_psql_execute_file_as_root --file="./db.sql" --database=$db_name
 
 #=================================================
+# RESTORE VARIOUS FILES
+#=================================================
+ynh_script_progression --message="Restoring various files..."
+
+ynh_restore_file --origin_path="/etc/cron.d/$app"
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
+
+mkdir -p "/var/log/$app/"
+touch "/var/log/$app/${app}-horizon.log"
+chown -R $app: "/var/log/$app/"
+
+#=================================================
 # RESTORE SUPERVISOR CONFIGURATION
 #=================================================
 ynh_script_progression --message="Restoring the supervisor configuration..."
 
 ynh_restore_file --origin_path="/etc/supervisor/conf.d/${app}-horizon.conf"
 supervisorctl reread && supervisorctl update
+
+#=================================================
+# RESTORE THE LOGROTATE CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the logrotate configuration..."
+
+ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -143,13 +145,6 @@ yunohost service add "supervisor" --description="Supervisor daemon for $app" --l
 ynh_script_progression --message="Starting a supervisor service..."
 
 ynh_supervisor_action --service_name="${app}-horizon" --action="reload" --log_path="systemd" --line_match="success: ${app}-horizon"
-
-#=================================================
-# RESTORE THE LOGROTATE CONFIGURATION
-#=================================================
-ynh_script_progression --message="Restoring the logrotate configuration..."
-
-ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION

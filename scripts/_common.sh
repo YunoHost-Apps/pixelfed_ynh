@@ -17,3 +17,7 @@ pkg_dependencies="postgresql libgd3 jpegoptim optipng pngquant ffmpeg imagemagic
 #=================================================
 # EXPERIMENTAL HELPERS
 #=================================================
+
+#=================================================
+# FUTURE OFFICIAL HELPERS
+#=================================================

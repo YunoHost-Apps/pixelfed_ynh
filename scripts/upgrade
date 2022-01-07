@@ -54,9 +54,18 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 #=================================================
-# ENSURE UPGRADE COMPATIBILITY
+# STANDARD UPGRADE STEPS
 #=================================================
-ynh_script_progression --message="Ensuring upgrade compatibility..."
+# STOP SUPERVISOR SERVICE
+#=================================================
+ynh_script_progression --message="Stopping a supervisor service..."
+
+ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="systemd" --line_match="stopped: ${app}-horizon"
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression --message="Ensuring downward compatibility..."
 
 # If fpm_footprint doesn't exist, create it
 if [ -z "$fpm_footprint" ]; then
@@ -133,21 +142,12 @@ if ynh_legacy_permissions_exists; then
 fi
 
 #=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
-# STOP SUPERVISOR SERVICE
-#=================================================
-ynh_script_progression --message="Stopping a supervisor service..."
-
-ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="systemd" --line_match="stopped: ${app}-horizon"
-
-#=================================================
 # CREATE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
+ynh_system_user_create --username=$app --home_dir=$final_path
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
