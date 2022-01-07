@@ -184,9 +184,6 @@ ynh_script_progression --message="Installing the cron file..."
 
 ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 
-chown root: "/etc/cron.d/$app"
-chmod 644 "/etc/cron.d/$app"
-
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
