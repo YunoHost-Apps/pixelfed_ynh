@@ -173,19 +173,19 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..."
 ynh_add_nginx_config
 
 #=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..."
-
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading PHP-FPM configuration..."
 
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint
+
+#=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading dependencies..."
+
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE
