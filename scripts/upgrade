@@ -23,7 +23,6 @@ db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=psqlpwd)
 app_key=$(ynh_app_setting_get --app=$app --key=app_key)
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 redis_db=$(ynh_app_setting_get --app=$app --key=redis_db)
 
 fpm_footprint=$(ynh_app_setting_get --app=$app --key=fpm_footprint)
@@ -51,9 +50,18 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 #=================================================
-# ENSURE UPGRADE COMPATIBILITY
+# STANDARD UPGRADE STEPS
 #=================================================
-ynh_script_progression --message="Ensuring upgrade compatibility..."
+# STOP SUPERVISOR SERVICE
+#=================================================
+ynh_script_progression --message="Stopping a supervisor service..."
+
+ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="systemd" --line_match="stopped: ${app}-horizon"
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression --message="Ensuring downward compatibility..."
 
 # If fpm_footprint doesn't exist, create it
 if [ -z "$fpm_footprint" ]; then
@@ -102,7 +110,7 @@ ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app
 ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
+ynh_system_user_create --username=$app --home_dir=$final_path
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -113,7 +121,7 @@ then
 	ynh_script_progression --message="Upgrading source files..."
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path"
+	ynh_setup_source --dest_dir="$final_path" --keep="$final_path/.env"
 fi
 
 chmod 750 "$final_path"
@@ -141,7 +149,8 @@ ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 ynh_script_progression --message="Upgrading PHP-FPM configuration..."
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --phpversion=$phpversion --usage=$fpm_usage --footprint=$fpm_footprint
+ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint --package="$extra_php_dependencies"
+phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -150,17 +159,17 @@ ynh_add_fpm_config --phpversion=$phpversion --usage=$fpm_usage --footprint=$fpm_
 #=================================================
 ynh_script_progression --message="Updating composer dependencies..."
 
-ynh_exec_warn_less ynh_composer_exec --phpversion="$phpversion" --workdir="$final_path" --commands="update"
+ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="update"
 
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a config file..."
+# ynh_script_progression --message="Updating a config file..."
 
-ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
+# ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
 
-chmod 400 "$final_path/.env"
-chown $app:$app "$final_path/.env"
+# chmod 400 "$final_path/.env"
+# chown $app:$app "$final_path/.env"
 
 #=================================================
 # DEPLOYMENT
