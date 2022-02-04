@@ -16,7 +16,7 @@ et répondez oui à la question « Ajouter des privilèges d'administrateur à c
 
 Les inscriptions sont ouvertes par défaut.
 Pour modifier ce paramètre, modifiez `/var/www/pixelfed/.env` et définissez `OPEN_REGISTRATION=false` au lieu de `true`.
-Ensuite, exécutez `php7.3 artisan config:cache` pour recharger les paramètres.
+Ensuite, exécutez `php7.4 artisan config:cache` pour recharger les paramètres.
 
 ### Désactiver l'indexation des moteurs de recherche
 
