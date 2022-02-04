@@ -52,7 +52,7 @@ and respond yes to the question ` Add admin privileges to this user?`.
 
 Registrations are open by default.
 To change that setting, edit `/var/www/pixelfed/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
-Then run `php7.3 artisan config:cache` to reload the settings.
+Then run `php7.4 artisan config:cache` to reload the settings.
 
 ### Disable search engine indexing
 
