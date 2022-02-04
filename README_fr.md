@@ -39,9 +39,9 @@ Il est également possible d'importer ses données depuis Instagram.
 
 Après avoir été enregistré pour la première fois, vous devez exécuter la commande suivante pour promouvoir le premier enregistré en tant qu'administrateur
 
-**Courir:**
+**Entrez la commande:**
 
-    $ (cd /var/www/pixelfed && php7.3 artisan user:admin 1)
+    $ php7.4 /var/www/pixelfed/artisan user:admin 1
 
 et répondez oui à la question « Ajouter des privilèges d'administrateur à cet utilisateur ? »
 
