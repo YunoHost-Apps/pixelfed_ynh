@@ -44,9 +44,9 @@ After being first registered, you need to execute the folloing command to promot
 
 **Run:**
 
-    $ (cd /var/www/pixelfed && php7.3 artisan user:admin 1)
+    $ sudo php7.4 /var/www/pixelfed/artisan user:admin 1)
 
-and respond yes to the question ` Add admin privileges to this user?`
+and respond yes to the question ` Add admin privileges to this user?`.
 
 ### Allow/Close registrations
 
