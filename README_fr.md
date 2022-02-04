@@ -21,7 +21,7 @@ En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de Pixe
 Il est également possible d'importer ses données depuis Instagram.
 
 
-**Version incluse :** 0.11.1~ynh2
+**Version incluse :** 0.11.2~ynh1
 
 
 
@@ -39,9 +39,9 @@ Il est également possible d'importer ses données depuis Instagram.
 
 Après avoir été enregistré pour la première fois, vous devez exécuter la commande suivante pour promouvoir le premier enregistré en tant qu'administrateur
 
-**Courir:**
+**Entrez la commande:**
 
-    $ (cd /var/www/pixelfed && php7.3 artisan user:admin 1)
+    $ php7.4 /var/www/pixelfed/artisan user:admin 1
 
 et répondez oui à la question « Ajouter des privilèges d'administrateur à cet utilisateur ? »
 
@@ -49,7 +49,7 @@ et répondez oui à la question « Ajouter des privilèges d'administrateur à c
 
 Les inscriptions sont ouvertes par défaut.
 Pour modifier ce paramètre, modifiez `/var/www/pixelfed/.env` et définissez `OPEN_REGISTRATION=false` au lieu de `true`.
-Ensuite, exécutez `php7.3 artisan config:cache` pour recharger les paramètres.
+Ensuite, exécutez `php7.4 artisan config:cache` pour recharger les paramètres.
 
 ### Désactiver l'indexation des moteurs de recherche
 
