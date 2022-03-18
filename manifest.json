@@ -46,16 +46,6 @@
                 "name": "is_public",
                 "type": "boolean",
                 "default": true
-            },
-                        {
-                "name": "language",
-                "type": "string",
-                "ask": {
-                    "en": "Choose the application language",
-                    "fr": "Choisissez la langue de l'application"
-                },
-                "choices": ["fr","en","de","it","ar","ru","pt","zh-cn","zh-tw"],
-                "default": "fr"
             }
         ]
     }
