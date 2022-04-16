@@ -45,6 +45,9 @@
             {
                 "name": "is_public",
                 "type": "boolean",
+                "ask": {
+                    "en": "Should this application be visible by visitors, without a Yunohost login ?",
+                    "fr": "Cette application devrait-elle être visible par les visiteurs n'ayant pas de compte Yunohost ?"},
                 "default": true
             }
         ]
