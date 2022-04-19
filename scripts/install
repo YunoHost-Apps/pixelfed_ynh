@@ -100,8 +100,6 @@ ynh_setup_source --dest_dir="$final_path"
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
-# Pixelfed app should be able to edit its settings from the admin panel
-chmod 600 "$final_path"/.env
 
 #=================================================
 # NGINX CONFIGURATION
@@ -145,7 +143,8 @@ ynh_script_progression --message="Adding a config file..."
 
 ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
 
-chmod 400 "$final_path/.env"
+# Pixelfed app should be able to edit its settings from the admin panel
+chmod 600 "$final_path/.env"
 chown $app:$app "$final_path/.env"
 
 #=================================================
