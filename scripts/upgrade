@@ -146,7 +146,7 @@ fi
 ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir=$final_path
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -199,16 +199,6 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 ynh_script_progression --message="Updating composer dependencies..."
 
 ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="update"
-
-#=================================================
-# UPDATE A CONFIG FILE
-#=================================================
-# ynh_script_progression --message="Updating a config file..."
-
-# ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
-
-# chmod 400 "$final_path/.env"
-# chown $app:$app "$final_path/.env"
 
 #=================================================
 # DEPLOYMENT
