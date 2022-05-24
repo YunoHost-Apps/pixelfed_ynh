@@ -5,7 +5,7 @@ It shall NOT be edited by hand.
 
 # Pixelfed for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed) ![](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed) ![Working status](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)  
 [![Install Pixelfed with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -26,11 +26,9 @@ It is also possible to import your data from Instagram.
 
 **Shipped version:** 0.11.3~ynh1
 
-
-
 ## Screenshots
 
-![](./doc/screenshots/screenshots.jpg)
+![Screenshot of Pixelfed](./doc/screenshots/screenshots.jpg)
 
 ## Disclaimers / important information
 
@@ -67,22 +65,23 @@ Since 0.10.10, by default `/discover/places/`, `/stories/` and `/i/` are present
 
 ## Documentation and resources
 
-* Official app website: https://pixelfed.org/
-* Official user documentation: https://docs.pixelfed.org/
-* Official admin documentation: https://docs.pixelfed.org/running-pixelfed/administration.html
-* Upstream app code repository: https://github.com/pixelfed/pixelfed
-* YunoHost documentation for this app: https://yunohost.org/app_pixelfed
-* Report a bug: https://github.com/YunoHost-Apps/pixelfed_ynh/issues
+* Official app website: <https://pixelfed.org/>
+* Official user documentation: <https://docs.pixelfed.org/>
+* Official admin documentation: <https://docs.pixelfed.org/running-pixelfed/administration.html>
+* Upstream app code repository: <https://github.com/pixelfed/pixelfed>
+* YunoHost documentation for this app: <https://yunohost.org/app_pixelfed>
+* Report a bug: <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
 
 ## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
-```
+
+``` bash
 sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade pixelfed -u https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
 ```
 
-**More info regarding app packaging:** https://yunohost.org/packaging_apps
+**More info regarding app packaging:** <https://yunohost.org/packaging_apps>
