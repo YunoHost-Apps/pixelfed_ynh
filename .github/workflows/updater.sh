@@ -9,9 +9,6 @@
 # Since each app is different, maintainers can adapt its contents so as to perform
 # automatic actions when a new upstream release is detected.
 
-# Remove this exit command when you are ready to run this Action
-#exit 1
-
 #=================================================
 # FETCHING LATEST RELEASE AND ITS ASSETS
 #=================================================
@@ -21,7 +18,7 @@ current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
 repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
 # Some jq magic is needed, because the latest upstream release is not always the latest version (e.g. security patches for older versions)
 version=$(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
-assets=($(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '[ .[] | select(.tag_name=="'$version'").assets[].browser_download_url ] | join(" ") | @sh' | tr -d "'"))
+assets="https://github.com/pixelfed/pixelfed/archive/refs/tags/$version.tar.gz"
 
 # Later down the script, we assume the version has only digits and dots
 # Sometimes the release name starts with a "v", so let's filter it out.
@@ -34,6 +31,7 @@ fi
 echo "Current version: $current_version"
 echo "Latest release from upstream: $version"
 echo "VERSION=$version" >> $GITHUB_ENV
+echo "REPO=$repo" >> $GITHUB_ENV
 # For the time being, let's assume the script will fail
 echo "PROCEED=false" >> $GITHUB_ENV
 
@@ -47,32 +45,16 @@ elif git ls-remote -q --exit-code --heads https://github.com/$GITHUB_REPOSITORY.
     exit 0
 fi
 
-# Each release can hold multiple assets (e.g. binaries for different architectures, source code, etc.)
-echo "${#assets[@]} available asset(s)"
-
 #=================================================
 # UPDATE SOURCE FILES
 #=================================================
 
-# Here we use the $assets variable to get the resources published in the upstream release.
-# Here is an example for Grav, it has to be adapted in accordance with how the upstream releases look like.
-
-# Let's loop over the array of assets URLs
-for asset_url in ${assets[@]}; do
+# Let's download source tarball
+asset_url=$assets
 
 echo "Handling asset at $asset_url"
 
-# Assign the asset to a source file in conf/ directory
-# Here we base the source file name upon a unique keyword in the assets url (admin vs. update)
-# Leave $src empty to ignore the asset
-case $asset_url in
-  v"*".tar.gz)  v0.11.1.tar.gz
-    src="app"
-    ;;
-esac
-
-# If $src is not empty, let's process the asset
-if [ ! -z "$src" ]; then
+src="app"
 
 # Create the temporary directory
 tempdir="$(mktemp -d)"
@@ -99,15 +81,9 @@ SOURCE_SUM=$checksum
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=$extension
 SOURCE_IN_SUBDIR=true
-SOURCE_EXTRACT=true
+SOURCE_FILENAME=
 EOT
 echo "... conf/$src.src updated"
-
-else
-echo "... asset ignored"
-fi
-
-done
 
 #=================================================
 # SPECIFIC UPDATE STEPS
