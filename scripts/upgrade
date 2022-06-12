@@ -166,7 +166,6 @@ chown -R $app:www-data "$final_path"
 # Pixelfed app should be able to edit its settings from the admin panel
 chmod 600 "$final_path"/.env
 
-
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
@@ -181,6 +180,7 @@ ynh_script_progression --message="Upgrading PHP-FPM configuration..."
 
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint
+phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
 # NGINX CONFIGURATION
