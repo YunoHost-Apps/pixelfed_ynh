@@ -18,10 +18,6 @@
     "license": "AGPL-3.0-or-later",
     "maintainer": [
         {
-            "name": "Jean-Baptiste Holcroft",
-            "email": "jean-baptiste@holcroft.fr"
-        },
-        {
             "name": "yalh76"
         },
         {
@@ -34,10 +30,10 @@
     "multi_instance": true,
     "services": [
         "nginx",
-        "php7.3-fpm"
+        "php7.4-fpm"
     ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "type": "domain"
@@ -45,9 +41,6 @@
             {
                 "name": "is_public",
                 "type": "boolean",
-                "ask": {
-                    "en": "Should this application be visible by visitors, without a Yunohost login ?",
-                    "fr": "Cette application devrait-elle être visible par les visiteurs n'ayant pas de compte Yunohost ?"},
                 "default": true
             }
         ]

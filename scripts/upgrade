@@ -146,7 +146,7 @@ fi
 ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir=$final_path
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -166,15 +166,6 @@ chown -R $app:www-data "$final_path"
 # Pixelfed app should be able to edit its settings from the admin panel
 chmod 600 "$final_path"/.env
 
-
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..."
-
-# Create a dedicated NGINX config
-ynh_add_nginx_config
-
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
@@ -188,8 +179,16 @@ ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 ynh_script_progression --message="Upgrading PHP-FPM configuration..."
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint --package="$extra_php_dependencies"
+ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading NGINX web server configuration..."
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -199,16 +198,6 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 ynh_script_progression --message="Updating composer dependencies..."
 
 ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="update"
-
-#=================================================
-# UPDATE A CONFIG FILE
-#=================================================
-# ynh_script_progression --message="Updating a config file..."
-
-# ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
-
-# chmod 400 "$final_path/.env"
-# chown $app:$app "$final_path/.env"
 
 #=================================================
 # DEPLOYMENT
