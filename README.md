@@ -27,7 +27,6 @@ It is also possible to import your data from Instagram.
 **Shipped version:** 0.11.3~ynh2
 
 
-
 ## Screenshots
 
 ![Screenshot of Pixelfed](./doc/screenshots/screenshots.jpg)
