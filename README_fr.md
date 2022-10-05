@@ -25,7 +25,7 @@ En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de Pixe
 Il est également possible d'importer ses données depuis Instagram.
 
 
-**Version incluse :** 0.11.3~ynh2
+**Version incluse :** 0.11.4~ynh1 *(:warning: Il s'agit de la branche `ci-auto-update-v0.11.4`. La [branche `master`](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/master) utilisée dans le catalogue est actuellement en 0.11.3\~ynh3.)*
 
 
 ## Captures d'écran
