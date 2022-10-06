@@ -24,7 +24,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 
 It is also possible to import your data from Instagram. 
 
-**Shipped version:** 0.11.4~ynh1 *
+**Shipped version:** 0.11.4~ynh1 *(:warning: This is the `testing` branch. The [`master` branch](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/master) used in the catalog is currently on version 0.11.3\~ynh3.)*
 
 
 ## Screenshots
