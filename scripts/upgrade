@@ -14,7 +14,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..."
+ynh_script_progression --message="Loading settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -27,20 +27,17 @@ db_pwd=$(ynh_app_setting_get --app=$app --key=psqlpwd)
 app_key=$(ynh_app_setting_get --app=$app --key=app_key)
 redis_db=$(ynh_app_setting_get --app=$app --key=redis_db)
 
-fpm_footprint=$(ynh_app_setting_get --app=$app --key=fpm_footprint)
-fpm_usage=$(ynh_app_setting_get --app=$app --key=fpm_usage)
-
 #=================================================
 # CHECK VERSION
 #=================================================
-ynh_script_progression --message="Checking version..."
+ynh_script_progression --message="Checking version..." --weight=1
 
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..."
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -57,26 +54,17 @@ ynh_abort_if_errors
 #=================================================
 # STOP SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a supervisor service..."
+ynh_script_progression --message="Stopping a supervisor service..." --weight=1
 
 ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="systemd" --line_match="stopped: ${app}-horizon"
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
+ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
-# If fpm_footprint doesn't exist, create it
-if [ -z "$fpm_footprint" ]; then
-	fpm_footprint=low
-	ynh_app_setting_set --app=$app --key=fpm_footprint --value=$fpm_footprint
-fi
-
-# If fpm_usage doesn't exist, create it
-if [ -z "$fpm_usage" ]; then
-	fpm_usage=low
-	ynh_app_setting_set --app=$app --key=fpm_usage --value=$fpm_usage
-fi
+ynh_app_setting_delete --app=$app --key=fpm_footprint
+ynh_app_setting_delete --app=$app --key=fpm_usage
 
 # If redis_db doesn't exist, create it
 if [ -z "$redis_db" ]; then
@@ -143,7 +131,7 @@ fi
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..."
+ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username=$app --home_dir="$final_path"
@@ -154,7 +142,7 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-	ynh_script_progression --message="Upgrading source files..."
+	ynh_script_progression --message="Upgrading source files..." --weight=1
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path" --keep=".env"
@@ -169,23 +157,23 @@ chmod 600 "$final_path"/.env
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..."
+ynh_script_progression --message="Upgrading dependencies..." --weight=1
 
 ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading PHP-FPM configuration..."
+ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=1
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint
+ynh_add_fpm_config
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..."
+ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
@@ -195,7 +183,7 @@ ynh_add_nginx_config
 #=================================================
 # UPDATE COMPOSER DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Updating composer dependencies..."
+ynh_script_progression --message="Updating composer dependencies..." --weight=1
 
 ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="update"
 
@@ -226,7 +214,7 @@ popd
 #=================================================
 # CREATE LOG FILE
 #=================================================
-ynh_script_progression --message="Creating log file..."
+ynh_script_progression --message="Creating log file..." --weight=1
 
 mkdir -p "/var/log/$app/"
 touch "/var/log/$app/${app}-horizon.log"
@@ -235,14 +223,14 @@ chown -R $app: "/var/log/$app/"
 #=================================================
 # UPGRADE THE CRON FILE
 #=================================================
-ynh_script_progression --message="Upgrading cron file..."
+ynh_script_progression --message="Upgrading cron file..." --weight=1
 
 ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 
 #=================================================
 # SETUP SUPERVISOR
 #=================================================
-ynh_script_progression --message="Upgrading supervisor configuration..."
+ynh_script_progression --message="Upgrading supervisor configuration..." --weight=1
 
 # Create a dedicated supervisor config
 ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
@@ -252,7 +240,7 @@ ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
 #=================================================
 # SETUP LOGROTATE
 #=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..."
+ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
 
 # Use logrotate to manage app-specific logfile(s)
 ynh_use_logrotate --non-append
@@ -260,21 +248,21 @@ ynh_use_logrotate --non-append
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Starting a supervisor service..."
+ynh_script_progression --message="Starting a supervisor service..." --weight=1
 
 ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -282,4 +270,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed"
+ynh_script_progression --message="Upgrade of $app completed" --last
