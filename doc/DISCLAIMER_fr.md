@@ -18,6 +18,14 @@ Les inscriptions sont ouvertes par défaut.
 Pour modifier ce paramètre, modifiez `/var/www/pixelfed/.env` et définissez `OPEN_REGISTRATION=false` au lieu de `true`.
 Ensuite, exécutez `php7.4 artisan config:cache` pour recharger les paramètres.
 
+### Changer la taille limite maximale de téléversement
+
+Pour changer la limite maximale de téléversement (par défaut : 50Mo), éditer le fichier `php-fpm.conf` de Pixelfed et après la ligne `Common values to change to increase file upload limit` ajuster ces valeurs:
+```
+php_admin_value[post_max_size] = 50M
+php_admin_value[upload_max_filesize] = 50M
+```
+
 ### Désactiver l'indexation des moteurs de recherche
 
 Si vous ne voulez pas que votre instance Pixelfed soit indexée dans le moteur de recherche (et ainsi de suite), modifiez `/var/www/pixelfed/public/robots.txt` comme ceci :

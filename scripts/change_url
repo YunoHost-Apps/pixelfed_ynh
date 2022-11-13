@@ -25,7 +25,7 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..."
+ynh_script_progression --message="Loading settings..." --weight=1
 
 # Needed for helper "ynh_add_nginx_config"
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
@@ -35,12 +35,11 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 #=================================================
 # BACKUP BEFORE CHANGE URL THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before changing its URL (may take a while)..."
+ynh_script_progression --message="Backing up the app before changing its URL (may take a while)..." --weight=1
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
-	ynh_clean_check_starting
 	# Remove the new domain config file, the remove script won't do it as it doesn't know yet its location.
 	ynh_secure_remove --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
 
@@ -65,14 +64,14 @@ fi
 #=================================================
 # STOP SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a supervisor service..."
+ynh_script_progression --message="Stopping a supervisor service..." --weight=1
 
 ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
-ynh_script_progression --message="Updating NGINX web server configuration..."
+ynh_script_progression --message="Updating NGINX web server configuration..." --weight=1
 
 nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
 
@@ -91,7 +90,7 @@ fi
 #=================================================
 # UPDATE CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating config file..."
+ynh_script_progression --message="Updating config file..." --weight=1
 
 config="$final_path/.env"
 ynh_backup_if_checksum_is_different --file="$config"
@@ -106,7 +105,7 @@ ynh_store_file_checksum --file="$config"
 #=================================================
 # APPLY CHANGES
 #=================================================
-ynh_script_progression --message="Applying changes..."
+ynh_script_progression --message="Applying changes..." --weight=1
 
 pushd "$final_path"
 	php$phpversion artisan config:clear
@@ -121,14 +120,14 @@ popd
 #=================================================
 # START SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Starting a supervisor service..."
+ynh_script_progression --message="Starting a supervisor service..." --weight=1
 
 ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -136,4 +135,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Change of URL completed for $app"
+ynh_script_progression --message="Change of URL completed for $app" --last
