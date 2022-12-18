@@ -6,7 +6,7 @@
         "en": "ActivityPub Federated Image Sharing",
         "fr": "Logiciel de partage d'image fédéré via ActivityPub"
     },
-    "version": "0.11.3~ynh2",
+    "version": "0.11.4~ynh3",
     "url": "https://pixelfed.org/",
     "upstream": {
         "license": "AGPL-3.0-or-later",
@@ -25,12 +25,12 @@
         }
     ],
     "requirements": {
-        "yunohost": ">= 4.3.0"
+        "yunohost": ">= 11.0"
     },
     "multi_instance": true,
     "services": [
         "nginx",
-        "php7.4-fpm"
+        "php8.0-fpm"
     ],
     "arguments": {
         "install": [

@@ -24,8 +24,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 
 It is also possible to import your data from Instagram. 
 
-**Shipped version:** 0.11.3~ynh2
-
+**Shipped version:** 0.11.4~ynh3
 
 ## Screenshots
 
@@ -52,6 +51,20 @@ and respond yes to the question ` Add admin privileges to this user?`.
 Registrations are open by default.
 To change that setting, edit `/var/www/pixelfed/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
 Then run `php7.4 artisan config:cache` to reload the settings.
+
+### Change max upload limit
+
+To change max upload limit (default : 50MB), edit the Pixelfed `php-fpm.conf` file and find the line `Common values to change to increase file upload limit`
+And adjust those values:
+```
+php_admin_value[post_max_size] = 50M
+php_admin_value[upload_max_filesize] = 50M
+```
+        
+        
+          
+
+
 
 ### Disable search engine indexing
 

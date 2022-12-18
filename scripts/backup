@@ -23,7 +23,7 @@ ynh_abort_if_errors
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_print_info --message="Loading installation settings..."
+ynh_print_info --message="Loading settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
