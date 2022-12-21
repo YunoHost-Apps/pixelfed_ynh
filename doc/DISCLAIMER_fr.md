@@ -8,7 +8,7 @@ Après avoir été enregistré pour la première fois, vous devez exécuter la c
 
 **Entrez la commande:**
 
-    $ php7.4 /var/www/pixelfed/artisan user:admin 1
+    $ php8.0 /var/www/pixelfed/artisan user:admin 1
 
 et répondez oui à la question « Ajouter des privilèges d'administrateur à cet utilisateur ? »
 

@@ -8,7 +8,7 @@ After being first registered, you need to execute the folloing command to promot
 
 **Run:**
 
-    $ sudo php7.4 /var/www/pixelfed/artisan user:admin 1
+    $ sudo php8.0 /var/www/pixelfed/artisan user:admin 1
 
 and respond yes to the question ` Add admin privileges to this user?`.
 
