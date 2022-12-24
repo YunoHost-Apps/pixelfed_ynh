@@ -183,6 +183,10 @@ ynh_add_nginx_config
 #=================================================
 # UPDATE COMPOSER DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Updating composer..." --weight=1
+
+ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="self-update"
+
 ynh_script_progression --message="Updating composer dependencies..." --weight=1
 
 ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="update"

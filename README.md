@@ -24,7 +24,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 
 It is also possible to import your data from Instagram. 
 
-**Shipped version:** 0.11.4~ynh3
+**Shipped version:** 0.11.4~ynh4
 
 ## Screenshots
 
@@ -42,7 +42,7 @@ After being first registered, you need to execute the folloing command to promot
 
 **Run:**
 
-    $ sudo php7.4 /var/www/pixelfed/artisan user:admin 1
+    $ sudo php8.0 /var/www/pixelfed/artisan user:admin 1
 
 and respond yes to the question ` Add admin privileges to this user?`.
 

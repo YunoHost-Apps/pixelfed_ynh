@@ -25,7 +25,7 @@ En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de Pixe
 Il est également possible d'importer ses données depuis Instagram.
 
 
-**Version incluse :** 0.11.4~ynh3
+**Version incluse :** 0.11.4~ynh4
 
 ## Captures d'écran
 
@@ -43,7 +43,7 @@ Après avoir été enregistré pour la première fois, vous devez exécuter la c
 
 **Entrez la commande:**
 
-    $ php7.4 /var/www/pixelfed/artisan user:admin 1
+    $ php8.0 /var/www/pixelfed/artisan user:admin 1
 
 et répondez oui à la question « Ajouter des privilèges d'administrateur à cet utilisateur ? »
 
