@@ -5,15 +5,16 @@ It shall NOT be edited by hand.
 
 # Pixelfed pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
+
 [![Installer Pixelfed avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Pixelfed rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Pixelfed rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 PixelFed est un logiciel décentralisé et fédéré de partage d'images en cours de développement.
 En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de PixelFed est:
@@ -25,11 +26,11 @@ En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de Pixe
 Il est également possible d'importer ses données depuis Instagram.
 
 
-**Version incluse :** 0.11.4~ynh4
+**Version incluse :** 0.11.4~ynh5
 
-## Captures d'écran
+## Captures d’écran
 
-![Capture d'écran de Pixelfed](./doc/screenshots/screenshots.jpg)
+![Capture d’écran de Pixelfed](./doc/screenshots/screenshots.jpg)
 
 ## Avertissements / informations importantes
 
@@ -74,10 +75,10 @@ Depuis la 0.10.10, par défaut `/discover/places/`, `/stories/` et `/i/` sont pr
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://pixelfed.org/>
+* Site officiel de l’app : <https://pixelfed.org/>
 * Documentation officielle utilisateur : <https://docs.pixelfed.org/>
-* Documentation officielle de l'admin : <https://docs.pixelfed.org/running-pixelfed/administration.html>
-* Dépôt de code officiel de l'app : <https://github.com/pixelfed/pixelfed>
+* Documentation officielle de l’admin : <https://docs.pixelfed.org/running-pixelfed/administration.html>
+* Dépôt de code officiel de l’app : <https://github.com/pixelfed/pixelfed>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_pixelfed>
 * Signaler un bug : <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
 
@@ -93,4 +94,4 @@ ou
 sudo yunohost app upgrade pixelfed -u https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
