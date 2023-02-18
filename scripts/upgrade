@@ -152,7 +152,7 @@ chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
 # Pixelfed app should be able to edit its settings from the admin panel
-chmod 600 "$final_path"/.env
+chmod -R 600 "$final_path"/.env
 
 #=================================================
 # UPGRADE DEPENDENCIES
