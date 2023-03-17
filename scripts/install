@@ -195,6 +195,7 @@ ynh_script_progression --message="Configuring log rotation..." --weight=1
 
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
+ynh_use_logrotate --logfile="/var/www/$app/storage/logs/laravel.log"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
