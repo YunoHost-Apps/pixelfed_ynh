@@ -135,7 +135,7 @@ ynh_script_progression --message="Creating log file..." --weight=1
 mkdir -p "/var/log/$app/"
 touch "/var/log/$app/${app}-horizon.log"
 chown -R $app: "/var/log/$app/"
-chmod -R 600 $app: "/var/log/$app/"
+chmod -R 600 "/var/log/$app/"
 
 #=================================================
 # ADD A CONFIGURATION
