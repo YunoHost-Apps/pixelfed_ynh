@@ -135,6 +135,7 @@ ynh_script_progression --message="Creating log file..." --weight=1
 mkdir -p "/var/log/$app/"
 touch "/var/log/$app/${app}-horizon.log"
 chown -R $app: "/var/log/$app/"
+chmod -R 600 "/var/log/$app/"
 
 #=================================================
 # ADD A CONFIGURATION
@@ -194,6 +195,7 @@ ynh_script_progression --message="Configuring log rotation..." --weight=1
 
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
+ynh_use_logrotate --logfile="/var/www/$app/storage/logs/laravel.log"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
