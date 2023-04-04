@@ -1,0 +1,213 @@
+
+// Fonts
+@import "fonts";
+@import "lib/fontawesome";
+
+// Variables
+@import "dark";
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+@import "custom";
+
+.text-dark {
+    color: #ADAFAE !important;
+}
+
+.border-left {
+    background: #ADAFAE !important;
+}
+
+.border-top {
+	border-top: 1px solid #282828 !important;
+}
+
+.border-bottom {
+	border-bottom: 1px solid #282828 !important;
+}
+
+.btn-outline-light {
+	border-color: #E2E8F0 !important;
+	color: #E2E8F0 !important;
+}
+
+.modal-content,
+.card,
+.dropdown-menu,
+.bg-white,
+.list-group-item,
+.autocomplete-result-list,
+.postPresenterContainer,
+.postComponent .card-body.flex-grow-0.py-1,
+.postComponent .reactions,
+.postComponent .status-comments,
+.navbar-laravel {
+	background: #000 !important;
+}
+
+.story-viewer-component-card {
+	background: transparent !important;
+}
+
+.autocomplete-result-list {
+	z-index: 99999;
+}
+
+.pill-to {
+	background: #282828 !important;
+}
+
+.dropdown-item:hover, 
+.tt-suggestion:hover, 
+.dropdown-item:focus, 
+.tt-suggestion:focus,
+.chat-msg:hover,
+.result-card .media:hover {
+	background: #181818 !important;
+}
+
+.notification-card .contents {
+	scrollbar-color: dark;
+}
+
+body, html {
+	scrollbar-color: dark;
+}
+
+.modal-content,
+.form-control,
+.img-thumbnail {
+	border: 1px solid #282828 !important;
+}
+
+.navbar.border-bottom {
+	border-color: #282828 !important; 
+}
+
+.postComponent .border-left {
+	border-left: 0 !important;
+}
+
+.postComponent .card-header {
+	border-radius: 0;
+}
+
+input,
+textarea {
+	color: #E2E8F0 !important;
+	background: #000 !important;
+}
+
+.far, .fas,
+.navbar-laravel .navbar-brand span,
+.navbar-laravel .nav-link .d-md-block,
+.navbar-laravel .nav-link.dropdown-toggle .far,
+.navbar-laravel .nav-link.dropdown-toggle::after {
+	color: #ADAFAE !important;
+}
+
+.btn-outline-primary {
+	border-color: #4A5568 !important;
+}
+
+.postComponent .status-comments {
+	border-top: 1px solid #282828 !important;
+	border-bottom: 1px solid #282828 !important;
+}
+
+.messages-page .card-header {
+	border-bottom: 1px solid #282828;
+}
+
+hr {
+	border-color: #282828 !important;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background: #202020;
+  border-left: 1px solid #2c2c2c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3e3e3e;
+  border: solid 3px #202020;
+  border-radius: 7px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: white;
+}
+
+@import "components/filters";
+
+@import "components/typeahead";
+
+@import "components/notifications";
+
+@import '~bootstrap-vue/dist/bootstrap-vue.css';
+
+@import "moment";
+
+@import '~animate.css/animate.min.css';
+
+.border {
+	border-color: #282828 !important;
+}
+
+.tribute-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: auto;
+    max-height: 300px;
+    min-width: 120px;
+    max-width: 500px;
+    overflow: auto;
+    display: block;
+    z-index: 999999;
+    border-radius: 4px;
+    border: 1px solid #282828;
+
+    ul {
+      margin: 0;
+      margin-top: 2px;
+      padding: 0;
+      list-style: none;
+      background: #181818;
+      border-radius: 4px;
+      border: 1px solid #282828;
+      background-clip: padding-box;
+      overflow: hidden;
+    }
+
+    li {
+        color: #ADAFAE;
+        padding: 5px 15px;
+        cursor: pointer;
+        font-size: 14px;
+        overflow-x: hidden !important;
+        
+        span {
+          font-weight: bold;
+        }
+
+        &.highlight,
+        &:hover {
+            background: #11304c;
+            color: #fff;
+        }
+
+        &.no-match {
+            cursor: default;
+        }
+    }
+
+    .menu-highlighted {
+        font-weight: bold;
+    }
+}
