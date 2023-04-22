@@ -16,16 +16,16 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression --message="Loading settings..." --weight=1
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-db_user=$db_name
-db_pwd=$(ynh_app_setting_get --app=$app --key=psqlpwd)
-app_key=$(ynh_app_setting_get --app=$app --key=app_key)
-redis_db=$(ynh_app_setting_get --app=$app --key=redis_db)
+#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
+#REMOVEME? path=$(ynh_app_setting_get --app=$app --key=path)
+#REMOVEME? #REMOVEME? install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+#REMOVEME? db_name=$(ynh_app_setting_get --app=$app --key=db_name)
+#REMOVEME? db_user=$db_name
+#REMOVEME? db_pwd=$(ynh_app_setting_get --app=$app --key=psqlpwd)
+#REMOVEME? app_key=$(ynh_app_setting_get --app=$app --key=app_key)
+#REMOVEME? redis_db=$(ynh_app_setting_get --app=$app --key=redis_db)
 
 #=================================================
 # CHECK VERSION
@@ -37,17 +37,17 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
+#REMOVEME? ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
 
 # Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
+#REMOVEME? ynh_backup_before_upgrade
+#REMOVEME? ynh_clean_setup () {
 	ynh_clean_check_starting
 	# Restore it if the upgrade fails
-	ynh_restore_upgradebackup
+#REMOVEME? 	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -75,25 +75,25 @@ fi
 # If app_key doesn't exist, retrieve it
 if [ -z "$app_key" ]; then
 	ynh_script_progression --message="Retrieving app_key..."
-	app_key=$(grep -oP "APP_KEY=\Kbase64.*" "$final_path/.env")
+	app_key=$(grep -oP "APP_KEY=\Kbase64.*" "$install_dir/.env")
 	ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 fi
 
-if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
+#REMOVEME? if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
 	ynh_script_progression --message="Ensuring upgrade compatibility to 0.9.0~ynh3..."
 	
 	ynh_script_progression --message="Configuring a systemd service..."
 	ynh_add_systemd_config --service="${app}-horizon" --template=horizon.conf
 fi
 
-if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
+#REMOVEME? if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
 	ynh_script_progression --message="Ensuring upgrade compatibility to 0.10.9~ynh2..."
 	
 	ynh_script_progression --message="Stopping and removing the systemd service..."
 	ynh_remove_systemd_config --service="${app}-horizon"
 	
-	ynh_script_progression --message="Installing dependencies..."
-	ynh_install_app_dependencies "$pkg_dependencies"
+#REMOVEME? 	ynh_script_progression --message="Installing dependencies..."
+#REMOVEME? 	ynh_install_app_dependencies "$pkg_dependencies"
 	
 	ynh_script_progression --message="Creating log file..."
 	mkdir -p "/var/log/$app/"
@@ -108,7 +108,7 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/et
 	ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
 fi
 
-if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
+#REMOVEME? if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
 	ynh_script_progression --message="Ensuring upgrade compatibility to 0.10.9~ynh3..."
 	
 	if ynh_exec_warn_less yunohost service status ${app}-horizon >/dev/null
@@ -122,8 +122,8 @@ if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/et
 fi
 
 # Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
+#REMOVEME? if ynh_legacy_permissions_exists; then
+#REMOVEME? 	ynh_legacy_permissions_delete_all
 
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
@@ -131,10 +131,10 @@ fi
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
+#REMOVEME? ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
+#REMOVEME? ynh_system_user_create --username=$app --home_dir="$install_dir"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -145,21 +145,21 @@ then
 	ynh_script_progression --message="Upgrading source files..." --weight=1
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path" --keep=".env"
+	ynh_setup_source --dest_dir="$install_dir" --keep=".env"
 fi
 
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
+chmod 750 "$install_dir"
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 # Pixelfed app should be able to edit its settings from the admin panel
-chmod 600 "$final_path"/.env
+chmod 600 "$install_dir"/.env
 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=1
+#REMOVEME? ynh_script_progression --message="Upgrading dependencies..." --weight=1
 
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
+#REMOVEME? ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -168,7 +168,7 @@ ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=1
 
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+#REMOVEME? phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
 # NGINX CONFIGURATION
@@ -185,18 +185,18 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Updating composer..." --weight=1
 
-ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="self-update"
+ynh_exec_warn_less ynh_composer_exec --workdir="$install_dir" --commands="self-update"
 
-ynh_script_progression --message="Updating composer dependencies..." --weight=1
+#REMOVEME? ynh_script_progression --message="Updating composer dependencies..." --weight=1
 
-ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="update"
+ynh_exec_warn_less ynh_composer_exec --workdir="$install_dir" --commands="update"
 
 #=================================================
 # DEPLOYMENT
 #=================================================
 ynh_script_progression --message="Deploying..."
 
-pushd "$final_path"
+pushd "$install_dir"
 	php$phpversion artisan horizon:install
 	php$phpversion artisan horizon:publish
 	php$phpversion artisan passport:keys --force
@@ -267,9 +267,9 @@ ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_pat
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
-ynh_systemd_action --service_name=nginx --action=reload
+#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT

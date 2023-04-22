@@ -14,49 +14,49 @@ source /usr/share/yunohost/helpers
 # RETRIEVE ARGUMENTS
 #=================================================
 
-old_domain=$YNH_APP_OLD_DOMAIN
-old_path=$YNH_APP_OLD_PATH
+#REMOVEME? old_domain=$YNH_APP_OLD_DOMAIN
+#REMOVEME? old_path=$YNH_APP_OLD_PATH
 
-new_domain=$YNH_APP_NEW_DOMAIN
-new_path="/"
+#REMOVEME? new_domain=$YNH_APP_NEW_DOMAIN
+#REMOVEME? new_path="/"
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
 # LOAD SETTINGS
 #=================================================
 ynh_script_progression --message="Loading settings..." --weight=1
 
-# Needed for helper "ynh_add_nginx_config"
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+#REMOVEME? # Needed for helper "ynh_add_nginx_config"
+#REMOVEME? #REMOVEME? install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
 
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+#REMOVEME? phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
 # BACKUP BEFORE CHANGE URL THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before changing its URL (may take a while)..." --weight=1
+#REMOVEME? ynh_script_progression --message="Backing up the app before changing its URL (may take a while)..." --weight=1
 
 # Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
+#REMOVEME? ynh_backup_before_upgrade
+#REMOVEME? ynh_clean_setup () {
 	# Remove the new domain config file, the remove script won't do it as it doesn't know yet its location.
-	ynh_secure_remove --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
+#REMOVEME? 	ynh_secure_remove --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
 
 	# Restore it if the upgrade fails
-	ynh_restore_upgradebackup
+#REMOVEME? 	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # CHECK WHICH PARTS SHOULD BE CHANGED
 #=================================================
 
-change_domain=0
-if [ "$old_domain" != "$new_domain" ]
+#REMOVEME? change_domain=0
+#REMOVEME? if [ "$old_domain" != "$new_domain" ]
 then
-	change_domain=1
+	#REMOVEME? change_domain=1
 fi
 
 #=================================================
@@ -73,16 +73,18 @@ ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path
 #=================================================
 ynh_script_progression --message="Updating NGINX web server configuration..." --weight=1
 
-nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
+ynh_change_url_nginx_config
+
+#REMOVEME? nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
 
 # Change the domain for NGINX
 if [ $change_domain -eq 1 ]
 then
 	# Delete file checksum for the old conf file location
-	ynh_delete_file_checksum --file="$nginx_conf_path"
-	mv $nginx_conf_path /etc/nginx/conf.d/$new_domain.d/$app.conf
+#REMOVEME? 	ynh_delete_file_checksum --file="$nginx_conf_path"
+#REMOVEME? 	mv $nginx_conf_path /etc/nginx/conf.d/$new_domain.d/$app.conf
 	# Store file checksum for the new config file location
-	ynh_store_file_checksum --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
+#REMOVEME? 	ynh_store_file_checksum --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
 fi
 
 #=================================================
@@ -92,7 +94,7 @@ fi
 #=================================================
 ynh_script_progression --message="Updating config file..." --weight=1
 
-config="$final_path/.env"
+config="$install_dir/.env"
 ynh_backup_if_checksum_is_different --file="$config"
 ynh_replace_string --match_string="APP_URL=.*"           --replace_string="APP_URL=https://$new_domain"                --target_file="$config"
 ynh_replace_string --match_string="ADMIN_DOMAIN=.*"      --replace_string="ADMIN_DOMAIN=\"$new_domain\""               --target_file="$config"
@@ -107,7 +109,7 @@ ynh_store_file_checksum --file="$config"
 #=================================================
 ynh_script_progression --message="Applying changes..." --weight=1
 
-pushd "$final_path"
+pushd "$install_dir"
 	php$phpversion artisan config:clear
 	php$phpversion artisan config:cache
 	php$phpversion artisan route:clear
@@ -127,9 +129,9 @@ ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_pat
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
-ynh_systemd_action --service_name=nginx --action=reload
+#REMOVEME? #REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT

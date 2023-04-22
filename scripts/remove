@@ -16,13 +16,13 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression --message="Loading settings..." --weight=1
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-db_user=$db_name
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-redis_db=$(ynh_app_setting_get --app=$app --key=redis_db)
+#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
+#REMOVEME? db_name=$(ynh_app_setting_get --app=$app --key=db_name)
+#REMOVEME? db_user=$db_name
+#REMOVEME? #REMOVEME? install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+#REMOVEME? redis_db=$(ynh_app_setting_get --app=$app --key=redis_db)
 
 #=================================================
 # STANDARD REMOVE
@@ -56,10 +56,10 @@ ynh_remove_logrotate
 #=================================================
 # REMOVE THE POSTGRESQL DATABASE
 #=================================================
-ynh_script_progression --message="Removing the PostgreSQL database..." --weight=1
+#REMOVEME? ynh_script_progression --message="Removing the PostgreSQL database..." --weight=1
 
 # Remove a database if it exists, along with the associated user
-ynh_psql_remove_db --db_user=$db_user --db_name=$db_name
+#REMOVEME? ynh_psql_remove_db --db_user=$db_user --db_name=$db_name
 
 #=================================================
 # REMOVE THE REDIS DATABASE
@@ -71,10 +71,10 @@ ynh_redis_remove_db "$redis_db"
 #=================================================
 # REMOVE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Removing app main directory..." --weight=1
+#REMOVEME? ynh_script_progression --message="Removing app main directory..." --weight=1
 
 # Remove the app directory securely
-ynh_secure_remove --file="$final_path"
+#REMOVEME? ynh_secure_remove --file="$install_dir"
 
 #=================================================
 # REMOVE NGINX CONFIGURATION
@@ -95,10 +95,10 @@ ynh_remove_fpm_config
 #=================================================
 # REMOVE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Removing dependencies..." --weight=1
+#REMOVEME? ynh_script_progression --message="Removing dependencies..." --weight=1
 
 # Remove metapackage and its dependencies
-ynh_remove_app_dependencies
+#REMOVEME? ynh_remove_app_dependencies
 
 #=================================================
 # SPECIFIC REMOVE
@@ -118,10 +118,10 @@ ynh_secure_remove --file="/var/log/$app"
 #=================================================
 # REMOVE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Removing the dedicated system user..." --weight=1
+#REMOVEME? ynh_script_progression --message="Removing the dedicated system user..." --weight=1
 
 # Delete a system user
-ynh_system_user_delete --username=$app
+#REMOVEME? ynh_system_user_delete --username=$app
 
 #=================================================
 # END OF SCRIPT
