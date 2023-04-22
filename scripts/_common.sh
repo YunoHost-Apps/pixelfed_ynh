@@ -85,7 +85,7 @@ ynh_add_supervisor_config () {
     local template="${template:-supervisor.service}"
     others_var="${others_var:-}"
 
-    [[ -z "$others_var" ]] || ynh_print_warn --message="Packagers: using --others_var is unecessary since Yunohost 4.2"
+    [[ -z "$others_var" ]] || ynh_print_warn --message="Packagers: using others_var is unecessary since Yunohost 4.2"
 
     ynh_add_config --template="$YNH_APP_BASEDIR/conf/$template" --destination="/etc/supervisor/conf.d/$service.conf"
 
