@@ -39,6 +39,8 @@ ram.runtime = "50M"
         [resources.sources.main]
         url = "https://github.com/pixelfed/pixelfed/archive/21714eec342d079c169210c49099b2988bbb205b.tar.gz"
         sha256 = "eff6d2e4d93af1ef05d01fab2c55ebe6f55bf82866edcdc9af3a72767976a52d"
+        autoupdate.upstream = "https://github.com/pixelfed/pixelfed"
+        autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
 
