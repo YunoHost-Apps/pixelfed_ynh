@@ -184,12 +184,16 @@ ynh_add_nginx_config
 # UPDATE COMPOSER DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Updating composer..." --weight=1
-
 ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="self-update"
 
 ynh_script_progression --message="Updating composer dependencies..." --weight=1
-
 ynh_exec_warn_less ynh_composer_exec --workdir="$final_path" --commands="update"
+
+#=================================================
+# PATCH PERMISSIONS for v0.11.5 versions and higher
+#=================================================
+ynh_script_progression --message="Patching permissions (for version 0.11.5 and newer)..." --weight=1
+ynh_replace_string --match_string="'private' => 0700," --replace_string="'private' => 0750," --target_file=$final_path/config/filesystems.php
 
 #=================================================
 # DEPLOYMENT
