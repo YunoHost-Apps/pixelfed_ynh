@@ -26,7 +26,7 @@ En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de Pixe
 Il est également possible d'importer ses données depuis Instagram.
 
 
-**Version incluse :** 0.11.6~ynh1
+**Version incluse :** 0.11.6~ynh2
 
 ## Captures d’écran
 
