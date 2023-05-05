@@ -197,7 +197,9 @@ ynh_script_progression --message="Patching permissions (for version 0.11.5 and n
 ynh_replace_string --match_string="'private' => 0700," --replace_string="'private' => 0750," --target_file=$final_path/config/filesystems.php
 # Repair permissions for files created after v0.11.5 and before this patch
 if [ -d "$final_path/public/storage/m/_v2/" ]; then
-  chmod 750 -R "$final_path/public/storage/m/_v2/"
+  chmod 750 -R "$final_path/public/storage/m/_v2/*" # all files subdirectories (picture folders) should be readable and executable. But if there is no picture, there is no /*/*
+  chmod 770 "$final_path/public/storage/m/_v2/" # this should be 770
+  chmod 770 "$final_path/public/storage/m/_v2/*" # users folders should be 770
 fi
 
 #=================================================
