@@ -1,7 +1,3 @@
-## Important points to read before installing
-
-1. **Pixelfed** require a dedicated **root domain**, eg. pixelfed.domain.tld
-
 ### Administrator
 
 After being first registered, you need to execute the folloing command to promote first registered as admin

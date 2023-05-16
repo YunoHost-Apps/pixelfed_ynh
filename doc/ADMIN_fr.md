@@ -1,7 +1,3 @@
-## Points importants à lire avant l'installation
-
-1. **Pixelfed** nécessite un **domaine racine** dédié, par ex. pixelfed.domain.tld
-
 ### Administrateur
 
 Après avoir été enregistré pour la première fois, vous devez exécuter la commande suivante pour promouvoir le premier enregistré en tant qu'administrateur
