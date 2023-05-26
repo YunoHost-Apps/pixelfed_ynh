@@ -4,7 +4,7 @@ Après avoir été enregistré pour la première fois, vous devez exécuter la c
 
 **Entrez la commande:**
 
-    sudo php8.1 __INSTALL_DIR__/artisan user:admin 1
+    sudo php8.2 __INSTALL_DIR__/artisan user:admin 1
 
 et répondez oui à la question « Ajouter des privilèges d'administrateur à cet utilisateur ? »
 
@@ -12,7 +12,7 @@ et répondez oui à la question « Ajouter des privilèges d'administrateur à c
 
 Les inscriptions sont ouvertes par défaut.
 Pour modifier ce paramètre, modifiez `__INSTALL_DIR__/.env` et définissez `OPEN_REGISTRATION=false` au lieu de `true`.
-Ensuite, exécutez `php8.1 artisan config:cache` pour recharger les paramètres.
+Ensuite, exécutez `php8.2 artisan config:cache` pour recharger les paramètres.
 
 ### Désactiver l'indexation des moteurs de recherche
 
