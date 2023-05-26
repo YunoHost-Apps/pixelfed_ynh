@@ -22,9 +22,9 @@ architectures = "all"
 multi_instance = true
 ldap = false
 sso = false
-disk = "50M"
-ram.build = "50M"
-ram.runtime = "50M"
+disk = "500M"
+ram.build = "1000M"
+ram.runtime = "100M"
 
 [install]
     [install.domain]
@@ -49,7 +49,7 @@ ram.runtime = "50M"
     main.url = "/"
 
     [resources.apt]
-    packages = "postgresql libgd3 jpegoptim optipng pngquant ffmpeg imagemagick supervisor php8.1-redis php8.1-bcmath php8.1-cli php8.1-ctype php8.1-curl php8.1-exif php8.1-gd php8.1-iconv php8.1-intl php8.1-mbstring php8.1-tokenizer php8.1-xml php8.1-zip php8.1-pdo php8.1-pgsql php8.1-fileinfo php8.1-imagick"
+    packages = "postgresql libgd3 jpegoptim optipng pngquant ffmpeg imagemagick supervisor php8.2-redis php8.2-bcmath php8.2-cli php8.2-ctype php8.2-curl php8.2-exif php8.2-gd php8.2-iconv php8.2-intl php8.2-mbstring php8.2-tokenizer php8.2-xml php8.2-zip php8.2-pdo php8.2-pgsql php8.2-fileinfo php8.2-imagick"
 
     [resources.database]
     type = "postgresql"
