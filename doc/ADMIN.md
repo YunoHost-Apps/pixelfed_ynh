@@ -4,7 +4,7 @@ After being first registered, you need to execute the folloing command to promot
 
 **Run:**
 
-    $ sudo php8.1 __INSTALL_DIR__/artisan user:admin 1
+    sudo php8.1 __INSTALL_DIR__/artisan user:admin 1
 
 and respond yes to the question ` Add admin privileges to this user?`.
 
