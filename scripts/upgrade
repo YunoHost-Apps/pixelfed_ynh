@@ -54,6 +54,12 @@ if [ -z "${app_key:-}" ]; then
 	ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 fi
 
+# If open_registration doesn't exist, retrieve it
+if [ -z "${open_registration:-}" ]; then
+	open_registration="true"
+	ynh_app_setting_set --app="$app" --key=open_registration --value=$open_registration
+fi
+
 if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
 	ynh_script_progression --message="Ensuring upgrade compatibility to 0.9.0~ynh3..."
 	

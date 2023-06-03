@@ -1,0 +1,16 @@
+version = "1.0"
+
+[main]
+name = "Pixelfed configuration"
+services = ["__APP__"]
+
+    [main.config]
+    name = "Configuration Options"
+
+        [main.config.open_registration]
+        ask = "Open Registration"
+        type = "boolean"
+        yes = "true"
+        no = "false"
+        help = "Registrations are open by default."
+        bind = "OPEN_REGISTRATION:__INSTALL_DIR__/.env"
