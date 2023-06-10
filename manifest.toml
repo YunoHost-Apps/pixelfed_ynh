@@ -1,0 +1,55 @@
+packaging_format = 2
+
+id = "pixelfed"
+name = "Pixelfed"
+description.en = "ActivityPub Federated Image Sharing"
+description.fr = "Logiciel de partage d'image fédéré via ActivityPub"
+
+version = "0.11.8~ynh2"
+
+maintainers = ["yalh76", "lapineige"]
+
+[upstream]
+license = "AGPL-3.0-or-later"
+website = "https://pixelfed.org/"
+admindoc = "https://docs.pixelfed.org/running-pixelfed/administration.html"
+userdoc = "https://docs.pixelfed.org/"
+code = "https://github.com/pixelfed/pixelfed"
+
+[integration]
+yunohost = ">= 11.1.19"
+architectures = "all"
+multi_instance = true
+ldap = false
+sso = false
+disk = "500M"
+ram.build = "1000M"
+ram.runtime = "100M"
+
+[install]
+    [install.domain]
+    type = "domain"
+    full_domain = true
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+[resources]
+        [resources.sources.main]
+        url = "https://github.com/pixelfed/pixelfed/archive/refs/tags/v0.11.8.tar.gz"
+        sha256 = "cf98d50225dd83d612bc16d2b0eb0415f09e74413e28795c4d320fda029aa1ff"
+        autoupdate.strategy = "latest_github_tag"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.apt]
+    packages = "postgresql libgd3 jpegoptim optipng pngquant ffmpeg imagemagick supervisor php8.2-redis php8.2-bcmath php8.2-cli php8.2-ctype php8.2-curl php8.2-exif php8.2-gd php8.2-iconv php8.2-intl php8.2-mbstring php8.2-tokenizer php8.2-xml php8.2-zip php8.2-pdo php8.2-pgsql php8.2-fileinfo php8.2-imagick"
+
+    [resources.database]
+    type = "postgresql"
