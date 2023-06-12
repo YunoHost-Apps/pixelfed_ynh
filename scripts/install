@@ -136,6 +136,14 @@ ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
 ynh_use_logrotate --logfile="/var/www/$app/storage/logs/laravel.log"
 
 #=================================================
+# PATCH PERMISSIONS for v0.11.5 versions and higher
+#=================================================
+ynh_script_progression --message="Patching permissions (for version 0.11.5 and newer)..." --weight=1
+
+# Default configuration doesn't work
+ynh_replace_string --match_string="'private' => 0700," --replace_string="'private' => 0750," --target_file=$install_dir/config/filesystems.php
+
+#=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
