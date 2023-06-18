@@ -149,6 +149,7 @@ if [ -d "$install_dir/public/storage/m/_v2/" ]; then
   chmod 750 -R "$install_dir/public/storage/m/_v2/"* # all files subdirectories (picture folders) should be readable and executable. But if there is no picture, there is no /*/*
   chmod 770 "$install_dir/public/storage/m/_v2/"* # users folders should be 770
   chmod 770 "$install_dir/public/storage/m/_v2/" # this should be 770
+  chown -R :www-data "$install_dir/public/storage/m/_v2/" # Fix the mess following packaging v2 upgrade - and make sure proper group owner is set.
 fi
 
 #=================================================
