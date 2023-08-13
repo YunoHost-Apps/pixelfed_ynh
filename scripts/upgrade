@@ -92,6 +92,15 @@ if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/et
 	yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
 fi
 
+# Fix old email configs
+if ynh_compare_current_package_version --comparison lt --version "0.11.8~ynh5" ; then
+	ynh_replace_special_string --match_string="MAIL_DRIVER=[^\\n]*" --replace_string="MAIL_DRIVER=sendmail" --target_file="$install_dir/.env" # two \\ because it's in a ""
+	ynh_replace_special_string --match_string="MAIL_HOST=[^\\n]*" --replace_string="MAIL_HOST=127.0.0.1" --target_file="$install_dir/.env" # two \\ because it's in a ""
+	ynh_replace_special_string --match_string="MAIL_USERNAME=[^\\n]*" --replace_string="MAIL_USERNAME=$app" --target_file="$install_dir/.env" # two \\ because it's in a ""
+	ynh_replace_special_string --match_string="MAIL_PASSWORD=[^\\n]*" --replace_string="MAIL_PASSWORD=$mail_pwd" --target_file="$install_dir/.env" # two \\ because it's in a ""
+	ynh_replace_special_string --match_string="MAIL_FROM_ADDRESS=pixelfed" --replace_string=`MAIL_FROM_ADDRESS="$app"` --target_file="$install_dir/.env"
+fi
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
@@ -108,6 +117,15 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 # Pixelfed app should be able to edit its settings from the admin panel
 chmod 600 "$install_dir"/.env
+
+#=================================================
+# PATCHING SOURCE
+#=================================================
+ynh_script_progression --message="Patching source files..." --weight=1
+
+# Prevent privilege escalation by injecting commands in an email name
+# This described in more detail on the manpage https://www.postfix.org/sendmail.1.html under security
+ynh_replace_string --match_string="'/usr/sbin/sendmail -bs'" --replace_string="'/usr/sbin/sendmail -bs -- '" --target_file=$install_dir/config/mail.php
 
 #=================================================
 # PHP-FPM CONFIGURATION
