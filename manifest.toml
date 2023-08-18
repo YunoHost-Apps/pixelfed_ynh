@@ -29,7 +29,6 @@ ram.runtime = "100M"
 [install]
     [install.domain]
     type = "domain"
-    full_domain = true
 
     [install.init_main_permission]
     type = "group"
