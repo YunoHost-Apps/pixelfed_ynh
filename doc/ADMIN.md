@@ -14,6 +14,9 @@ Registrations are open by default.
 To change that setting, edit `__INSTALL_DIR__/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
 Then run `php8.2 artisan config:cache` to reload the settings.
 
+### Manually verifying emails
+By default, email verification is activated (adjust the `.env` file if needed). If your server can't send emails, you can manually confirm one user email in the admin UI, tab `Moderation`, and by using the command `php8.2 /var/www/pixelfed/artisan user:verify UserName`.
+
 ### Disable search engine indexing
 
 If you don't want your Pixelfed instance to be indexed in search engine (and so on), edit `__INSTALL_DIR__/public/robots.txt` like this:
