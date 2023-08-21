@@ -48,6 +48,15 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
 #=================================================
+# PATCHING SOURCE
+#=================================================
+ynh_script_progression --message="Patching source files..." --weight=1
+
+# Prevent privilege escalation by injecting commands in an email name
+# This described in more detail on the manpage https://www.postfix.org/sendmail.1.html under security
+ynh_replace_string --match_string="'/usr/sbin/sendmail -bs'" --replace_string="'/usr/sbin/sendmail -bs -- '" --target_file=$install_dir/config/mail.php
+
+#=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
 ynh_script_progression --message="Configuring PHP-FPM..." --weight=1
