@@ -5,7 +5,7 @@ name = "Pixelfed"
 description.en = "ActivityPub Federated Image Sharing"
 description.fr = "Logiciel de partage d'image fédéré via ActivityPub"
 
-version = "0.11.8~ynh5"
+version = "0.11.9~ynh1"
 
 maintainers = ["yalh76", "Lapineige"]
 
@@ -36,8 +36,8 @@ ram.runtime = "100M"
 
 [resources]
         [resources.sources.main]
-        url = "https://github.com/pixelfed/pixelfed/archive/refs/tags/v0.11.8.tar.gz"
-        sha256 = "cf98d50225dd83d612bc16d2b0eb0415f09e74413e28795c4d320fda029aa1ff"
+        url = "https://github.com/pixelfed/pixelfed/archive/refs/tags/v0.11.9.tar.gz"
+        sha256 = "a56629a8094749911927a4a02b69fa3446f1a089315ff9b2ccfd85a5e26bd140"
         autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
