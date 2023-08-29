@@ -5,7 +5,7 @@ name = "Pixelfed"
 description.en = "ActivityPub Federated Image Sharing"
 description.fr = "Logiciel de partage d'image fédéré via ActivityPub"
 
-version = "0.11.9~ynh1"
+version = "0.11.9~ynh2"
 
 maintainers = ["yalh76", "Lapineige"]
 
