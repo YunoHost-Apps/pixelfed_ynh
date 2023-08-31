@@ -17,7 +17,7 @@ userdoc = "https://docs.pixelfed.org/"
 code = "https://github.com/pixelfed/pixelfed"
 
 [integration]
-yunohost = ">= 11.1.19"
+yunohost = ">= 11.2.14"
 architectures = "all"
 multi_instance = true
 ldap = false
