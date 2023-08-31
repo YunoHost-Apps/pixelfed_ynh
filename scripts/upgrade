@@ -133,7 +133,7 @@ ynh_replace_string --match_string="'/usr/sbin/sendmail -bs'" --replace_string="'
 ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=1
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint
+ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint --group=www-data
 
 #=================================================
 # NGINX CONFIGURATION
