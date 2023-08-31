@@ -61,7 +61,7 @@ ynh_replace_string --match_string="'/usr/sbin/sendmail -bs'" --replace_string="'
 #=================================================
 ynh_script_progression --message="Configuring PHP-FPM..." --weight=1
 
-ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint
+ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint --group=www-data
 
 ynh_add_nginx_config
 
