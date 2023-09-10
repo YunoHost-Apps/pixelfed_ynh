@@ -56,17 +56,17 @@ fi
 
 if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
 	ynh_script_progression --message="Ensuring upgrade compatibility to 0.9.0~ynh3..."
-	
+
 	ynh_script_progression --message="Configuring a systemd service..."
 	ynh_add_systemd_config --service="${app}-horizon" --template=horizon.conf
 fi
 
 if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
 	ynh_script_progression --message="Ensuring upgrade compatibility to 0.10.9~ynh2..."
-	
+
 	ynh_script_progression --message="Stopping and removing the systemd service..."
 	ynh_remove_systemd_config --service="${app}-horizon"
-	
+
 	ynh_script_progression --message="Creating log file..."
 	mkdir -p "/var/log/$app/"
 	touch "/var/log/$app/${app}-horizon.log"
@@ -74,20 +74,20 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/et
 
 	ynh_script_progression --message="Configuring a supervisor service..."
 	ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
-	
+
 	ynh_script_progression --message="Starting a supervisor service..."
 	ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
 fi
 
 if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
 	ynh_script_progression --message="Ensuring upgrade compatibility to 0.10.9~ynh3..."
-	
+
 	if ynh_exec_warn_less yunohost service status ${app}-horizon >/dev/null
 	then
 		ynh_script_progression --message="Removing ${app}-horizon service..."
 		yunohost service remove "${app}-horizon"
 	fi
-	
+
 	ynh_script_progression --message="Integrating service in YunoHost..."
 	yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
 fi
@@ -150,7 +150,7 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Updating composer..." --weight=1
 
-ynh_exec_warn_less ynh_composer_exec --workdir="$install_dir" --commands="self-update"
+ynh_exec_warn_less ynh_composer_exec --workdir="$install_dir" --commands="self-update --2"
 
 ynh_exec_warn_less ynh_composer_exec --workdir="$install_dir" --commands="update"
 
