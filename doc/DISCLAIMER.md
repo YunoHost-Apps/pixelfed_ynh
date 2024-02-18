@@ -1,17 +1,17 @@
-# Some useful commands to know to manage your instance
-You need to run them from you pixelfed folder (usually `/var/www/pixelfed`).
+## Some useful commands to know to manage your instance
+You need to run them from you pixelfed folder (usually `/var/www/pixelfed`). The `php.VERSION` might be changed according to you current package version.
 
-## Applying changes from the `.env` config file
+### Applying changes from the `.env` config file
 
 Once you made some changes, you need to run `php8.2 artisan config:cache && php8.2 artisan cache:clear` to apply them.
 Note: this will disconnect any logged-in account (including from the admin web UI).
 
-## Removing avatar cache to save space
+### Removing avatar cache to save space
 `php8.2 artisan avatar:storage-deep-clean`
 
 Use it to prune old avatars that are outdated or no longer used. This might save some disk space.
 
-## Fix missing avatars or refetch them.
+### Fix missing avatars or refetch them.
 `php8.2 artisan  avatar:storage`
 
 It can be used to fetch remote avatars that are not loaded (or in case you deleted `/var/www/pixelfed/storage/app/public/cache/avatars` where they are stored).
@@ -19,7 +19,7 @@ It might also be usefull to migrate that cache (only, not the other existing med
 
 Be aware that this will generate a lot of "jobs" that will take time to be completed, and have a significant load on your server (especially bandwith and CPU).
 
-## When using S3
+### When using S3
 
 - Delete non-used media that where not cleaned (it happens) : `php8.2 artisanmedia:gc` (Delete media uploads not attached to any active statuses)
 
