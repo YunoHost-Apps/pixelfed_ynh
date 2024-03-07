@@ -26,7 +26,7 @@ En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de Pixe
 Il est également possible d'importer ses données depuis Instagram.
 
 
-**Version incluse :** 0.11.12~ynh1
+**Version incluse :** 0.11.13~ynh1
 
 ## Captures d’écran
 
@@ -67,12 +67,12 @@ Be aware that this will generate a lot of "jobs" that will take time to be compl
 
 ## Documentations et ressources
 
-* Site officiel de l’app : <https://pixelfed.org/>
-* Documentation officielle utilisateur : <https://docs.pixelfed.org/>
-* Documentation officielle de l’admin : <https://docs.pixelfed.org/running-pixelfed/administration.html>
-* Dépôt de code officiel de l’app : <https://github.com/pixelfed/pixelfed>
-* YunoHost Store: <https://apps.yunohost.org/app/pixelfed>
-* Signaler un bug : <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
+- Site officiel de l’app : <https://pixelfed.org/>
+- Documentation officielle utilisateur : <https://docs.pixelfed.org/>
+- Documentation officielle de l’admin : <https://docs.pixelfed.org/running-pixelfed/administration.html>
+- Dépôt de code officiel de l’app : <https://github.com/pixelfed/pixelfed>
+- YunoHost Store : <https://apps.yunohost.org/app/pixelfed>
+- Signaler un bug : <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
 
 ## Informations pour les développeurs
 

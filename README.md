@@ -25,7 +25,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 
 It is also possible to import your data from Instagram. 
 
-**Shipped version:** 0.11.12~ynh1
+**Shipped version:** 0.11.13~ynh1
 
 ## Screenshots
 
@@ -66,12 +66,12 @@ Be aware that this will generate a lot of "jobs" that will take time to be compl
 
 ## Documentation and resources
 
-* Official app website: <https://pixelfed.org/>
-* Official user documentation: <https://docs.pixelfed.org/>
-* Official admin documentation: <https://docs.pixelfed.org/running-pixelfed/administration.html>
-* Upstream app code repository: <https://github.com/pixelfed/pixelfed>
-* YunoHost Store: <https://apps.yunohost.org/app/pixelfed>
-* Report a bug: <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
+- Official app website: <https://pixelfed.org/>
+- Official user documentation: <https://docs.pixelfed.org/>
+- Official admin documentation: <https://docs.pixelfed.org/running-pixelfed/administration.html>
+- Upstream app code repository: <https://github.com/pixelfed/pixelfed>
+- YunoHost Store: <https://apps.yunohost.org/app/pixelfed>
+- Report a bug: <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
 
 ## Developer info
 
