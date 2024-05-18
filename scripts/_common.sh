@@ -53,7 +53,7 @@ ynh_redis_get_free_db() {
 # | arg: database - the database to erase
 ynh_redis_remove_db() {
     local db=$1
-    redis-cli -n "$db" flushall
+    redis-cli -n "$db" flushdb
 }
 
 
