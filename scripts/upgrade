@@ -137,7 +137,7 @@ ynh_add_systemd_config
 
 ynh_use_logrotate --non-append
 
-yunohost service add "$app" --description="A short description of the app" --log="/var/log/$app/$app.log"
+yunohost service add "$app" --description="Federated Image Sharing" --log="/var/log/$app/$app.log"
 
 #=================================================
 # SPECIFIC UPGRADE
