@@ -10,19 +10,11 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# CHECK VERSION
+# STOP SYSTEMD SERVICE
 #=================================================
+ynh_script_progression --message="Stopping $app's systemd service..." --weight=1
 
-upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
-# STOP SUPERVISOR SERVICE
-#=================================================
-ynh_script_progression --message="Stopping a supervisor service..." --weight=1
-
-ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="systemd" --line_match="stopped: ${app}-horizon"
+ynh_systemd_action --service_name="$app" --action="stop" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -54,31 +46,6 @@ if [ -z "${app_key:-}" ]; then
 	ynh_app_setting_set --app="$app" --key=app_key --value="$app_key"
 fi
 
-if dpkg --compare-versions "0.9.0~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
-	ynh_script_progression --message="Ensuring upgrade compatibility to 0.9.0~ynh3..."
-
-	ynh_script_progression --message="Configuring a systemd service..."
-	ynh_add_systemd_config --service="${app}-horizon" --template=horizon.conf
-fi
-
-if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
-	ynh_script_progression --message="Ensuring upgrade compatibility to 0.10.9~ynh2..."
-
-	ynh_script_progression --message="Stopping and removing the systemd service..."
-	ynh_remove_systemd_config --service="${app}-horizon"
-
-	ynh_script_progression --message="Creating log file..."
-	mkdir -p "/var/log/$app/"
-	touch "/var/log/$app/${app}-horizon.log"
-	chown -R $app: "/var/log/$app/"
-
-	ynh_script_progression --message="Configuring a supervisor service..."
-	ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
-
-	ynh_script_progression --message="Starting a supervisor service..."
-	ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
-fi
-
 if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/etc/yunohost/apps/$YNH_APP_INSTANCE_NAME/manifest.json" --manifest_key="version" || echo 1.0)" ; then
 	ynh_script_progression --message="Ensuring upgrade compatibility to 0.10.9~ynh3..."
 
@@ -87,9 +54,6 @@ if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --manifest="/et
 		ynh_script_progression --message="Removing ${app}-horizon service..."
 		yunohost service remove "${app}-horizon"
 	fi
-
-	ynh_script_progression --message="Integrating service in YunoHost..."
-	yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
 fi
 
 # Fix old email configs
@@ -104,14 +68,10 @@ fi
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+ynh_script_progression --message="Upgrading source files..." --weight=1
 
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
-	ynh_script_progression --message="Upgrading source files..." --weight=1
-
-	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$install_dir" --keep=".env"
-fi
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$install_dir" --keep=".env"
 
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
@@ -135,13 +95,21 @@ ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=1
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint --group=www-data
 
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
-
 # Create a dedicated NGINX config
 ynh_add_nginx_config
+
+mkdir -p "/var/log/$app/"
+touch "/var/log/$app/${app}-horizon.log"
+chown -R $app: "/var/log/$app/"
+chmod -R 600 "/var/log/$app/"
+
+ynh_add_config --template="cron" --destination="/etc/cron.d/$app"
+
+ynh_add_systemd_config
+
+ynh_use_logrotate --non-append
+
+yunohost service add "$app" --description="Federated Image Sharing" --log="/var/log/$app/$app.log"
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -195,53 +163,11 @@ pushd "$install_dir"
 popd
 
 #=================================================
-# CREATE LOG FILE
+# START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Creating log file..." --weight=1
+ynh_script_progression --message="Starting $app's systemd service..." --weight=1
 
-mkdir -p "/var/log/$app/"
-touch "/var/log/$app/${app}-horizon.log"
-chown -R $app: "/var/log/$app/"
-chmod -R 600 "/var/log/$app/"
-
-#=================================================
-# UPGRADE THE CRON FILE
-#=================================================
-ynh_script_progression --message="Upgrading cron file..." --weight=1
-
-ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
-
-#=================================================
-# SETUP SUPERVISOR
-#=================================================
-ynh_script_progression --message="Upgrading supervisor configuration..." --weight=1
-
-# Create a dedicated supervisor config
-ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
-
-# Use logrotate to manage app-specific logfile(s)
-ynh_use_logrotate --non-append
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
-
-yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
-
-#=================================================
-# START SUPERVISOR SERVICE
-#=================================================
-ynh_script_progression --message="Starting a supervisor service..." --weight=1
-
-ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
+ynh_systemd_action --service_name="$app" --action="start" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # END OF SCRIPT
