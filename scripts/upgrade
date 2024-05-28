@@ -175,23 +175,25 @@ fi
 #=================================================
 ynh_script_progression --message="Deploying..."
 
+artisan="ynh_exec_as $app php$phpversion artisan"
+
 pushd "$install_dir"
-	php$phpversion artisan horizon:install
-	php$phpversion artisan horizon:publish
-	php$phpversion artisan passport:keys --force
-	php$phpversion artisan config:clear
-	php$phpversion artisan config:cache
-	php$phpversion artisan route:clear
-	php$phpversion artisan route:cache
-	php$phpversion artisan view:clear
-	php$phpversion artisan view:cache
-	php$phpversion artisan storage:link
-	php$phpversion artisan migrate --force
-	php$phpversion artisan update
-	php$phpversion artisan horizon:purge
-	php$phpversion artisan import:cities 2>/dev/null
-	php$phpversion artisan instance:actor
-	php$phpversion artisan passport:client --personal <<< "\\n"
+	$artisan horizon:install
+	$artisan horizon:publish
+	$artisan passport:keys --force
+	$artisan config:clear
+	$artisan config:cache
+	$artisan route:clear
+	$artisan route:cache
+	$artisan view:clear
+	$artisan view:cache
+	$artisan storage:link
+	$artisan migrate --force
+	$artisan update
+	$artisan horizon:purge
+	$artisan import:cities 2>/dev/null
+	$artisan instance:actor
+	$artisan passport:client --personal <<< "\\n"
 popd
 
 #=================================================
