@@ -104,6 +104,22 @@ ynh_script_progression --message="Configuring a supervisor service..." --weight=
 ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
 
 #=================================================
+# PATCH PERMISSIONS for v0.11.5 versions and higher
+#=================================================
+ynh_script_progression --message="Patching permissions (for version 0.11.5 and newer)..." --weight=1
+
+# Default configuration doesn't work
+ynh_replace_string --match_string="'private' => 0700," --replace_string="'private' => 0750," --target_file=$install_dir/config/filesystems.php
+
+# Repair permissions for files created after v0.11.5 and before this patch
+if [ -d "$install_dir/public/storage/m/_v2/" ]; then
+  chmod 750 -R "$install_dir/public/storage/m/_v2/"* # all files subdirectories (picture folders) should be readable and executable. But if there is no picture, there is no /*/*
+  chmod 770 "$install_dir/public/storage/m/_v2/"* # users folders should be 770
+  chmod 770 "$install_dir/public/storage/m/_v2/" # this should be 770
+  chown -R :www-data "$install_dir/public/storage/m/_v2/" # Fix the mess following packaging v2 upgrade - and make sure proper group owner is set.
+fi
+
+#=================================================
 # DEPLOY
 #=================================================
 ynh_script_progression --message="Deploying..." --weight=1
@@ -145,22 +161,6 @@ ynh_script_progression --message="Configuring log rotation..." --weight=1
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
 ynh_use_logrotate --logfile="/var/www/$app/storage/logs/laravel.log" --specific_user=$app/www-data
-
-#=================================================
-# PATCH PERMISSIONS for v0.11.5 versions and higher
-#=================================================
-ynh_script_progression --message="Patching permissions (for version 0.11.5 and newer)..." --weight=1
-
-# Default configuration doesn't work
-ynh_replace_string --match_string="'private' => 0700," --replace_string="'private' => 0750," --target_file=$install_dir/config/filesystems.php
-
-# Repair permissions for files created after v0.11.5 and before this patch
-if [ -d "$install_dir/public/storage/m/_v2/" ]; then
-  chmod 750 -R "$install_dir/public/storage/m/_v2/"* # all files subdirectories (picture folders) should be readable and executable. But if there is no picture, there is no /*/*
-  chmod 770 "$install_dir/public/storage/m/_v2/"* # users folders should be 770
-  chmod 770 "$install_dir/public/storage/m/_v2/" # this should be 770
-  chown -R :www-data "$install_dir/public/storage/m/_v2/" # Fix the mess following packaging v2 upgrade - and make sure proper group owner is set.
-fi
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
