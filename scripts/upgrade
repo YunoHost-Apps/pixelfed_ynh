@@ -176,16 +176,17 @@ fi
 ynh_script_progression --message="Deploying..."
 
 artisan="ynh_exec_as $app php$phpversion artisan"
+artisan_root="php$phpversion artisan"
 
 pushd "$install_dir"
 	$artisan horizon:install
 	$artisan horizon:publish
 	$artisan passport:keys --force
-	$artisan config:clear
+	$artisan_root config:clear
 	$artisan config:cache
-	$artisan route:clear
+	$artisan_root route:clear
 	$artisan route:cache
-	$artisan view:clear
+	$artisan_root view:clear
 	$artisan view:cache
 	$artisan storage:link
 	$artisan migrate --force
