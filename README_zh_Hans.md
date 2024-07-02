@@ -5,7 +5,7 @@
 
 # YunoHost 上的 Pixelfed
 
-[![集成程度](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed) ![工作状态](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
+[![集成程度](https://dash.yunohost.org/integration/pixelfed.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
 
 [![使用 YunoHost 安装 Pixelfed](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 
@@ -25,7 +25,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 
 It is also possible to import your data from Instagram. 
 
-**分发版本：** 0.12.1~ynh1
+**分发版本：** 0.12.3~ynh1
 
 ## 截图
 
