@@ -1,13 +1,9 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
+
+ynh_app_setting_set --key=php_upload_max_filesize --value=100M
 
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
@@ -15,90 +11,90 @@ source /usr/share/yunohost/helpers
 
 app_key="base64:$(ynh_string_random --length=32 | base64)"
 
-fpm_footprint="low"
-fpm_free_footprint=0
-fpm_usage="low"
+#REMOVEME? Everything about fpm_footprint is removed in helpers2.1... | fpm_footprint="low"
+#REMOVEME? Everything about fpm_free_footprint is removed in helpers2.1... | fpm_free_footprint=0
+#REMOVEME? Everything about fpm_usage is removed in helpers2.1... | fpm_usage="low"
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
 
-ynh_app_setting_set --app=$app --key=app_key --value=$app_key
-ynh_app_setting_set --app=$app --key=fpm_footprint --value=$fpm_footprint
-ynh_app_setting_set --app=$app --key=fpm_free_footprint --value=$fpm_free_footprint
-ynh_app_setting_set --app=$app --key=fpm_usage --value=$fpm_usage
+ynh_app_setting_set --key=app_key --value=$app_key
+#REMOVEME? Everything about fpm_footprint is removed in helpers2.1... | ynh_app_setting_set --key=fpm_footprint --value=$fpm_footprint
+#REMOVEME? Everything about fpm_free_footprint is removed in helpers2.1... | ynh_app_setting_set --key=fpm_free_footprint --value=$fpm_free_footprint
+#REMOVEME? Everything about fpm_usage is removed in helpers2.1... | ynh_app_setting_set --key=fpm_usage --value=$fpm_usage
 
 #=================================================
 # CONFIGURE REDIS DATABASE
 #=================================================
-ynh_script_progression --message="Creating a Redis database..." --weight=1
+ynh_script_progression "Creating a Redis database..."
 
 redis_db=$(ynh_redis_get_free_db)
-ynh_app_setting_set --app="$app" --key=redis_db --value="$redis_db"
+ynh_app_setting_set --key=redis_db --value="$redis_db"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..." --weight=1
+ynh_script_progression "Setting up source files..."
 
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir"
 
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
-
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 #=================================================
 # PATCHING SOURCE
 #=================================================
-ynh_script_progression --message="Patching source files..." --weight=1
+ynh_script_progression "Patching source files..."
 
 # Prevent privilege escalation by injecting commands in an email name
 # This described in more detail on the manpage https://www.postfix.org/sendmail.1.html under security
-ynh_replace_string --match_string="'/usr/sbin/sendmail -bs'" --replace_string="'/usr/sbin/sendmail -bs -- '" --target_file=$install_dir/config/mail.php
+ynh_replace --match="'/usr/sbin/sendmail -bs'" --replace="'/usr/sbin/sendmail -bs -- '" --file=$install_dir/config/mail.php
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring PHP-FPM..." --weight=1
+ynh_script_progression "Configuring PHP-FPM..."
 
-ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint --group=www-data
+ynh_config_add_phpfpm # FIXMEhelpers2.1 : --group=www-data to be replaced with php_group=www-data to be added in _common.sh
 
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
 # INSTALL COMPOSER DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing composer dependencies..." --weight=1
+ynh_script_progression "Installing composer dependencies..."
 
-ynh_exec_warn_less ynh_install_composer --phpversion="$phpversion" --composerversion="$YNH_COMPOSER_VERSION" --workdir="$install_dir"
+ynh_composer_install
+ynh_composer_exec install --no-dev
 
 #=================================================
 # CREATE LOG FILE
 #=================================================
-ynh_script_progression --message="Creating log file..." --weight=1
+ynh_script_progression "Creating log file..."
 
 mkdir -p "/var/log/$app/"
 touch "/var/log/$app/${app}-horizon.log"
-chown -R $app: "/var/log/$app/"
-chmod -R 600 "/var/log/$app/"
+#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app: "/var/log/$app/"
+#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R 600 "/var/log/$app/"
 
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..." --weight=1
+ynh_script_progression "Adding $app's configuration..."
 
-ynh_add_config --template="../conf/.env" --destination="$install_dir/.env"
+ynh_config_add --template=".env" --destination="$install_dir/.env"
 
 # Pixelfed app should be able to edit its settings from the admin panel
-chmod 600 "$install_dir/.env"
-chown $app:$app "$install_dir/.env"
+#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 600 "$install_dir/.env"
+#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$install_dir/.env"
 
 #=================================================
 # SETUP SUPERVISOR
 #=================================================
-ynh_script_progression --message="Configuring a supervisor service..." --weight=1
+ynh_script_progression "Configuring a supervisor service..."
 
 # Create a dedicated supervisor config
 ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
@@ -106,51 +102,49 @@ ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
 #=================================================
 # DEPLOY
 #=================================================
-ynh_script_progression --message="Deploying..." --weight=1
+ynh_script_progression "Deploying..."
 
 pushd "$install_dir"
-	php$phpversion artisan -n key:generate --force
-	php$phpversion artisan horizon:install
-	php$phpversion artisan horizon:publish
-	php$phpversion artisan passport:keys
-	php$phpversion artisan config:clear
-	php$phpversion artisan config:cache
-	php$phpversion artisan route:cache
-	php$phpversion artisan view:cache
-	php$phpversion artisan storage:link
-	php$phpversion artisan migrate --force
-	php$phpversion artisan update
-	php$phpversion artisan horizon:purge
-	php$phpversion artisan import:cities 2>/dev/null
-	php$phpversion artisan instance:actor
-	php$phpversion artisan passport:client --personal <<< "\\n"
+	php$php_version artisan -n key:generate --force
+	php$php_version artisan horizon:install
+	php$php_version artisan horizon:publish
+	php$php_version artisan passport:keys
+	php$php_version artisan config:clear
+	php$php_version artisan config:cache
+	php$php_version artisan route:cache
+	php$php_version artisan view:cache
+	php$php_version artisan storage:link
+	php$php_version artisan migrate --force
+	php$php_version artisan update
+	php$php_version artisan horizon:purge
+	php$php_version artisan import:cities 2>/dev/null
+	php$php_version artisan instance:actor
+	php$php_version artisan passport:client --personal <<< "\\n"
 popd
 
 #=================================================
 # INSTALL THE CRON FILE
 #=================================================
-ynh_script_progression --message="Installing the cron file..." --weight=1
+ynh_script_progression "Installing the cron file..."
 
-ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+ynh_config_add --template="cron" --destination="/etc/cron.d/$app"
 
-#=================================================
-# GENERIC FINALIZATION
 #=================================================
 # SETUP LOGROTATE
 #=================================================
-ynh_script_progression --message="Configuring log rotation..." --weight=1
+ynh_script_progression "Configuring log rotation..."
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
-ynh_use_logrotate --logfile="/var/www/$app/storage/logs/laravel.log" --specific_user=$app/www-data
+ynh_config_add_logrotate "/var/log/$app/${app}-horizon.log"
+ynh_config_add_logrotate "/var/www/$app/storage/logs/laravel.log"
 
 #=================================================
 # PATCH PERMISSIONS for v0.11.5 versions and higher
 #=================================================
-ynh_script_progression --message="Patching permissions (for version 0.11.5 and newer)..." --weight=1
+ynh_script_progression "Patching permissions (for version 0.11.5 and newer)..."
 
 # Default configuration doesn't work
-ynh_replace_string --match_string="'private' => 0700," --replace_string="'private' => 0750," --target_file=$install_dir/config/filesystems.php
+ynh_replace --match="'private' => 0700," --replace="'private' => 0750," --file=$install_dir/config/filesystems.php
 
 # Repair permissions for files created after v0.11.5 and before this patch
 if [ -d "$install_dir/public/storage/m/_v2/" ]; then
@@ -163,20 +157,20 @@ fi
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+ynh_script_progression "Integrating service in YunoHost..."
 
 yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # START SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Starting a supervisor service..." --weight=1
+ynh_script_progression "Starting a supervisor service..."
 
 # Start a supervisor service
-ynh_supervisor_action --service_name="${app}-horizon" --action="reload" --log_path="systemd" --line_match="success: ${app}-horizon"
+ynh_supervisor_action --service="${app}-horizon" --action="reload" --log_path="systemd" --wait_until="success: ${app}-horizon"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"

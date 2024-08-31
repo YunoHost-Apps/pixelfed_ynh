@@ -1,23 +1,10 @@
 #!/bin/bash
 
 #=================================================
-# COMMON VARIABLES
+# COMMON VARIABLES AND CUSTOM HELPERS
 #=================================================
 
-YNH_COMPOSER_VERSION="2.2.21"
-
-#=================================================
-# PERSONAL HELPERS
-#=================================================
-
-#=================================================
-# EXPERIMENTAL HELPERS
-#=================================================
-
-#=================================================
-# FUTURE OFFICIAL HELPERS
-#=================================================
-
+composer_version="2.2.21"
 
 # Create a dedicated supervisor config
 #
@@ -27,13 +14,13 @@ YNH_COMPOSER_VERSION="2.2.21"
 #
 # This will use the template `../conf/<templatename>.service`.
 #
-# See the documentation of `ynh_add_config` for a description of the template
+# See the documentation of `ynh_config_add` for a description of the template
 # format and how placeholders are replaced with actual variables.
 #
 # Requires YunoHost version 2.7.11 or higher.
 ynh_add_supervisor_config () {
     # Declare an array to define the options of this helper.
-    local legacy_args=stv
+    #REMOVEME? local legacy_args=stv
     local -A args_array=( [s]=service= [t]=template= [v]=others_var=)
     local service
     local template
@@ -44,9 +31,9 @@ ynh_add_supervisor_config () {
     local template="${template:-supervisor.service}"
     others_var="${others_var:-}"
 
-    [[ -z "$others_var" ]] || ynh_print_warn --message="Packagers: using others_var is unecessary since Yunohost 4.2"
+    [[ -z "$others_var" ]] || ynh_print_warn "Packagers: using others_var is unecessary since Yunohost 4.2"
 
-    ynh_add_config --template="$YNH_APP_BASEDIR/conf/$template" --destination="/etc/supervisor/conf.d/$service.conf"
+    ynh_config_add --template="$YNH_APP_BASEDIR/conf/$template" --destination="/etc/supervisor/conf.d/$service.conf"
 
     supervisorctl reread
     supervisorctl update
@@ -60,7 +47,7 @@ ynh_add_supervisor_config () {
 # Requires YunoHost version 2.7.2 or higher.
 ynh_remove_supervisor_config () {
     # Declare an array to define the options of this helper.
-    local legacy_args=s
+    #REMOVEME? local legacy_args=s
     local -A args_array=( [s]=service= )
     local service
     # Manage arguments with getopts
@@ -70,8 +57,8 @@ ynh_remove_supervisor_config () {
     local finalsupervisorconf="/etc/supervisor/conf.d/$service.conf"
     if [ -e "$finalsupervisorconf" ]
     then
-        ynh_supervisor_action --service_name=$service --action=stop
-        ynh_secure_remove --file="$finalsupervisorconf"
+        ynh_supervisor_action --service=$service --action=stop
+        ynh_safe_rm "$finalsupervisorconf"
         supervisorctl reread
         supervisorctl update
     fi
@@ -79,10 +66,10 @@ ynh_remove_supervisor_config () {
 
 # Start (or other actions) a service,  print a log in case of failure and optionnaly wait until the service is completely started
 #
-# usage: ynh_supervisor_action [--service_name=service_name] [--action=action] [ [--line_match="line to match"] [--log_path=log_path] [--timeout=300] [--length=20] ]
-# | arg: -n, --service_name= - Name of the service to start. Default : `$app`
+# usage: ynh_supervisor_action [--service=service_name] [--action=action] [ [--wait_until="line to match"] [--log_path=log_path] [--timeout=300] [--length=20] ]
+# | arg: -n, --service= - Name of the service to start. Default : `$app`
 # | arg: -a, --action=       - Action to perform with supervisorctl. Default: start
-# | arg: -l, --line_match=   - Line to match - The line to find in the log to attest the service have finished to boot. If not defined it don't wait until the service is completely started.
+# | arg: -l, --wait_until=   - Line to match - The line to find in the log to attest the service have finished to boot. If not defined it don't wait until the service is completely started.
 # | arg: -p, --log_path=     - Log file - Path to the log file. Default : `/var/log/$app/$app.log`
 # | arg: -t, --timeout=      - Timeout - The maximum time to wait before ending the watching. Default : 300 seconds.
 # | arg: -e, --length=       - Length of the error log : Default : 20
@@ -90,7 +77,7 @@ ynh_remove_supervisor_config () {
 # Requires YunoHost version 3.5.0 or higher.
 ynh_supervisor_action() {
     # Declare an array to define the options of this helper.
-    local legacy_args=nalpte
+    #REMOVEME? local legacy_args=nalpte
     declare -Ar args_array=( [n]=service_name= [a]=action= [l]=line_match= [p]=log_path= [t]=timeout= [e]=length= )
     local service_name
     local action
@@ -155,7 +142,7 @@ ynh_supervisor_action() {
             # Read the log until the sentence is found, that means the app finished to start. Or run until the timeout
             if grep --extended-regexp --quiet "$line_match" "$templog"
             then
-                ynh_print_info --message="The service $service_name has correctly executed the action ${action}."
+                ynh_print_info "The service $service_name has correctly executed the action ${action}."
                 break
             fi
             if [ $i -eq 3 ]; then
@@ -172,12 +159,12 @@ ynh_supervisor_action() {
         fi
         if [ $i -eq $timeout ]
         then
-            ynh_print_warn --message="The service $service_name didn't fully executed the action ${action} before the timeout."
-            ynh_print_warn --message="Please find here an extract of the end of the log of the service $service_name:"
+            ynh_print_warn "The service $service_name didn't fully executed the action ${action} before the timeout."
+            ynh_print_warn "Please find here an extract of the end of the log of the service $service_name:"
             ynh_exec_warn journalctl --quiet --no-hostname --no-pager --lines=$length --unit=$service_name
             if [ -e "$log_path" ]
             then
-                ynh_print_warn --message="\-\-\-"
+                ynh_print_warn "\-\-\-"
                 ynh_exec_warn tail --lines=$length "$log_path"
             fi
         fi

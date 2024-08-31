@@ -1,71 +1,61 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC STARTING
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD MODIFICATIONS
-#=================================================
 # STOP SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a supervisor service..." --weight=1
+ynh_script_progression "Stopping a supervisor service..."
 
-ynh_supervisor_action --service_name="${app}-horizon" --action="stop" --log_path="/var/log/$app/${app}-horizon.log"
+ynh_supervisor_action --service="${app}-horizon" --action="stop" --log_path="/var/log/$app/${app}-horizon.log"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
-ynh_script_progression --message="Updating NGINX web server configuration..." --weight=1
+ynh_script_progression "Updating NGINX web server configuration..."
 
-ynh_change_url_nginx_config
+ynh_config_change_url_nginx
 
 #=================================================
 # SPECIFIC MODIFICATIONS
 #=================================================
 # UPDATE CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating config file..." --weight=1
+ynh_script_progression "Updating config file..."
 
 config="$install_dir/.env"
-ynh_backup_if_checksum_is_different --file="$config"
-ynh_replace_string --match_string="APP_URL=.*"           --replace_string="APP_URL=https://$new_domain"                --target_file="$config"
-ynh_replace_string --match_string="ADMIN_DOMAIN=.*"      --replace_string="ADMIN_DOMAIN=\"$new_domain\""               --target_file="$config"
-ynh_replace_string --match_string="APP_DOMAIN=.*"        --replace_string="APP_DOMAIN=\"$new_domain\""                 --target_file="$config"
-ynh_replace_string --match_string="MAIL_FROM_ADDRESS=.*" --replace_string="MAIL_FROM_ADDRESS=\"pixelfed@$new_domain\"" --target_file="$config"
+ynh_backup_if_checksum_is_different "$config"
+ynh_replace --match="APP_URL=.*"           --replace="APP_URL=https://$new_domain"                --file="$config"
+ynh_replace --match="ADMIN_DOMAIN=.*"      --replace="ADMIN_DOMAIN=\"$new_domain\""               --file="$config"
+ynh_replace --match="APP_DOMAIN=.*"        --replace="APP_DOMAIN=\"$new_domain\""                 --file="$config"
+ynh_replace --match="MAIL_FROM_ADDRESS=.*" --replace="MAIL_FROM_ADDRESS=\"pixelfed@$new_domain\"" --file="$config"
 
 # Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file="$config"
+ynh_store_file_checksum "$config"
 
 #=================================================
 # APPLY CHANGES
 #=================================================
-ynh_script_progression --message="Applying changes..." --weight=1
+ynh_script_progression "Applying changes..."
 
 pushd "$install_dir"
-	php$phpversion artisan config:clear
-	php$phpversion artisan config:cache
-	php$phpversion artisan route:clear
-	php$phpversion artisan route:cache
-	php$phpversion artisan horizon:purge
+	php$php_version artisan config:clear
+	php$php_version artisan config:cache
+	php$php_version artisan route:clear
+	php$php_version artisan route:cache
+	php$php_version artisan horizon:purge
 popd
 
 #=================================================
-# GENERIC FINALISATION
-#=================================================
 # START SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Starting a supervisor service..." --weight=1
+ynh_script_progression "Starting a supervisor service..."
 
-ynh_supervisor_action --service_name="${app}-horizon" --action="start" --log_path="systemd" --line_match="success: ${app}-horizon"
+ynh_supervisor_action --service="${app}-horizon" --action="start" --log_path="systemd" --wait_until="success: ${app}-horizon"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Change of URL completed for $app" --last
+ynh_script_progression "Change of URL completed for $app"
