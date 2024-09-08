@@ -52,7 +52,7 @@ ynh_replace --match="'/usr/sbin/sendmail -bs'" --replace="'/usr/sbin/sendmail -b
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."
 
-ynh_config_add_phpfpm # FIXMEhelpers2.1 : --group=www-data to be replaced with php_group=www-data to be added in _common.sh
+ynh_config_add_phpfpm
 
 ynh_config_add_nginx
 
@@ -71,8 +71,6 @@ ynh_config_add_logrotate "/var/www/$app/storage/logs/laravel.log"
 
 ynh_config_add --template="cron" --destination="/etc/cron.d/$app"
 
-#=================================================
-# SPECIFIC SETUP
 #=================================================
 # INSTALL COMPOSER DEPENDENCIES
 #=================================================
@@ -121,7 +119,7 @@ if [ -d "$install_dir/public/storage/m/_v2/" ]; then
 fi
 
 #=================================================
-# START SUPERVISOR SERVICE
+# START SERVICE
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
