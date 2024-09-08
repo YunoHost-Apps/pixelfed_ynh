@@ -27,29 +27,11 @@ ynh_backup --src_path="$install_dir"
 
 ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
-#=================================================
-# BACKUP THE PHP-FPM CONFIGURATION
-#=================================================
-
 ynh_backup --src_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
-
-#=================================================
-# SPECIFIC BACKUP
-#=================================================
-# BACKUP LOGROTATE
-#=================================================
 
 ynh_backup --src_path="/etc/logrotate.d/$app"
 
-#=================================================
-# BACKUP SUPERVISOR CONFIGURATION
-#=================================================
-
-ynh_backup --src_path="/etc/supervisor/conf.d/${app}-horizon.conf"
-
-#=================================================
-# BACKUP VARIOUS FILES
-#=================================================
+ynh_backup --src_path="/etc/systemd/system/$app.service"
 
 ynh_backup --src_path="/etc/cron.d/$app"
 
