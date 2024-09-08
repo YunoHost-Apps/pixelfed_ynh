@@ -17,24 +17,6 @@ ynh_supervisor_action --service="${app}-horizon" --action="stop" --log_path="sys
 #=================================================
 ynh_script_progression "Ensuring downward compatibility..."
 
-# If fpm_footprint doesn't exist, create it
-if [ -z "${fpm_footprint:-}" ]; then
-    fpm_footprint=low
-#REMOVEME? Everything about fpm_footprint is removed in helpers2.1... |     ynh_app_setting_set --key=fpm_footprint --value=$fpm_footprint
-fi
-
-# If fpm_free_footprint doesn't exist, create it
-if [ -z "${fpm_free_footprint:-}" ]; then
-    fpm_free_footprint=0
-#REMOVEME? Everything about fpm_free_footprint is removed in helpers2.1... |     ynh_app_setting_set --key=fpm_free_footprint --value=$fpm_free_footprint
-fi
-
-# If fpm_usage doesn't exist, create it
-if [ -z "${fpm_usage:-}" ]; then
-    fpm_usage=low
-#REMOVEME? Everything about fpm_usage is removed in helpers2.1... |     ynh_app_setting_set --key=fpm_usage --value=$fpm_usage
-fi
-
 # If app_key doesn't exist, retrieve it
 if [ -z "${app_key:-}" ]; then
 	ynh_script_progression "Retrieving app_key..."
@@ -58,7 +40,7 @@ if dpkg --compare-versions "0.10.9~ynh2" gt "$(ynh_read_manifest --key="version"
 	ynh_script_progression "Creating log file..."
 	mkdir -p "/var/log/$app/"
 	touch "/var/log/$app/${app}-horizon.log"
-	#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app: "/var/log/$app/"
+	chown -R $app: "/var/log/$app/"
 
 	ynh_script_progression "Configuring a supervisor service..."
 	ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
@@ -92,20 +74,12 @@ fi
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+ynh_script_progression "Upgrading source files..."
 
-# FIXME: this is still supported but the recommendation is now to *always* re-setup the app sources wether or not the upstream sources changed
-if ynh_app_upstream_version_changed
-then
-	ynh_script_progression "Upgrading source files..."
+ynh_setup_source --dest_dir="$install_dir" --keep=".env"
 
-	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$install_dir" --keep=".env"
-fi
-
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 # Pixelfed app should be able to edit its settings from the admin panel
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 600 "$install_dir"/.env
+chmod 600 "$install_dir"/.env
 
 #=================================================
 # PATCHING SOURCE
@@ -188,8 +162,8 @@ ynh_script_progression "Creating log file..."
 
 mkdir -p "/var/log/$app/"
 touch "/var/log/$app/${app}-horizon.log"
-#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app: "/var/log/$app/"
-#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R 600 "/var/log/$app/"
+chown -R $app: "/var/log/$app/"
+chmod -R 600 "/var/log/$app/"
 
 #=================================================
 # UPGRADE THE CRON FILE
