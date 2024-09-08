@@ -11,18 +11,7 @@ ynh_app_setting_set --key=php_upload_max_filesize --value=100M
 
 app_key="base64:$(ynh_string_random --length=32 | base64)"
 
-#REMOVEME? Everything about fpm_footprint is removed in helpers2.1... | fpm_footprint="low"
-#REMOVEME? Everything about fpm_free_footprint is removed in helpers2.1... | fpm_free_footprint=0
-#REMOVEME? Everything about fpm_usage is removed in helpers2.1... | fpm_usage="low"
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-
 ynh_app_setting_set --key=app_key --value=$app_key
-#REMOVEME? Everything about fpm_footprint is removed in helpers2.1... | ynh_app_setting_set --key=fpm_footprint --value=$fpm_footprint
-#REMOVEME? Everything about fpm_free_footprint is removed in helpers2.1... | ynh_app_setting_set --key=fpm_free_footprint --value=$fpm_free_footprint
-#REMOVEME? Everything about fpm_usage is removed in helpers2.1... | ynh_app_setting_set --key=fpm_usage --value=$fpm_usage
 
 #=================================================
 # CONFIGURE REDIS DATABASE
@@ -37,11 +26,8 @@ ynh_app_setting_set --key=redis_db --value="$redis_db"
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir"
 
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
@@ -49,9 +35,8 @@ ynh_script_progression "Adding $app's configuration..."
 
 ynh_config_add --template=".env" --destination="$install_dir/.env"
 
-# Pixelfed app should be able to edit its settings from the admin panel
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 600 "$install_dir/.env"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$install_dir/.env"
+600 "$install_dir/.env"
+chown $app:$app "$install_dir/.env"
 
 #=================================================
 # PATCHING SOURCE
@@ -77,8 +62,8 @@ yunohost service add "$app" --description="Federated Image Sharing" --log="/var/
 
 mkdir -p "/var/log/$app/"
 touch "/var/log/$app/${app}-horizon.log"
-#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app: "/var/log/$app/"
-#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R 600 "/var/log/$app/"
+chown -R $app: "/var/log/$app/"
+chmod -R 600 "/var/log/$app/"
 
 # Use logrotate to manage application logfile(s)
 ynh_config_add_logrotate "/var/log/$app/${app}-horizon.log"
@@ -130,8 +115,8 @@ ynh_replace --match="'private' => 0700," --replace="'private' => 0750," --file=$
 # Repair permissions for files created after v0.11.5 and before this patch
 if [ -d "$install_dir/public/storage/m/_v2/" ]; then
   chmod 750 -R "$install_dir/public/storage/m/_v2/"* # all files subdirectories (picture folders) should be readable and executable. But if there is no picture, there is no /*/*
-  chmod 770 "$install_dir/public/storage/m/_v2/"* # users folders should be 770
-  chmod 770 "$install_dir/public/storage/m/_v2/" # this should be 770
+  chmod 770 "$install_dir/public/storage/m/_v2/"*
+  chmod 770 "$install_dir/public/storage/m/_v2/"
   chown -R :www-data "$install_dir/public/storage/m/_v2/" # Fix the mess following packaging v2 upgrade - and make sure proper group owner is set.
 fi
 
