@@ -5,7 +5,7 @@ Il NE doit PAS être modifié à la main.
 
 # Pixelfed pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
+[![Niveau d’intégration](https://dash.yunohost.org/integration/pixelfed.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
 
 [![Installer Pixelfed avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 
@@ -26,7 +26,7 @@ En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de Pixe
 Il est également possible d'importer ses données depuis Instagram.
 
 
-**Version incluse :** 0.11.13~ynh1
+**Version incluse :** 0.12.3~ynh1
 
 ## Captures d’écran
 

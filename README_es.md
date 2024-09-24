@@ -5,7 +5,7 @@ No se debe editar a mano.
 
 # Pixelfed para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/pixelfed.svg)](https://dash.yunohost.org/appci/app/pixelfed) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
+[![Nivel de integración](https://dash.yunohost.org/integration/pixelfed.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
 
 [![Instalar Pixelfed con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 
@@ -25,7 +25,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 
 It is also possible to import your data from Instagram. 
 
-**Versión actual:** 0.11.13~ynh1
+**Versión actual:** 0.12.3~ynh1
 
 ## Capturas
 

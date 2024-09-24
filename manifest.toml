@@ -5,7 +5,7 @@ name = "Pixelfed"
 description.en = "ActivityPub Federated Image Sharing"
 description.fr = "Logiciel de partage d'image fédéré via ActivityPub"
 
-version = "0.11.13~ynh1"
+version = "0.12.3~ynh1"
 
 maintainers = ["yalh76", "Lapineige"]
 
@@ -36,8 +36,8 @@ ram.runtime = "100M"
 
 [resources]
         [resources.sources.main]
-        url = "https://github.com/pixelfed/pixelfed/archive/refs/tags/v0.11.13.tar.gz"
-        sha256 = "e284a99a427f3d0835f885d513a61c74def2b1df4cb3bf7d2c378df42607b1e4"
+        url = "https://github.com/pixelfed/pixelfed/archive/refs/tags/v0.12.3.tar.gz"
+        sha256 = "04c9c0528d7b315eb909a792ab4efccbc4314fb2a8ddfe9eefc5f500a97b2992"
         autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
@@ -49,7 +49,7 @@ ram.runtime = "100M"
     main.url = "/"
 
     [resources.apt]
-    packages = "postgresql, libgd3, jpegoptim, optipng, pngquant, ffmpeg, imagemagick, supervisor, php8.2-redis, php8.2-bcmath, php8.2-cli, php8.2-ctype, php8.2-curl, php8.2-exif, php8.2-gd, php8.2-iconv, php8.2-intl, php8.2-mbstring, php8.2-tokenizer, php8.2-xml, php8.2-zip, php8.2-pdo, php8.2-pgsql, php8.2-fileinfo, php8.2-imagick"
+    packages = "postgresql, libgd3, jpegoptim, optipng, pngquant, ffmpeg, imagemagick, supervisor, php8.2-redis, php8.2-bcmath, php8.2-cli, php8.2-ctype, php8.2-curl, php8.2-exif, php8.2-gd, php8.2-iconv, php8.2-intl, php8.2-mbstring, php8.2-tokenizer, php8.2-xml, php8.2-zip, php8.2-pdo, php8.2-pgsql, php8.2-fileinfo, php8.2-imagick, redis-server"
 
     [resources.database]
     type = "postgresql"
