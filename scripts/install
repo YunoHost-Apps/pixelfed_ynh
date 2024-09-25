@@ -48,6 +48,17 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
 #=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding a configuration file..." --weight=1
+
+ynh_add_config --template=".env" --destination="$install_dir/.env"
+
+# Pixelfed app should be able to edit its settings from the admin panel
+chmod 600 "$install_dir/.env"
+chown $app:$app "$install_dir/.env"
+
+#=================================================
 # PATCHING SOURCE
 #=================================================
 ynh_script_progression --message="Patching source files..." --weight=1
@@ -57,13 +68,28 @@ ynh_script_progression --message="Patching source files..." --weight=1
 ynh_replace_string --match_string="'/usr/sbin/sendmail -bs'" --replace_string="'/usr/sbin/sendmail -bs -- '" --target_file=$install_dir/config/mail.php
 
 #=================================================
-# PHP-FPM CONFIGURATION
+# SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring PHP-FPM..." --weight=1
+ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
 ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint --group=www-data
 
 ynh_add_nginx_config
+
+ynh_add_systemd_config
+
+yunohost service add "$app" --description="Federated Image Sharing" --log="/var/log/$app/$app.log"
+
+mkdir -p "/var/log/$app/"
+touch "/var/log/$app/${app}-horizon.log"
+chown -R $app: "/var/log/$app/"
+chmod -R 600 "/var/log/$app/"
+
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
+ynh_use_logrotate --logfile="/var/www/$app/storage/logs/laravel.log" --specific_user=$app/www-data
+
+ynh_add_config --template="cron" --destination="/etc/cron.d/$app"
 
 #=================================================
 # SPECIFIC SETUP
@@ -73,76 +99,6 @@ ynh_add_nginx_config
 ynh_script_progression --message="Installing composer dependencies..." --weight=1
 
 ynh_exec_warn_less ynh_install_composer --phpversion="$phpversion" --composerversion="$YNH_COMPOSER_VERSION" --workdir="$install_dir"
-
-#=================================================
-# CREATE LOG FILE
-#=================================================
-ynh_script_progression --message="Creating log file..." --weight=1
-
-mkdir -p "/var/log/$app/"
-touch "/var/log/$app/${app}-horizon.log"
-chown -R $app: "/var/log/$app/"
-chmod -R 600 "/var/log/$app/"
-
-#=================================================
-# ADD A CONFIGURATION
-#=================================================
-ynh_script_progression --message="Adding a configuration file..." --weight=1
-
-ynh_add_config --template="../conf/.env" --destination="$install_dir/.env"
-
-# Pixelfed app should be able to edit its settings from the admin panel
-chmod 600 "$install_dir/.env"
-chown $app:$app "$install_dir/.env"
-
-#=================================================
-# SETUP SUPERVISOR
-#=================================================
-ynh_script_progression --message="Configuring a supervisor service..." --weight=1
-
-# Create a dedicated supervisor config
-ynh_add_supervisor_config --service="${app}-horizon" --template=horizon.conf
-
-#=================================================
-# DEPLOY
-#=================================================
-ynh_script_progression --message="Deploying..." --weight=1
-
-pushd "$install_dir"
-	php$phpversion artisan -n key:generate --force
-	php$phpversion artisan horizon:install
-	php$phpversion artisan horizon:publish
-	php$phpversion artisan passport:keys
-	php$phpversion artisan config:clear
-	php$phpversion artisan config:cache
-	php$phpversion artisan route:cache
-	php$phpversion artisan view:cache
-	php$phpversion artisan storage:link
-	php$phpversion artisan migrate --force
-	php$phpversion artisan update
-	php$phpversion artisan horizon:purge
-	php$phpversion artisan import:cities 2>/dev/null
-	php$phpversion artisan instance:actor
-	php$phpversion artisan passport:client --personal <<< "\\n"
-popd
-
-#=================================================
-# INSTALL THE CRON FILE
-#=================================================
-ynh_script_progression --message="Installing the cron file..." --weight=1
-
-ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Configuring log rotation..." --weight=1
-
-# Use logrotate to manage application logfile(s)
-ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
-ynh_use_logrotate --logfile="/var/www/$app/storage/logs/laravel.log" --specific_user=$app/www-data
 
 #=================================================
 # PATCH PERMISSIONS for v0.11.5 versions and higher
@@ -160,20 +116,41 @@ if [ -d "$install_dir/public/storage/m/_v2/" ]; then
   chown -R :www-data "$install_dir/public/storage/m/_v2/" # Fix the mess following packaging v2 upgrade - and make sure proper group owner is set.
 fi
 
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+# patch the database to fix a bug which prevent to upload images
+# see: https://github.com/pixelfed/pixelfed/issues/5217
+ynh_psql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" <<< "alter table media alter column caption drop not null;"
 
-yunohost service add "supervisor" --description="Supervisor daemon for $app" --log="/var/log/$app/${app}-horizon.log"
+#=================================================
+# DEPLOY
+#=================================================
+ynh_script_progression --message="Deploying..." --weight=1
+
+artisan="ynh_exec_as $app php$phpversion artisan"
+
+pushd "$install_dir"
+	$artisan -n key:generate --force
+	$artisan horizon:install
+	$artisan horizon:publish
+	$artisan passport:keys
+	$artisan config:clear
+	$artisan config:cache
+	$artisan route:cache
+	$artisan view:cache
+	$artisan storage:link
+	$artisan migrate --force
+	$artisan update
+	$artisan horizon:purge
+	$artisan import:cities 2>/dev/null
+	$artisan instance:actor
+	$artisan passport:client --personal <<< "\\n"
+popd
 
 #=================================================
 # START SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Starting a supervisor service..." --weight=1
+ynh_script_progression --message="Starting $app's systemd service..." --weight=1
 
-# Start a supervisor service
-ynh_supervisor_action --service_name="${app}-horizon" --action="reload" --log_path="systemd" --line_match="success: ${app}-horizon"
+ynh_systemd_action --service_name="$app" --action="start" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # END OF SCRIPT
