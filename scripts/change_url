@@ -47,12 +47,15 @@ ynh_store_file_checksum --file="$config"
 #=================================================
 ynh_script_progression --message="Applying changes..." --weight=1
 
+artisan="ynh_exec_as $app php$phpversion artisan"
+artisan_root="php$phpversion artisan"
+
 pushd "$install_dir"
-	php$phpversion artisan config:clear
-	php$phpversion artisan config:cache
-	php$phpversion artisan route:clear
-	php$phpversion artisan route:cache
-	php$phpversion artisan horizon:purge
+	$artisan_root config:clear
+	$artisan config:cache
+	$artisan_root route:clear
+	$artisan route:cache
+	$artisan horizon:purge
 popd
 
 #=================================================
