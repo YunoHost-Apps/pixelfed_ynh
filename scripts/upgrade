@@ -138,10 +138,6 @@ if [ -d "$install_dir/public/storage/m/_v2/" ]; then
   chown -R :www-data "$install_dir/public/storage/m/_v2/" # Fix the mess following packaging v2 upgrade - and make sure proper group owner is set.
 fi
 
-# patch the database to fix a bug which prevent to upload images
-# see: https://github.com/pixelfed/pixelfed/issues/5217
-ynh_psql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" <<< "alter table media alter column caption drop not null;"
-
 #=================================================
 # DEPLOYMENT
 #=================================================
@@ -168,6 +164,10 @@ pushd "$install_dir"
 	$artisan instance:actor
 	$artisan passport:client --personal <<< "\\n"
 popd
+
+# patch the database to fix a bug which prevent to upload images
+# see: https://github.com/pixelfed/pixelfed/issues/5217
+ynh_psql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" <<< "alter table media alter column caption drop not null;"
 
 #=================================================
 # START SYSTEMD SERVICE
