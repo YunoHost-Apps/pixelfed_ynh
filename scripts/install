@@ -134,7 +134,6 @@ pushd "$install_dir"
 	$artisan view:cache
 	$artisan storage:link
 	$artisan migrate --force
-	$artisan update
 	$artisan horizon:purge
 	$artisan import:cities 2>/dev/null
 	$artisan instance:actor
