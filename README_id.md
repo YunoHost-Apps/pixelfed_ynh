@@ -26,7 +26,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 It is also possible to import your data from Instagram.
 
 
-**Versi terkirim:** 0.12.3~ynh3
+**Versi terkirim:** 0.12.4~ynh1
 
 ## Tangkapan Layar
 
