@@ -26,7 +26,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 It is also possible to import your data from Instagram.
 
 
-**Поставляемая версия:** 0.12.3~ynh3
+**Поставляемая версия:** 0.12.4~ynh1
 
 ## Снимки экрана
 
