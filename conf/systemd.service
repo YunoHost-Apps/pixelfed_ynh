@@ -1,5 +1,5 @@
 [Unit]
-Description=Pixelfed: federated image sharing
+Description=PixelFed: federated image sharing
 After=network.target
 
 [Service]
