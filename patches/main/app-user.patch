@@ -11,8 +11,8 @@
 -class User extends Authenticatable
 +class User extends Authenticatable implements LdapAuthenticatable
  {
--    use Notifiable, SoftDeletes, HasApiTokens, UserRateLimit;
-+    use Notifiable, SoftDeletes, HasApiTokens, UserRateLimit, HasFactory, AuthenticatesWithLdap;
+-    use HasApiTokens, HasFactory, HasPushSubscriptions, Notifiable, SoftDeletes, UserRateLimit;
++    use HasApiTokens, HasFactory, HasPushSubscriptions, Notifiable, SoftDeletes, UserRateLimit, HasFactory, AuthenticatesWithLdap;
  
      /**
       * The attributes that should be mutated to dates.
