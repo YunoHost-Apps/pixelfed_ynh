@@ -2,8 +2,8 @@ packaging_format = 2
 
 id = "pixelfed"
 name = "Pixelfed"
-description.en = "ActivityPub Federated Image Sharing"
-description.fr = "Logiciel de partage d'image fédéré via ActivityPub"
+description.en = "Decentralized photo sharing social media platform"
+description.fr = "Plateforme de partage de photos décentralisée"
 
 version = "0.12.4~ynh1"
 
@@ -15,6 +15,8 @@ website = "https://pixelfed.org/"
 admindoc = "https://docs.pixelfed.org/running-pixelfed/administration.html"
 userdoc = "https://docs.pixelfed.org/"
 code = "https://github.com/pixelfed/pixelfed"
+cpe = "cpe:2.3:a:pixelfed:pixelfed"
+fund = "https://www.patreon.com/dansup"
 
 [integration]
 yunohost = ">= 11.2.30"
