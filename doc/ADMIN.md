@@ -33,24 +33,20 @@ Note: search engines will see that file and may or may not respect its content.
 
 Since version 0.10.10, by default `/discover/places/`, `/stories/` and `/i/` are present in that file.
 
-## Some useful commands to know to manage your instance
-
-You need to run them from you pixelfed folder (usually `__INSTALL_DIR__`). The `php.VERSION` might be changed according to you current package version.
-
 ### Applying changes from the `.env` config file
 
-Once you made some changes, you need to run `php__PHP_VERSION__ artisan config:cache && php__PHP_VERSION__ artisan cache:clear` to apply them.
+Once you made some changes, you need to run `php__PHP_VERSION__ __INSTALL_DIR__/artisan config:cache && php__PHP_VERSION__ __INSTALL_DIR__/artisan cache:clear` to apply them.
 Note: this will disconnect any logged-in account (including from the admin web UI).
 
 ### Removing avatar cache to save space
 
-`php__PHP_VERSION__ artisan avatar:storage-deep-clean`
+`php__PHP_VERSION__ __INSTALL_DIR__/artisan avatar:storage-deep-clean`
 
 Use it to prune old avatars that are outdated or no longer used. This might save some disk space.
 
 ### Fix missing avatars or refetch them
 
-`php__PHP_VERSION__ artisan  avatar:storage`
+`php__PHP_VERSION__ __INSTALL_DIR__/artisan  avatar:storage`
 
 It can be used to fetch remote avatars that are not loaded (or in case you deleted `__INSTALL_DIR__/storage/app/public/cache/avatars` where they are stored).
 It might also be usefull to migrate that cache (only, not the other existing media) to an S3 storage, by refectching all of them.
@@ -59,10 +55,10 @@ Be aware that this will generate a lot of "jobs" that will take time to be compl
 
 ### When using S3
 
-- Delete non-used media that where not cleaned (it happens): `php__PHP_VERSION__ artisanmedia:gc` (Delete media uploads not attached to any active statuses)
+- Delete non-used media that where not cleaned (it happens): `php__PHP_VERSION__ __INSTALL_DIR__/artisanmedia:gc` (Delete media uploads not attached to any active statuses)
 
-- Same but for media stored on S3 storage and still locally stored (doubles): `php__PHP_VERSION__ artisan media:s3gc` (Delete (local) media uploads that exist on S3)
+- Same but for media stored on S3 storage and still locally stored (doubles): `php__PHP_VERSION__ __INSTALL_DIR__/artisan media:s3gc` (Delete (local) media uploads that exist on S3)
 
 - Migrate your media to an S3 storage (you need to configure it first), so media uploaded before configuring S3 are migrated there: `php__PHP_VERSION__ artisanmedia:migrate2cloud` (Move older media to cloud storage)
 
-- Migrate from one S3 backend the other one (change the configuration first): `php__PHP_VERSION__ artisanmedia:cloud-url-rewrite` (Rewrite S3 media urls from local users)
+- Migrate from one S3 backend the other one (change the configuration first): `php__PHP_VERSION__ __INSTALL_DIR__/artisanmedia:cloud-url-rewrite` (Rewrite S3 media urls from local users)
