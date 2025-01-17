@@ -1,0 +1,18 @@
+--- a/app/User.php
++++ b/app/User.php
+@@ -7,10 +7,13 @@
+ use Illuminate\Database\Eloquent\SoftDeletes;
+ use Illuminate\Foundation\Auth\User as Authenticatable;
+ use App\Util\RateLimit\User as UserRateLimit;
++use Illuminate\Database\Eloquent\Factories\HasFactory;
++use LdapRecord\Laravel\Auth\LdapAuthenticatable;
++use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
+ 
+-class User extends Authenticatable
++class User extends Authenticatable implements LdapAuthenticatable
+ {
+-    use Notifiable, SoftDeletes, HasApiTokens, UserRateLimit;
++    use Notifiable, SoftDeletes, HasApiTokens, UserRateLimit, HasFactory, AuthenticatesWithLdap;
+ 
+     /**
+      * The attributes that should be mutated to dates.
