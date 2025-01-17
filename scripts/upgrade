@@ -25,7 +25,7 @@ if [ -z "${app_key:-}" ]; then
 	ynh_app_setting_set --key=app_key --value="$app_key"
 fi
 
-if dpkg --compare-versions "0.10.9~ynh3" gt "$(ynh_read_manifest --key="version" || echo 1.0)" ; then
+if ynh_app_upgrading_from_version_before_or_equal_to 0.10.9~ynh3; then
 	ynh_script_progression "Ensuring upgrade compatibility to 0.10.9~ynh3..."
 
 	if ynh_hide_warnings yunohost service status ${app}-horizon >/dev/null
