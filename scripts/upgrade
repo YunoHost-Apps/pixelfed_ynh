@@ -50,7 +50,6 @@ ynh_script_progression "Upgrading source files..."
 
 ynh_setup_source --dest_dir="$install_dir" --keep=".env"
 
-# Pixelfed app should be able to edit its settings from the admin panel
 chmod 600 "$install_dir"/.env
 
 #=================================================
@@ -67,10 +66,8 @@ ynh_replace --match="'/usr/sbin/sendmail -bs'" --replace="'/usr/sbin/sendmail -b
 #=================================================
 ynh_script_progression "Upgrading PHP-FPM configuration..."
 
-# Create a dedicated PHP-FPM config
 ynh_config_add_phpfpm
 
-# Create a dedicated NGINX config
 ynh_config_add_nginx
 
 mkdir -p "/var/log/$app/"
@@ -116,7 +113,7 @@ fi
 #=================================================
 ynh_script_progression "Deploying..."
 
-artisan="ynh_exec_as $app php$phpversion artisan"
+artisan="ynh_exec_as $app php$php_version artisan"
 artisan_root="php$phpversion artisan"
 
 pushd "$install_dir"
