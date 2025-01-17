@@ -14,7 +14,7 @@ Alternatively, you can create the account and make it admin directly with the co
 
 Registrations are open by default.
 To change that setting, edit `__INSTALL_DIR__/.env` and set `OPEN_REGISTRATION=false` instead of `true`.
-Then run `php__PHP_VERSION__ artisan config:cache` (from the app `__INSTALL_DIR__` folder) to reload the settings.
+Then run `php__PHP_VERSION__ __INSTALL_DIR__/artisan config:cache` to reload the settings.
 
 ### Manually verifying emails
 
@@ -31,7 +31,7 @@ Disallow: /
 
 Note: search engines will see that file and may or may not respect its content.
 
-Since 0.10.10, by default `/discover/places/`, `/stories/` and `/i/` are present in that file.
+Since version 0.10.10, by default `/discover/places/`, `/stories/` and `/i/` are present in that file.
 
 ## Some useful commands to know to manage your instance
 

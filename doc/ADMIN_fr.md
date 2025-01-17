@@ -14,11 +14,11 @@ Vous pouvez également créer le compte et le rendre administrateur directement 
 
 Les inscriptions sont ouvertes par défaut.
 Pour modifier ce paramètre, modifiez `__INSTALL_DIR__/.env` et définissez `OPEN_REGISTRATION=false` au lieu de `true`.
-Ensuite, exécutez `php__PHP_VERSION__ artisan config:cache` depuis le dossier de l'application (dans `/var/www/pixelfed…`) pour recharger les paramètres.
+Ensuite, exécutez `php__PHP_VERSION__ __INSTALL_DIR__/artisan config:cache` pour recharger les paramètres.
 
 ### Vérification manuelle des e-mails
 
-Par défaut, la vérification des emails est activée (ajustez le fichier `.env` si nécessaire). Si votre serveur ne peut pas envoyer d'emails, vous pouvez confirmer manuellement l'email d'un compte dans l'interface d'administration, onglet `Modération`, et en utilisant la commande `php__PHP_VERSION__ artisan user:verify NomUtilisateur`.
+Par défaut, la vérification des e-mails est activée (ajustez le fichier `.env` si nécessaire). Si votre serveur ne peut pas envoyer d'emails, vous pouvez confirmer manuellement l'e-mail d'un compte dans l'interface d'administration, onglet `Modération`, et en utilisant la commande `php__PHP_VERSION__ __INSTALL_DIR__/artisan user:verify NomUtilisateur`.
 
 ### Désactiver l'indexation des moteurs de recherche
 
@@ -31,4 +31,4 @@ Disallow: /
 
 Remarque : les moteurs de recherche verront ce fichier et pourront ou non respecter son contenu.
 
-Depuis la 0.10.10, par défaut `/discover/places/`, `/stories/` et `/i/` sont présents dans ce fichier.
+Depuis la version 0.10.10, par défaut `/discover/places/`, `/stories/` et `/i/` sont présents dans ce fichier.
