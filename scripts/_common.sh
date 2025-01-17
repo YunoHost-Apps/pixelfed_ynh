@@ -13,6 +13,6 @@ exec_artisan() {
 
 # Define a function to execute commands with `exec_artisan_as_root`
 exec_artisan_as_root() {
-  (cd "$install_dir" php${php_version} artisan)
+  (cd "$install_dir" && php${php_version} artisan)
 }
 
