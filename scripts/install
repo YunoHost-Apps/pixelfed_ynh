@@ -100,7 +100,7 @@ fi
 #=================================================
 ynh_script_progression --message="Deploying..." --weight=1
 
-artisan="ynh_exec_as $app php$phpversion artisan"
+artisan="ynh_exec_as $app php$php_version artisan"
 
 pushd "$install_dir"
 	$artisan -n key:generate --force
