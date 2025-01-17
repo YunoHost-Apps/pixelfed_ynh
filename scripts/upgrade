@@ -116,24 +116,30 @@ fi
 #=================================================
 ynh_script_progression "Deploying..."
 
+artisan="ynh_exec_as $app php$phpversion artisan"
+artisan_root="php$phpversion artisan"
+
 pushd "$install_dir"
-	php$php_version artisan horizon:install
-	php$php_version artisan horizon:publish
-	php$php_version artisan passport:keys --force
-	php$php_version artisan config:clear
-	php$php_version artisan config:cache
-	php$php_version artisan route:clear
-	php$php_version artisan route:cache
-	php$php_version artisan view:clear
-	php$php_version artisan view:cache
-	php$php_version artisan storage:link
-	php$php_version artisan migrate --force
-	php$php_version artisan update
-	php$php_version artisan horizon:purge
-	php$php_version artisan import:cities 2>/dev/null
-	php$php_version artisan instance:actor
-	php$php_version artisan passport:client --personal <<< "\\n"
+	$artisan horizon:install
+	$artisan horizon:publish
+	$artisan passport:keys --force
+	$artisan_root config:clear
+	$artisan config:cache
+	$artisan_root route:clear
+	$artisan route:cache
+	$artisan_root view:clear
+	$artisan view:cache
+	$artisan storage:link
+	$artisan migrate --force
+	$artisan horizon:purge
+	$artisan import:cities 2>/dev/null
+	$artisan instance:actor
+	$artisan passport:client --personal <<< "\\n"
 popd
+
+# patch the database to fix a bug which prevent to upload images
+# see: https://github.com/pixelfed/pixelfed/issues/5217
+ynh_psql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" <<< "alter table media alter column caption drop not null;"
 
 #=================================================
 # START SYSTEMD SERVICE
