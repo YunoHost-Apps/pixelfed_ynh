@@ -25,7 +25,7 @@ En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de Pixe
 
 * Fédéré : Via le protocole ActivityPub, PixelFed peut interagir avec d'autres logiciels qui font partie du Fediverse, comme Mastodon ou PeerTube par exemple.
 
-Il est également possible d'importer ses données depuis Instagram.
+Il est possible d'importer ses données depuis Instagram.
 
 
 **Version incluse :** 0.12.4~ynh1
