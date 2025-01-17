@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # Pixelfed untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/pixelfed.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
+![Status kerja](https://apps.yunohost.org/badge/state/pixelfed)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/pixelfed)
 
 [![Pasang Pixelfed dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 
