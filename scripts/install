@@ -1,13 +1,10 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
+
+ynh_app_setting_set --key=php_upload_max_filesize --value=100M
+ynh_app_setting_set --key=php_post_max_size --value=100M
 
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
@@ -15,68 +12,52 @@ source /usr/share/yunohost/helpers
 
 app_key="base64:$(ynh_string_random --length=32 | base64)"
 
-fpm_footprint="low"
-fpm_free_footprint=0
-fpm_usage="low"
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-
-ynh_app_setting_set --app=$app --key=app_key --value=$app_key
-ynh_app_setting_set --app=$app --key=fpm_footprint --value=$fpm_footprint
-ynh_app_setting_set --app=$app --key=fpm_free_footprint --value=$fpm_free_footprint
-ynh_app_setting_set --app=$app --key=fpm_usage --value=$fpm_usage
+ynh_app_setting_set --key=app_key --value=$app_key
 
 #=================================================
 # CONFIGURE REDIS DATABASE
 #=================================================
-ynh_script_progression --message="Creating a Redis database..." --weight=1
+ynh_script_progression "Creating a Redis database..."
 
 redis_db=$(ynh_redis_get_free_db)
-ynh_app_setting_set --app="$app" --key=redis_db --value="$redis_db"
+ynh_app_setting_set --key=redis_db --value="$redis_db"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..." --weight=1
+ynh_script_progression "Setting up source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir"
-
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
 
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..." --weight=1
+ynh_script_progression "Adding $app's configuration..."
 
-ynh_add_config --template=".env" --destination="$install_dir/.env"
+ynh_config_add --template=".env" --destination="$install_dir/.env"
 
-# Pixelfed app should be able to edit its settings from the admin panel
-chmod 600 "$install_dir/.env"
+chmod -R 600 "$install_dir/.env"
 chown $app:$app "$install_dir/.env"
 
 #=================================================
 # PATCHING SOURCE
 #=================================================
-ynh_script_progression --message="Patching source files..." --weight=1
+ynh_script_progression "Patching source files..."
 
 # Prevent privilege escalation by injecting commands in an email name
 # This described in more detail on the manpage https://www.postfix.org/sendmail.1.html under security
-ynh_replace_string --match_string="'/usr/sbin/sendmail -bs'" --replace_string="'/usr/sbin/sendmail -bs -- '" --target_file=$install_dir/config/mail.php
+ynh_replace --match="'/usr/sbin/sendmail -bs'" --replace="'/usr/sbin/sendmail -bs -- '" --file=$install_dir/config/mail.php
 
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
-ynh_add_fpm_config --usage=$fpm_usage --footprint=$fpm_footprint --group=www-data
+ynh_config_add_phpfpm
 
-ynh_add_nginx_config
+ynh_config_add_nginx
 
-ynh_add_systemd_config
+ynh_config_add_systemd
 
 yunohost service add "$app" --description="Federated Image Sharing" --log="/var/log/$app/$app.log"
 
@@ -86,42 +67,41 @@ chown -R $app: "/var/log/$app/"
 chmod -R 600 "/var/log/$app/"
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate --logfile="/var/log/$app/${app}-horizon.log"
-ynh_use_logrotate --logfile="/var/www/$app/storage/logs/laravel.log" --specific_user=$app/www-data
+ynh_config_add_logrotate "/var/log/$app/${app}-horizon.log"
+ynh_config_add_logrotate "/var/www/$app/storage/logs/laravel.log"
 
-ynh_add_config --template="cron" --destination="/etc/cron.d/$app"
+ynh_config_add --template="cron" --destination="/etc/cron.d/$app"
 
-#=================================================
-# SPECIFIC SETUP
 #=================================================
 # INSTALL COMPOSER DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing composer dependencies..." --weight=1
+ynh_script_progression "Installing composer dependencies..."
 
-ynh_exec_warn_less ynh_install_composer --phpversion="$phpversion" --composerversion="$YNH_COMPOSER_VERSION" --workdir="$install_dir"
+ynh_composer_install
+ynh_composer_exec install --no-dev
 
 #=================================================
 # PATCH PERMISSIONS for v0.11.5 versions and higher
 #=================================================
-ynh_script_progression --message="Patching permissions (for version 0.11.5 and newer)..." --weight=1
+ynh_script_progression "Patching permissions (for version 0.11.5 and newer)..."
 
 # Default configuration doesn't work
-ynh_replace_string --match_string="'private' => 0700," --replace_string="'private' => 0750," --target_file=$install_dir/config/filesystems.php
+ynh_replace --match="'private' => 0700," --replace="'private' => 0750," --file=$install_dir/config/filesystems.php
 
 # Repair permissions for files created after v0.11.5 and before this patch
 if [ -d "$install_dir/public/storage/m/_v2/" ]; then
   chmod 750 -R "$install_dir/public/storage/m/_v2/"* # all files subdirectories (picture folders) should be readable and executable. But if there is no picture, there is no /*/*
-  chmod 770 "$install_dir/public/storage/m/_v2/"* # users folders should be 770
-  chmod 770 "$install_dir/public/storage/m/_v2/" # this should be 770
+  chmod 770 "$install_dir/public/storage/m/_v2/"*
+  chmod 770 "$install_dir/public/storage/m/_v2/"
   chown -R :www-data "$install_dir/public/storage/m/_v2/" # Fix the mess following packaging v2 upgrade - and make sure proper group owner is set.
 fi
 
 #=================================================
 # DEPLOY
 #=================================================
-ynh_script_progression --message="Deploying..." --weight=1
+ynh_script_progression "Deploying..."
 
-artisan="ynh_exec_as $app php$phpversion artisan"
+artisan="ynh_exec_as_app php$php_version artisan"
 
 pushd "$install_dir"
 	$artisan -n key:generate --force
@@ -142,17 +122,17 @@ popd
 
 # patch the database to fix a bug which prevent to upload images
 # see: https://github.com/pixelfed/pixelfed/issues/5217
-ynh_psql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" <<< "alter table media alter column caption drop not null;"
+ynh_psql_db_shell <<< "alter table media alter column caption drop not null;"
 
 #=================================================
 # START SUPERVISOR SERVICE
 #=================================================
-ynh_script_progression --message="Starting $app's systemd service..." --weight=1
+ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemd_action --service_name="$app" --action="start" --log_path="/var/log/$app/$app.log"
+ynh_systemctl --service="$app" --action="start"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"

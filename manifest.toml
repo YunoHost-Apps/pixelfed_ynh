@@ -2,8 +2,8 @@ packaging_format = 2
 
 id = "pixelfed"
 name = "Pixelfed"
-description.en = "ActivityPub Federated Image Sharing"
-description.fr = "Logiciel de partage d'image fédéré via ActivityPub"
+description.en = "Decentralized photo sharing social media platform"
+description.fr = "Plateforme de partage de photos décentralisée"
 
 version = "0.12.4~ynh1"
 
@@ -15,13 +15,18 @@ website = "https://pixelfed.org/"
 admindoc = "https://docs.pixelfed.org/running-pixelfed/administration.html"
 userdoc = "https://docs.pixelfed.org/"
 code = "https://github.com/pixelfed/pixelfed"
+cpe = "cpe:2.3:a:pixelfed:pixelfed"
+fund = "https://www.patreon.com/dansup"
 
 [integration]
-yunohost = ">= 11.2.12"
+yunohost = ">= 11.2.30"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
+
 ldap = false
 sso = false
+
 disk = "500M"
 ram.build = "1000M"
 ram.runtime = "100M"
@@ -44,12 +49,13 @@ ram.runtime = "100M"
     allow_email = true
 
     [resources.install_dir]
+    group = "www-data:r-x"
 
     [resources.permissions]
     main.url = "/"
 
     [resources.apt]
-    packages = "postgresql, libgd3, jpegoptim, optipng, pngquant, ffmpeg, imagemagick, supervisor, php8.3-redis, php8.3-bcmath, php8.3-cli, php8.3-ctype, php8.3-curl, php8.3-exif, php8.3-gd, php8.3-iconv, php8.3-intl, php8.3-mbstring, php8.3-tokenizer, php8.3-xml, php8.3-zip, php8.3-pdo, php8.3-pgsql, php8.3-fileinfo, php8.3-imagick, redis-server"
+    packages = "postgresql, libgd3, jpegoptim, optipng, pngquant, ffmpeg, imagemagick, php8.3-redis, php8.3-bcmath, php8.3-cli, php8.3-ctype, php8.3-curl, php8.3-exif, php8.3-gd, php8.3-iconv, php8.3-intl, php8.3-mbstring, php8.3-tokenizer, php8.3-xml, php8.3-zip, php8.3-pdo, php8.3-pgsql, php8.3-fileinfo, php8.3-imagick, redis-server"
 
     [resources.database]
     type = "postgresql"
