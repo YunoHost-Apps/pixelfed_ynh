@@ -117,26 +117,21 @@ fi
 #=================================================
 ynh_script_progression "Deploying $app..."
 
-artisan="ynh_exec_as_app php$php_version artisan"
-artisan_root="php$php_version artisan"
-
-pushd "$install_dir"
-	$artisan horizon:install
-	$artisan horizon:publish
-	$artisan passport:keys --force
-	$artisan_root config:clear
-	$artisan config:cache
-	$artisan_root route:clear
-	$artisan route:cache
-	$artisan_root view:clear
-	$artisan view:cache
-	$artisan storage:link
-	$artisan migrate --force
-	$artisan horizon:purge
-	$artisan import:cities 2>/dev/null
-	$artisan instance:actor
-	$artisan passport:client --personal <<< "\\n"
-popd
+exec_artisan horizon:install
+exec_artisan horizon:publish
+exec_artisan passport:keys --force
+exec_artisan_as_root config:clear
+exec_artisan config:cache
+exec_artisan_as_root route:clear
+exec_artisan route:cache
+exec_artisan_as_root view:clear
+exec_artisan view:cache
+exec_artisan storage:link
+exec_artisan migrate --force
+exec_artisan horizon:purge
+exec_artisan import:cities 2>/dev/null
+exec_artisan instance:actor
+exec_artisan passport:client --personal <<< "\\n"
 
 # patch the database to fix a bug which prevent to upload images
 # see: https://github.com/pixelfed/pixelfed/issues/5217
