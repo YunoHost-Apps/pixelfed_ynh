@@ -32,7 +32,7 @@ It is possible to import your data from Instagram.
 
 ## 截图
 
-![Pixelfed 的截图](./doc/screenshots/screenshots.jpg)
+![Pixelfed 的截图](./doc/screenshots/screenshot.png)
 
 ## 文档与资源
 

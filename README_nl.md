@@ -32,7 +32,7 @@ It is possible to import your data from Instagram.
 
 ## Schermafdrukken
 
-![Schermafdrukken van Pixelfed](./doc/screenshots/screenshots.jpg)
+![Schermafdrukken van Pixelfed](./doc/screenshots/screenshot.png)
 
 ## Documentatie en bronnen
 

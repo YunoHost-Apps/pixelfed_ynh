@@ -32,7 +32,7 @@ It is possible to import your data from Instagram.
 
 ## Pantaila-argazkiak
 
-![Pixelfed(r)en pantaila-argazkia](./doc/screenshots/screenshots.jpg)
+![Pixelfed(r)en pantaila-argazkia](./doc/screenshots/screenshot.png)
 
 ## Dokumentazioa eta baliabideak
 
