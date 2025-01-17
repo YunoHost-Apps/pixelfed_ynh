@@ -113,7 +113,7 @@ fi
 #=================================================
 ynh_script_progression "Deploying..."
 
-artisan="ynh_exec_as $app php$php_version artisan"
+artisan="ynh_exec_as_app php$php_version artisan"
 artisan_root="php$phpversion artisan"
 
 pushd "$install_dir"
