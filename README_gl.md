@@ -5,7 +5,9 @@ NON debe editarse manualmente.
 
 # Pixelfed para YunoHost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/pixelfed.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
+![Estado de funcionamento](https://apps.yunohost.org/badge/state/pixelfed)
+![Estado de mantemento](https://apps.yunohost.org/badge/maintained/pixelfed)
 
 [![Instalar Pixelfed con YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 

@@ -5,7 +5,9 @@ No se debe editar a mano.
 
 # Pixelfed para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/pixelfed.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
+![Estado funcional](https://apps.yunohost.org/badge/state/pixelfed)
+![Estado En Mantención](https://apps.yunohost.org/badge/maintained/pixelfed)
 
 [![Instalar Pixelfed con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 
@@ -42,7 +44,7 @@ It is also possible to import your data from Instagram.
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 

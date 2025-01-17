@@ -5,7 +5,9 @@
 
 # Pixelfed для YunoHost
 
-[![Уровень интеграции](https://dash.yunohost.org/integration/pixelfed.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/) ![Состояние работы](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Состояние сопровождения](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
+[![Уровень интеграции](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
+![Состояние работы](https://apps.yunohost.org/badge/state/pixelfed)
+![Состояние сопровождения](https://apps.yunohost.org/badge/maintained/pixelfed)
 
 [![Установите Pixelfed с YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 

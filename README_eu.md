@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # Pixelfed YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/pixelfed.svg)](https://ci-apps.yunohost.org/ci/apps/pixelfed/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/pixelfed.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/pixelfed.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/pixelfed)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/pixelfed)
 
 [![Instalatu Pixelfed YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
 
