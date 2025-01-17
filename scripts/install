@@ -7,13 +7,15 @@ ynh_app_setting_set --key=php_upload_max_filesize --value=100M
 ynh_app_setting_set --key=php_post_max_size --value=100M
 ynh_app_setting_set --key=php_max_file_uploads --value=100M
 
+timezone=$(cat /etc/timezone)
+
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-app_key="base64:$(ynh_string_random --length=32 | base64)"
+#app_key="base64:$(ynh_string_random --length=32 | base64)"
 
-ynh_app_setting_set --key=app_key --value=$app_key
+#ynh_app_setting_set --key=app_key --value=$app_key
 
 #=================================================
 # CONFIGURE REDIS DATABASE
@@ -63,13 +65,13 @@ ynh_config_add_systemd
 yunohost service add "$app" --description="Federated Image Sharing" --log="/var/log/$app/$app.log"
 
 mkdir -p "/var/log/$app/"
-touch "/var/log/$app/${app}-horizon.log"
+touch "/var/log/$app/$app.log"
 chown -R $app: "/var/log/$app/"
 chmod -R 600 "/var/log/$app/"
 
 # Use logrotate to manage application logfile(s)
-ynh_config_add_logrotate "/var/log/$app/${app}-horizon.log"
-ynh_config_add_logrotate "/var/www/$app/storage/logs/laravel.log"
+ynh_config_add_logrotate "/var/log/$app/${app}.log"
+ynh_config_add_logrotate "$install_dir/storage/logs/laravel.log"
 
 ynh_config_add --template="cron" --destination="/etc/cron.d/$app"
 

@@ -39,6 +39,13 @@ ram.runtime = "100M"
     type = "group"
     default = "visitors"
 
+    [install.language]
+    ask.en = "Choose the application language"
+    ask.fr = "Choisissez la langue de l'application"
+    type = "select"
+    choices = ["fr", "en"]
+    default = "fr"
+    
 [resources]
         [resources.sources.main]
         url = "https://github.com/pixelfed/pixelfed/archive/refs/tags/v0.12.4.tar.gz"

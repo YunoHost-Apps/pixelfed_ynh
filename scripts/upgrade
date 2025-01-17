@@ -7,6 +7,8 @@ ynh_app_setting_set_default --key=php_upload_max_filesize --value=100M
 ynh_app_setting_set_default --key=php_post_max_size --value=100M
 ynh_app_setting_set_default --key=php_max_file_uploads --value=100M
 
+timezone=$(cat /etc/timezone)
+
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
@@ -73,7 +75,7 @@ ynh_config_add_phpfpm
 ynh_config_add_nginx
 
 mkdir -p "/var/log/$app/"
-touch "/var/log/$app/${app}-horizon.log"
+touch "/var/log/$app/$app.log"
 chown -R $app: "/var/log/$app/"
 chmod -R 600 "/var/log/$app/"
 

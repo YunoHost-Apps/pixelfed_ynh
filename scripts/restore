@@ -38,7 +38,7 @@ ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_restore "/etc/cron.d/$app"
 
 mkdir -p "/var/log/$app/"
-touch "/var/log/$app/${app}-horizon.log"
+touch "/var/log/$app/$app.log"
 chown -R $app: "/var/log/$app/"
 
 ynh_restore "/etc/systemd/system/$app.service"
