@@ -115,7 +115,7 @@ fi
 ynh_script_progression "Deploying $app..."
 
 artisan="ynh_exec_as_app php$php_version artisan"
-artisan_root="php$phpversion artisan"
+artisan_root="php$php_version artisan"
 
 pushd "$install_dir"
 	$artisan horizon:install
