@@ -18,7 +18,7 @@ Ensuite, exécutez `php__PHP_VERSION__ __INSTALL_DIR__/artisan config:cache` pou
 
 ### Vérification manuelle des e-mails
 
-Par défaut, la vérification des e-mails est activée (ajustez le fichier `.env` si nécessaire). Si votre serveur ne peut pas envoyer d'emails, vous pouvez confirmer manuellement l'e-mail d'un compte dans l'interface d'administration, onglet `Modération`, et en utilisant la commande `php__PHP_VERSION__ __INSTALL_DIR__/artisan user:verify NomUtilisateur`.
+Par défaut, la vérification des e-mails est activée (ajustez le fichier `.env` si nécessaire). Si votre serveur ne peut pas envoyer d'e-mails, vous pouvez confirmer manuellement l'e-mail d'un compte dans l'interface d'administration, onglet `Modération`, et en utilisant la commande `php__PHP_VERSION__ __INSTALL_DIR__/artisan user:verify NomUtilisateur`.
 
 ### Désactiver l'indexation des moteurs de recherche
 
