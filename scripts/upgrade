@@ -4,6 +4,7 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 ynh_app_setting_set_default --key=php_upload_max_filesize --value=100M
+ynh_app_setting_set_default --key=php_post_max_size --value=100M
 
 #=================================================
 # STOP SYSTEMD SERVICE
@@ -62,9 +63,9 @@ ynh_script_progression "Patching source files..."
 ynh_replace --match="'/usr/sbin/sendmail -bs'" --replace="'/usr/sbin/sendmail -bs -- '" --file=$install_dir/config/mail.php
 
 #=================================================
-# PHP-FPM CONFIGURATION
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression "Upgrading PHP-FPM configuration..."
+ynh_script_progression "Upgrading system configurations related to $app..."
 
 ynh_config_add_phpfpm
 
@@ -111,7 +112,7 @@ fi
 #=================================================
 # DEPLOYMENT
 #=================================================
-ynh_script_progression "Deploying..."
+ynh_script_progression "Deploying $app..."
 
 artisan="ynh_exec_as_app php$php_version artisan"
 artisan_root="php$phpversion artisan"
