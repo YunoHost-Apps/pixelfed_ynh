@@ -22,7 +22,7 @@ Par défaut, la vérification des e-mails est activée (ajustez le fichier `.env
 
 ### Désactiver l'indexation des moteurs de recherche
 
-Si vous ne voulez pas que votre instance Pixelfed soit indexée dans le moteur de recherche (et ainsi de suite), modifiez `__INSTALL_DIR__/public/robots.txt` comme ceci :
+Si vous ne voulez pas que votre instance PixelFed soit indexée dans le moteur de recherche (et ainsi de suite), modifiez `__INSTALL_DIR__/public/robots.txt` comme ceci :
 
 ```text
 User-agent: *

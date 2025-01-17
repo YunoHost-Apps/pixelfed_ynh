@@ -18,11 +18,11 @@ Then run `php__PHP_VERSION__ __INSTALL_DIR__/artisan config:cache` to reload the
 
 ### Manually verifying emails
 
-By default, email verification is activated (adjust the `.env` file if needed). If your server can't send emails, you can manually confirm one user's email in the admin UI, tab `Moderation`, and by using the command `php__PHP_VERSION__ artisan user:verify UserName`.
+By default, email verification is activated (adjust the `.env` file if needed). If your server can't send emails, you can manually confirm one user's email in the admin UI, tab `Moderation`, and by using the command `php__PHP_VERSION__ __INSTALL_DIR__/artisan user:verify UserName`.
 
 ### Disable search engine indexing
 
-If you don't want your Pixelfed instance to be indexed in search engine (and so on), edit `__INSTALL_DIR__/public/robots.txt` like this:
+If you don't want your PixelFed instance to be indexed in search engine (and so on), edit `__INSTALL_DIR__/public/robots.txt` like this:
 
 ```text
 User-agent: *
