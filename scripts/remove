@@ -38,8 +38,6 @@ ynh_remove_fpm_config
 # Remove a cron file
 ynh_secure_remove --file="/etc/cron.d/$app"
 
-# Remove the log files
-
 #=================================================
 # END OF SCRIPT
 #=================================================
