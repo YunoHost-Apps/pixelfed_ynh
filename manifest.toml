@@ -17,12 +17,14 @@ userdoc = "https://docs.pixelfed.org/"
 code = "https://github.com/pixelfed/pixelfed"
 
 [integration]
-yunohost = ">= 11.2.30"
+yunohost = ">= 12.0.9"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
+
 ldap = false
 sso = false
+
 disk = "500M"
 ram.build = "1000M"
 ram.runtime = "100M"
