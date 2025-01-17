@@ -13,9 +13,9 @@ timezone=$(cat /etc/timezone)
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-#app_key="base64:$(ynh_string_random --length=32 | base64)"
+app_key="base64:$(ynh_string_random --length=32 | base64)"
 
-#ynh_app_setting_set --key=app_key --value=$app_key
+ynh_app_setting_set --key=app_key --value=$app_key
 
 #=================================================
 # CONFIGURE REDIS DATABASE
