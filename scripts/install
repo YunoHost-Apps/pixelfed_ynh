@@ -3,17 +3,16 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-ynh_app_setting_set --key=php_upload_max_filesize --value=100M
-ynh_app_setting_set --key=php_post_max_size --value=100M
-ynh_app_setting_set --key=php_max_file_uploads --value=100M
-
 #=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
+# INITIALIZE AND STORE SETTINGS
 #=================================================
 
 app_key="base64:$(ynh_string_random --length=32 | base64)"
 
 ynh_app_setting_set --key=app_key --value=$app_key
+ynh_app_setting_set --key=php_upload_max_filesize --value=100M
+ynh_app_setting_set --key=php_post_max_size --value=100M
+ynh_app_setting_set --key=php_max_file_uploads --value=100M
 
 #=================================================
 # CONFIGURE REDIS DATABASE
