@@ -19,20 +19,20 @@ Il NE doit PAS être modifié à la main.
 ## Vue d’ensemble
 
 PixelFed est un logiciel décentralisé et fédéré de partage d'images en cours de développement.
-En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de PixelFed est:
+En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de PixelFed est :
 
-* Décentralisé : Chaque instance peut suivre une ou plusieurs autres instances PixelFed afin de permettre à leurs membres respectifs d'interagir. Une première instance publique pixelfed.social limitée à 10 000 membres a déjà été créée.
+* Décentralisé : Chaque instance peut suivre une ou plusieurs autres instances PixelFed afin de permettre à leurs membres respectifs d'interagir. Une première instance publique pixelfed.social limitée à 10000 membres a déjà été créée.
 
 * Fédéré : Via le protocole ActivityPub, PixelFed peut interagir avec d'autres logiciels qui font partie du Fediverse, comme Mastodon ou PeerTube par exemple.
 
-Il est également possible d'importer ses données depuis Instagram.
+Il est possible d'importer ses données depuis Instagram.
 
 
-**Version incluse :** 0.12.4~ynh1
+**Version incluse :** 0.12.4~ynh2
 
 ## Captures d’écran
 
-![Capture d’écran de Pixelfed](./doc/screenshots/screenshots.jpg)
+![Capture d’écran de Pixelfed](./doc/screenshots/screenshot.png)
 
 ## Documentations et ressources
 

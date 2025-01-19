@@ -1,1 +1,1 @@
-* * * * * __APP__ /usr/bin/php__PHPVERSION__ __INSTALL_DIR__/artisan schedule:run >> /dev/null 2>&1
+* * * * * __APP__ /usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/artisan schedule:run >> /dev/null 2>&1
