@@ -14,6 +14,7 @@ ynh_app_setting_set --key=app_key --value=$app_key
 ynh_app_setting_set --key=php_upload_max_filesize --value=100M
 ynh_app_setting_set --key=php_post_max_size --value=100M
 ynh_app_setting_set --key=php_max_file_uploads --value=100M
+ynh_app_setting_set --key=php_max_execution_time --value=600
 
 #=================================================
 # CONFIGURE REDIS DATABASE
