@@ -32,7 +32,7 @@ It is possible to import your data from Instagram.
 
 ## Screenshots
 
-![Screenshot of Pixelfed](./doc/screenshots/screenshots.jpg)
+![Screenshot of Pixelfed](./doc/screenshots/screenshot.png)
 
 ## Documentation and resources
 
