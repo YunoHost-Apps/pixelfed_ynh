@@ -25,14 +25,14 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 
 * Federated: Via the ActivityPub protocol, PixelFed can interact with other software that is part of the Fediverse, such as Mastodon or PeerTube for example.
 
-It is also possible to import your data from Instagram.
+It is possible to import your data from Instagram.
 
 
-**分发版本：** 0.12.4~ynh1
+**分发版本：** 0.12.4~ynh2
 
 ## 截图
 
-![Pixelfed 的截图](./doc/screenshots/screenshots.jpg)
+![Pixelfed 的截图](./doc/screenshots/screenshot.png)
 
 ## 文档与资源
 

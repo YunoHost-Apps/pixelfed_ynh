@@ -1,5 +1,5 @@
 [Unit]
-Description=Pixelfed
+Description=PixelFed: federated image sharing
 After=network.target
 
 [Service]
@@ -7,7 +7,7 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/
-ExecStart=php__PHPVERSION__ __INSTALL_DIR__/artisan horizon
+ExecStart=php__PHP_VERSION__ __INSTALL_DIR__/artisan horizon
 Restart=on-failure
 StandardOutput=append:/var/log/__APP__/__APP__.log
 StandardError=inherit
