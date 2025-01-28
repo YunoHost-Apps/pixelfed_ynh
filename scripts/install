@@ -37,6 +37,7 @@ ynh_setup_source --dest_dir="$install_dir"
 ynh_script_progression "Adding $app's configuration..."
 
 ynh_config_add --template=".env" --destination="$install_dir/.env"
+ynh_config_add --template="ldap.php" --destination="$install_dir/config/ldap.php"
 
 chmod 600 "$install_dir/.env"
 

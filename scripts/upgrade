@@ -53,9 +53,7 @@ fi
 #=================================================
 ynh_script_progression "Upgrading source files..."
 
-ynh_setup_source --dest_dir="$install_dir" --keep=".env"
-
-chmod 600 "$install_dir/.env"
+ynh_setup_source --dest_dir="$install_dir" --keep=".env config/ldap.php"
 
 #=================================================
 # PATCHING SOURCE
