@@ -38,8 +38,7 @@ ynh_script_progression "Adding $app's configuration..."
 
 ynh_config_add --template=".env" --destination="$install_dir/.env"
 
-chmod -R 600 "$install_dir/.env"
-chown $app:$app "$install_dir/.env"
+chmod 600 "$install_dir/.env"
 
 #=================================================
 # PATCHING SOURCE
