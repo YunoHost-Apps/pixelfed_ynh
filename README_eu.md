@@ -3,17 +3,17 @@ Ohart ongi: README hau automatikoki sortu da <https://github.com/YunoHost/apps/t
 EZ editatu eskuz.
 -->
 
-# Pixelfed YunoHost-erako
+# Pixelfed Glitch YunoHost-erako
 
-[![Integrazio maila](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
-![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/pixelfed)
-![Mantentze egoera](https://apps.yunohost.org/badge/maintained/pixelfed)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/pixelfed_glitch)](https://ci-apps.yunohost.org/ci/apps/pixelfed_glitch/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/pixelfed_glitch)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/pixelfed_glitch)
 
-[![Instalatu Pixelfed YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
+[![Instalatu Pixelfed Glitch YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed_glitch)
 
 *[Irakurri README hau beste hizkuntzatan.](./ALL_README.md)*
 
-> *Pakete honek Pixelfed YunoHost zerbitzari batean azkar eta zailtasunik gabe instalatzea ahalbidetzen dizu.*  
+> *Pakete honek Pixelfed Glitch YunoHost zerbitzari batean azkar eta zailtasunik gabe instalatzea ahalbidetzen dizu.*  
 > *YunoHost ez baduzu, kontsultatu [gida](https://yunohost.org/install) nola instalatu ikasteko.*
 
 ## Aurreikuspena
@@ -28,31 +28,31 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 It is possible to import your data from Instagram.
 
 
-**Paketatutako bertsioa:** 0.12.4~ynh2
+**Paketatutako bertsioa:** v0.12.4-glitch.1.9.1~ynh1
 
 ## Pantaila-argazkiak
 
-![Pixelfed(r)en pantaila-argazkia](./doc/screenshots/screenshot.png)
+![Pixelfed Glitch(r)en pantaila-argazkia](./doc/screenshots/screenshot.png)
 
 ## Dokumentazioa eta baliabideak
 
-- Aplikazioaren webgune ofiziala: <https://pixelfed.org/>
-- Erabiltzaileen dokumentazio ofiziala: <https://docs.pixelfed.org/>
-- Administratzaileen dokumentazio ofiziala: <https://docs.pixelfed.org/running-pixelfed/administration.html>
-- Jatorrizko aplikazioaren kode-gordailua: <https://github.com/pixelfed/pixelfed>
-- YunoHost Denda: <https://apps.yunohost.org/app/pixelfed>
-- Eman errore baten berri: <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
+- Aplikazioaren webgune ofiziala: <https://pixelfed-glitch.github.io/docs/>
+- Erabiltzaileen dokumentazio ofiziala: <https://pixelfed-glitch.github.io/docs/>
+- Administratzaileen dokumentazio ofiziala: <https://pixelfed-glitch.github.io/docs/>
+- Jatorrizko aplikazioaren kode-gordailua: <https://github.com/pixelfed-glitch/pixelfed>
+- YunoHost Denda: <https://apps.yunohost.org/app/pixelfed_glitch>
+- Eman errore baten berri: <https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/issues>
 
 ## Garatzaileentzako informazioa
 
-Bidali `pull request`a [`testing` abarrera](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing).
+Bidali `pull request`a [`testing` abarrera](https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing).
 
 `testing` abarra probatzeko, ondorengoa egin:
 
 ```bash
-sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
+sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing --debug
 edo
-sudo yunohost app upgrade pixelfed -u https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
+sudo yunohost app upgrade pixelfed_glitch -u https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing --debug
 ```
 
 **Informazio gehiago aplikazioaren paketatzeari buruz:** <https://yunohost.org/packaging_apps>

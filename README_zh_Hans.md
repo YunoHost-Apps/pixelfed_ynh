@@ -3,17 +3,17 @@
 请勿手动编辑。
 -->
 
-# YunoHost 上的 Pixelfed
+# YunoHost 上的 Pixelfed Glitch
 
-[![集成程度](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
-![工作状态](https://apps.yunohost.org/badge/state/pixelfed)
-![维护状态](https://apps.yunohost.org/badge/maintained/pixelfed)
+[![集成程度](https://apps.yunohost.org/badge/integration/pixelfed_glitch)](https://ci-apps.yunohost.org/ci/apps/pixelfed_glitch/)
+![工作状态](https://apps.yunohost.org/badge/state/pixelfed_glitch)
+![维护状态](https://apps.yunohost.org/badge/maintained/pixelfed_glitch)
 
-[![使用 YunoHost 安装 Pixelfed](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
+[![使用 YunoHost 安装 Pixelfed Glitch](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed_glitch)
 
 *[阅读此 README 的其它语言版本。](./ALL_README.md)*
 
-> *通过此软件包，您可以在 YunoHost 服务器上快速、简单地安装 Pixelfed。*  
+> *通过此软件包，您可以在 YunoHost 服务器上快速、简单地安装 Pixelfed Glitch。*  
 > *如果您还没有 YunoHost，请参阅[指南](https://yunohost.org/install)了解如何安装它。*
 
 ## 概况
@@ -28,31 +28,31 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 It is possible to import your data from Instagram.
 
 
-**分发版本：** 0.12.4~ynh2
+**分发版本：** v0.12.4-glitch.1.9.1~ynh1
 
 ## 截图
 
-![Pixelfed 的截图](./doc/screenshots/screenshot.png)
+![Pixelfed Glitch 的截图](./doc/screenshots/screenshot.png)
 
 ## 文档与资源
 
-- 官方应用网站： <https://pixelfed.org/>
-- 官方用户文档： <https://docs.pixelfed.org/>
-- 官方管理文档： <https://docs.pixelfed.org/running-pixelfed/administration.html>
-- 上游应用代码库： <https://github.com/pixelfed/pixelfed>
-- YunoHost 商店： <https://apps.yunohost.org/app/pixelfed>
-- 报告 bug： <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
+- 官方应用网站： <https://pixelfed-glitch.github.io/docs/>
+- 官方用户文档： <https://pixelfed-glitch.github.io/docs/>
+- 官方管理文档： <https://pixelfed-glitch.github.io/docs/>
+- 上游应用代码库： <https://github.com/pixelfed-glitch/pixelfed>
+- YunoHost 商店： <https://apps.yunohost.org/app/pixelfed_glitch>
+- 报告 bug： <https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/issues>
 
 ## 开发者信息
 
-请向 [`testing` 分支](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing) 发送拉取请求。
+请向 [`testing` 分支](https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing) 发送拉取请求。
 
 如要尝试 `testing` 分支，请这样操作：
 
 ```bash
-sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
+sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing --debug
 或
-sudo yunohost app upgrade pixelfed -u https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
+sudo yunohost app upgrade pixelfed_glitch -u https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing --debug
 ```
 
 **有关应用打包的更多信息：** <https://yunohost.org/packaging_apps>

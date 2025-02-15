@@ -3,17 +3,17 @@ NOTA: Este README foi creado automáticamente por <https://github.com/YunoHost/a
 NON debe editarse manualmente.
 -->
 
-# Pixelfed para YunoHost
+# Pixelfed Glitch para YunoHost
 
-[![Nivel de integración](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
-![Estado de funcionamento](https://apps.yunohost.org/badge/state/pixelfed)
-![Estado de mantemento](https://apps.yunohost.org/badge/maintained/pixelfed)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/pixelfed_glitch)](https://ci-apps.yunohost.org/ci/apps/pixelfed_glitch/)
+![Estado de funcionamento](https://apps.yunohost.org/badge/state/pixelfed_glitch)
+![Estado de mantemento](https://apps.yunohost.org/badge/maintained/pixelfed_glitch)
 
-[![Instalar Pixelfed con YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
+[![Instalar Pixelfed Glitch con YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed_glitch)
 
 *[Le este README en outros idiomas.](./ALL_README.md)*
 
-> *Este paquete permíteche instalar Pixelfed de xeito rápido e doado nun servidor YunoHost.*  
+> *Este paquete permíteche instalar Pixelfed Glitch de xeito rápido e doado nun servidor YunoHost.*  
 > *Se non usas YunoHost, le a [documentación](https://yunohost.org/install) para saber como instalalo.*
 
 ## Vista xeral
@@ -28,31 +28,31 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 It is possible to import your data from Instagram.
 
 
-**Versión proporcionada:** 0.12.4~ynh2
+**Versión proporcionada:** v0.12.4-glitch.1.9.1~ynh1
 
 ## Capturas de pantalla
 
-![Captura de pantalla de Pixelfed](./doc/screenshots/screenshot.png)
+![Captura de pantalla de Pixelfed Glitch](./doc/screenshots/screenshot.png)
 
 ## Documentación e recursos
 
-- Web oficial da app: <https://pixelfed.org/>
-- Documentación oficial para usuarias: <https://docs.pixelfed.org/>
-- Documentación oficial para admin: <https://docs.pixelfed.org/running-pixelfed/administration.html>
-- Repositorio de orixe do código: <https://github.com/pixelfed/pixelfed>
-- Tenda YunoHost: <https://apps.yunohost.org/app/pixelfed>
-- Informar dun problema: <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
+- Web oficial da app: <https://pixelfed-glitch.github.io/docs/>
+- Documentación oficial para usuarias: <https://pixelfed-glitch.github.io/docs/>
+- Documentación oficial para admin: <https://pixelfed-glitch.github.io/docs/>
+- Repositorio de orixe do código: <https://github.com/pixelfed-glitch/pixelfed>
+- Tenda YunoHost: <https://apps.yunohost.org/app/pixelfed_glitch>
+- Informar dun problema: <https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/issues>
 
 ## Info de desenvolvemento
 
-Envía a túa colaboración á [rama `testing`](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing).
+Envía a túa colaboración á [rama `testing`](https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing).
 
 Para probar a rama `testing`, procede deste xeito:
 
 ```bash
-sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
+sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing --debug
 ou
-sudo yunohost app upgrade pixelfed -u https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
+sudo yunohost app upgrade pixelfed_glitch -u https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing --debug
 ```
 
 **Máis info sobre o empaquetado da app:** <https://yunohost.org/packaging_apps>

@@ -3,17 +3,17 @@ N.B.: README ini dibuat secara otomatis oleh <https://github.com/YunoHost/apps/t
 Ini TIDAK boleh diedit dengan tangan.
 -->
 
-# Pixelfed untuk YunoHost
+# Pixelfed Glitch untuk YunoHost
 
-[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
-![Status kerja](https://apps.yunohost.org/badge/state/pixelfed)
-![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/pixelfed)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/pixelfed_glitch)](https://ci-apps.yunohost.org/ci/apps/pixelfed_glitch/)
+![Status kerja](https://apps.yunohost.org/badge/state/pixelfed_glitch)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/pixelfed_glitch)
 
-[![Pasang Pixelfed dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed)
+[![Pasang Pixelfed Glitch dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=pixelfed_glitch)
 
 *[Baca README ini dengan bahasa yang lain.](./ALL_README.md)*
 
-> *Paket ini memperbolehkan Anda untuk memasang Pixelfed secara cepat dan mudah pada server YunoHost.*  
+> *Paket ini memperbolehkan Anda untuk memasang Pixelfed Glitch secara cepat dan mudah pada server YunoHost.*  
 > *Bila Anda tidak mempunyai YunoHost, silakan berkonsultasi dengan [panduan](https://yunohost.org/install) untuk mempelajari bagaimana untuk memasangnya.*
 
 ## Ringkasan
@@ -28,31 +28,31 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 It is possible to import your data from Instagram.
 
 
-**Versi terkirim:** 0.12.4~ynh2
+**Versi terkirim:** v0.12.4-glitch.1.9.1~ynh1
 
 ## Tangkapan Layar
 
-![Tangkapan Layar pada Pixelfed](./doc/screenshots/screenshot.png)
+![Tangkapan Layar pada Pixelfed Glitch](./doc/screenshots/screenshot.png)
 
 ## Dokumentasi dan sumber daya
 
-- Website aplikasi resmi: <https://pixelfed.org/>
-- Dokumentasi pengguna resmi: <https://docs.pixelfed.org/>
-- Dokumentasi admin resmi: <https://docs.pixelfed.org/running-pixelfed/administration.html>
-- Depot kode aplikasi hulu: <https://github.com/pixelfed/pixelfed>
-- Gudang YunoHost: <https://apps.yunohost.org/app/pixelfed>
-- Laporkan bug: <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
+- Website aplikasi resmi: <https://pixelfed-glitch.github.io/docs/>
+- Dokumentasi pengguna resmi: <https://pixelfed-glitch.github.io/docs/>
+- Dokumentasi admin resmi: <https://pixelfed-glitch.github.io/docs/>
+- Depot kode aplikasi hulu: <https://github.com/pixelfed-glitch/pixelfed>
+- Gudang YunoHost: <https://apps.yunohost.org/app/pixelfed_glitch>
+- Laporkan bug: <https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/issues>
 
 ## Info developer
 
-Silakan kirim pull request ke [`testing` branch](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing).
+Silakan kirim pull request ke [`testing` branch](https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing).
 
 Untuk mencoba branch `testing`, silakan dilanjutkan seperti:
 
 ```bash
-sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
+sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing --debug
 atau
-sudo yunohost app upgrade pixelfed -u https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
+sudo yunohost app upgrade pixelfed_glitch -u https://github.com/YunoHost-Apps/pixelfed_glitch_ynh/tree/testing --debug
 ```
 
 **Info lebih lanjut mengenai pemaketan aplikasi:** <https://yunohost.org/packaging_apps>
