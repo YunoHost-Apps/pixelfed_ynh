@@ -18,7 +18,7 @@ Il NE doit PAS être modifié à la main.
 
 ## Vue d’ensemble
 
-PixelFed est un logiciel décentralisé et fédéré de partage d'images en cours de développement.
+PixelFed Glitch est un logiciel décentralisé et fédéré de partage d'images en cours de développement. C'est un dérivé du logiciel Pixelfed officiel.
 En plus de reprendre les fonctionnalités d'Instagram, le fonctionnement de PixelFed est :
 
 * Décentralisé : Chaque instance peut suivre une ou plusieurs autres instances PixelFed afin de permettre à leurs membres respectifs d'interagir. Une première instance publique pixelfed.social limitée à 10000 membres a déjà été créée.
