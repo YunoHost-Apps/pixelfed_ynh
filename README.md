@@ -18,7 +18,7 @@ It shall NOT be edited by hand.
 
 ## Overview
 
-PixelFed is a decentralized and federated image sharing software under development.
+PixelFed Glitch s a decentralized and federated image sharing software under development. It is a fork of the officiel Pixelfed software.
 In addition to taking over the functionality of Instagram, the functioning of PixelFed is:
 
 * Decentralized: Each instance can follow one or more other PixelFed instances in order to allow their respective members to interact. A first pixelfed.social public body limited to 10,000 members has already been created.
@@ -28,7 +28,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 It is possible to import your data from Instagram.
 
 
-**Shipped version:** v0.12.4-glitch.1.9.1~ynh1
+**Shipped version:** 0.12.4-glitch.1.9.1~ynh1
 
 ## Screenshots
 
