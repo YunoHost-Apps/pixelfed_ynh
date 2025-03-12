@@ -28,7 +28,7 @@ In addition to taking over the functionality of Instagram, the functioning of Pi
 It is possible to import your data from Instagram.
 
 
-**Paketatutako bertsioa:** 1.9.1~ynh1
+**Paketatutako bertsioa:** 0.12.4+glitch.1.9.1~ynh1
 
 ## Pantaila-argazkiak
 
