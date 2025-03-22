@@ -5,7 +5,7 @@ name = "Pixelfed Glitch"
 description.en = "Decentralized photo sharing social media platform - forked from Pixelfed"
 description.fr = "Plateforme de partage de photos décentralisée - dérivée de Pixelfed"
 
-version = "0.12.4-glitch.1.9.1~ynh1"
+version = "0.12.4-glitch.1.10.0~ynh1"
 
 maintainers = ["Lapineige"]
 
@@ -46,8 +46,8 @@ ram.runtime = "850M"
 
 [resources]
         [resources.sources.main]
-        url = "https://github.com/pixelfed-glitch/pixelfed/archive/refs/tags/v0.12.4-glitch.1.9.1.tar.gz"
-        sha256 = "c5e605f804d9c3e18578546d05c813e14cc604155626426412590563b3b78c2f"
+        url = "https://github.com/pixelfed-glitch/pixelfed/archive/refs/tags/v0.12.4-glitch.1.10.0.tar.gz"
+        sha256 = "b77da06048533d334dbcc875a4e3c5998f20dacb5dfe3cd25f7792845f32e87d"
         autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
