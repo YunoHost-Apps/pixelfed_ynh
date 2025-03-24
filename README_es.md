@@ -3,7 +3,7 @@ Este archivo README esta generado automaticamente<https://github.com/YunoHost/ap
 No se debe editar a mano.
 -->
 
-# Pixelfed para Yunohost
+# Pixelfed para YunoHost
 
 [![Nivel de integración](https://apps.yunohost.org/badge/integration/pixelfed)](https://ci-apps.yunohost.org/ci/apps/pixelfed/)
 ![Estado funcional](https://apps.yunohost.org/badge/state/pixelfed)
