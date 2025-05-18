@@ -3,7 +3,7 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-timezone=$(cat /etc/timezone)
+timezone=$(timedatectl show --value --property=Timezone)
 ynh_app_setting_set_default --key=language --value="fr"
 ynh_app_setting_set_default --key=php_upload_max_filesize --value=100M
 ynh_app_setting_set_default --key=php_post_max_size --value=100M
