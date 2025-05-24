@@ -31,34 +31,8 @@ The `testing` branch can be tested using:
 # fresh install:
 sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing
 
-It is possible to import your data from Instagram.
-
-
-**Shipped version:** 0.12.5~ynh1
-
-## Screenshots
-
-![Screenshot of Pixelfed](./doc/screenshots/screenshot.png)
-
-## Documentation and resources
-
-- Official app website: <https://pixelfed.org/>
-- Official user documentation: <https://docs.pixelfed.org/>
-- Official admin documentation: <https://docs.pixelfed.org/running-pixelfed/administration.html>
-- Upstream app code repository: <https://github.com/pixelfed/pixelfed>
-- YunoHost Store: <https://apps.yunohost.org/app/pixelfed>
-- Report a bug: <https://github.com/YunoHost-Apps/pixelfed_ynh/issues>
-
-## Developer info
-
-Please send your pull request to the [`testing` branch](https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing).
-
-To try the `testing` branch, please proceed like that:
-
-```bash
-sudo yunohost app install https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
-or
-sudo yunohost app upgrade pixelfed -u https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing --debug
+# upgrade an existing install:
+sudo yunohost app upgrade pixelfed -u https://github.com/YunoHost-Apps/pixelfed_ynh/tree/testing
 ```
 
 ### 📚 App packaging documentation
