@@ -7,7 +7,7 @@ source /usr/share/yunohost/helpers
 # INITIALIZE AND STORE SETTINGS
 #=================================================
 
-timezone=$(cat /etc/timezone)
+timezone=$(timedatectl show --value --property=Timezone)
 app_key="base64:$(ynh_string_random --length=32 | base64)"
 
 ynh_app_setting_set --key=app_key --value=$app_key
@@ -38,7 +38,7 @@ ynh_script_progression "Adding $app's configuration..."
 
 ynh_config_add --template=".env" --destination="$install_dir/.env"
 
-chmod -R 600 "$install_dir/.env"
+chmod 600 "$install_dir/.env"
 
 #=================================================
 # SYSTEM CONFIGURATION
