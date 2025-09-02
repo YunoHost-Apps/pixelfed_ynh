@@ -19,7 +19,7 @@ cpe = "cpe:2.3:a:pixelfed:pixelfed"
 fund = "https://www.patreon.com/dansup"
 
 [integration]
-yunohost = ">= 11.3.0.2"
+yunohost = ">= 12.1.17"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
@@ -66,3 +66,6 @@ ram.runtime = "100M"
 
     [resources.database]
     type = "postgresql"
+
+    [resources.composer]
+    version = "2.8.4"
