@@ -50,7 +50,7 @@ ram.runtime = "100M"
         [resources.sources.main]
         url = "https://github.com/pixelfed/pixelfed/archive/refs/tags/v0.12.6.tar.gz"
         sha256 = "4d13a104d3b03d6a8a03db2f9114b56fcaca69d52e64334a400ce98c85cbf3ac"
-        autoupdate.strategy = "latest_github_tag"
+        autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
     allow_email = true
