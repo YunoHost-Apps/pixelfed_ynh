@@ -48,8 +48,8 @@ ram.runtime = "100M"
 
 [resources]
         [resources.sources.main]
-        url = "https://github.com/pixelfed/pixelfed/archive/db0b09679808994d22c7b7994a2597899765ba6d.tar.gz"
-        sha256 = "7df2c9e6867b14724655fbcaa3e54b9455465de999cb2b1532210bd4471c678a"
+        url = "https://github.com/pixelfed/pixelfed/archive/40a51304302d1e18e1f4ab9f74ac034c4f49355c.tar.gz"
+        sha256 = "4fe2c46d5da0427a6cc0b896b76e1ccbcdeddb196bbe5503ef8dbc0d546b7912"
         autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
