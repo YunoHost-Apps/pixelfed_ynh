@@ -5,6 +5,7 @@ name = "Pixelfed"
 description.en = "Decentralized photo sharing social media platform"
 description.fr = "Plateforme de partage de photos décentralisée"
 
+
 version = "0.12.6~ynh2"
 
 maintainers = ["yalh76", "Lapineige"]
