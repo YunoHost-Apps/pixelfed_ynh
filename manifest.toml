@@ -49,9 +49,9 @@ ram.runtime = "100M"
 
 [resources]
         [resources.sources.main]
-        url = "https://github.com/pixelfed/pixelfed/archive/5efc09beea56e71b01293fc6e8be8ec9fe8e5875.tar.gz"
-        sha256 = "aecc487a4c369e81adf3dd7b0375e26dd86d274b51357ae8bec12d94895254f0"
-        autoupdate.strategy = "latest_github_release"
+        url = "https://github.com/pixelfed/pixelfed/archive/c68fb2e771d0e1bc5bb1e9eaaaa1e17fb5d3b71f.tar.gz"
+        sha256 = "4ffdb8108408e303ec9eaf00ff8c381801395c9471f63aceeb5335ba8186d1ff"
+        autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
     allow_email = true
