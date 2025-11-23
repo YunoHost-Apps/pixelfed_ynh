@@ -78,7 +78,6 @@ ynh_config_add --template="cron" --destination="/etc/cron.d/$app"
 #=================================================
 ynh_script_progression "Installing composer dependencies..."
 
-ynh_composer_install
 ynh_composer_exec install --no-dev
 
 #=================================================
@@ -124,6 +123,11 @@ popd
 # patch the database to fix a bug which prevent to upload images
 # see: https://github.com/pixelfed/pixelfed/issues/5217
 ynh_psql_db_shell <<< "alter table media alter column caption drop not null;"
+
+# patch the database to fix a bug which prevents reposts due to them not having a caption
+# see: https://github.com/pixelfed/pixelfed/issues/5217#issuecomment-2597202870
+ynh_psql_db_shell <<< "ALTER TABLE statuses ALTER COLUMN caption DROP NOT NULL;"
+ynh_psql_db_shell <<< "ALTER TABLE statuses ALTER COLUMN rendered DROP NOT NULL;"
 
 #=================================================
 # START SUPERVISOR SERVICE
