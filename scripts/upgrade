@@ -134,6 +134,11 @@ popd
 # see: https://github.com/pixelfed/pixelfed/issues/5217
 ynh_psql_db_shell <<< "alter table media alter column caption drop not null;"
 
+# patch the database to fix a bug which prevents reposts due to them not having a caption
+# see: https://github.com/pixelfed/pixelfed/issues/5217#issuecomment-2597202870
+ynh_psql_db_shell <<< "ALTER TABLE statuses ALTER COLUMN caption DROP NOT NULL;"
+ynh_psql_db_shell <<< "ALTER TABLE statuses ALTER COLUMN rendered DROP NOT NULL;"
+
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
