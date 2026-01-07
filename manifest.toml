@@ -63,10 +63,10 @@ ram.runtime = "100M"
     main.url = "/"
 
     [resources.apt]
-    packages = "postgresql, libgd3, jpegoptim, optipng, pngquant, ffmpeg, imagemagick, php8.3-redis, php8.3-bcmath, php8.3-cli, php8.3-ctype, php8.3-curl, php8.3-exif, php8.3-gd, php8.3-iconv, php8.3-intl, php8.3-mbstring, php8.3-tokenizer, php8.3-xml, php8.3-zip, php8.3-pdo, php8.3-pgsql, php8.3-fileinfo, php8.3-imagick, redis-server"
+    packages = "postgresql, libgd3, jpegoptim, optipng, pngquant, ffmpeg, imagemagick, php8.4-redis, php8.4-bcmath, php8.4-cli, php8.4-ctype, php8.4-curl, php8.4-exif, php8.4-gd, php8.4-iconv, php8.4-intl, php8.4-mbstring, php8.4-tokenizer, php8.4-xml, php8.4-zip, php8.4-pdo, php8.4-pgsql, php8.4-fileinfo, php8.4-imagick, redis-server"
 
     [resources.database]
     type = "postgresql"
 
     [resources.composer]
-    version = "2.9.2"
+    version = "2.9.3"
