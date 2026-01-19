@@ -19,7 +19,7 @@ cpe = "cpe:2.3:a:pixelfed:pixelfed"
 fund = "https://www.patreon.com/dansup"
 
 [integration]
-yunohost = ">= 12.1.17"
+yunohost = ">= 12.1.38"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
