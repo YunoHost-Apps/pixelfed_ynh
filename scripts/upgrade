@@ -4,6 +4,7 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 timezone=$(timedatectl show --value --property=Timezone)
+ynh_app_setting_set --key=php_max_file_uploads --value=20
 
 #=================================================
 # STOP SYSTEMD SERVICE
