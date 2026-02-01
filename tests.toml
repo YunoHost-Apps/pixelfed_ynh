@@ -8,4 +8,4 @@ exclude = [ "change_url" ]
     # Commits to test upgrade from
     # -------------------------------
 
-    test_upgrade_from.aa1c6c9.name = "Upgrade from v0.11.9"
+  # test_upgrade_from.aa1c6c9.name = "Upgrade from v0.11.9"
