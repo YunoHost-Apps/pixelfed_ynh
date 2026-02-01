@@ -10,14 +10,9 @@ name.en = "Upload limit size"
 name.fr = "Téléchargement de fichiers"
 
 [main.limit_size.php_upload_max_filesize]
-ask.fr = "Taille limite d'un fichier en Mo"
-ask.en = "Size limit file upload (Mb)"
+ask.fr = "Taille limite d'un téléchargement en Mo"
+ask.en = "Upload size limit (Mb)"
 type = "number"
 bind = "null"
 
-[main.limit_size.php_post_max_size]
-ask.fr = "Taille limite d'un envoi en Mo"
-ask.en = "Size limit post upload (Mb)"
-type = "number"
-bind = "null"
 
