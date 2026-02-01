@@ -1,0 +1,23 @@
+version = "1.0"
+
+[main]
+name.en = "Configuration panel"
+name.fr = "Panneau de configuration"
+services = ["__APP__", "nginx"]
+
+[main.limit_size]
+name.en = "Upload limit size"
+name.fr = "Téléchargement de fichiers"
+
+[main.limit_size.php_upload_max_filesize]
+ask.fr = "Taille limite d'un fichier en Mo"
+ask.en = "Size limit file upload (Mb)"
+type = "number"
+bind = "null"
+
+[main.limit_size.php_post_max_size]
+ask.fr = "Taille limite d'un envoi en Mo"
+ask.en = "Size limit post upload (Mb)"
+type = "number"
+bind = "null"
+
