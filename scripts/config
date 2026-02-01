@@ -1,0 +1,26 @@
+#!/bin/bash
+source /usr/share/yunohost/helpers
+
+get__php_upload_max_filesize() {
+ynh_app_setting_get --key=php_upload_max_filesize
+}
+get__php_post_max_size() {
+ynh_app_setting_get --key=php_post_max_size
+}
+
+
+set__php_post_max_size() {
+    ynh_replace --match='client_max_body_size [^"]*' --replace="client_max_body_size  ${php_post_max_size}M  ;" --file="/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_store_file_checksum "/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_app_setting_set --key=php_post_max_size --value="$php_post_max_size.M"
+    ynh_print_info "The nginx config has been edited"
+}
+
+set__php_upload_max_filesize() {
+    ynh_app_setting_set --key=php_upload_max_filesize --value="$php_upload_max_filesize"
+    ynh_print_info "The nginx config has been edited"
+}
+
+
+ynh_abort_if_errors
+ynh_app_config_run $1
