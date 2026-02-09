@@ -3,7 +3,7 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-timezone=$(cat /etc/timezone)
+timezone=$(timedatectl show --value --property=Timezone)
 ynh_app_setting_set_default --key=language --value="fr"
 ynh_app_setting_set_default --key=php_upload_max_filesize --value=100M
 ynh_app_setting_set_default --key=php_post_max_size --value=100M
@@ -55,7 +55,7 @@ ynh_script_progression "Upgrading source files..."
 
 ynh_setup_source --dest_dir="$install_dir" --keep=".env"
 
-chmod 600 "$install_dir"/.env
+chmod 600 "$install_dir/.env"
 
 #=================================================
 # PATCHING SOURCE
@@ -142,6 +142,11 @@ popd
 # patch the database to fix a bug which prevent to upload images
 # see: https://github.com/pixelfed/pixelfed/issues/5217
 ynh_psql_db_shell <<< "alter table media alter column caption drop not null;"
+
+# patch the database to fix a bug which prevents reposts due to them not having a caption
+# see: https://github.com/pixelfed/pixelfed/issues/5217#issuecomment-2597202870
+ynh_psql_db_shell <<< "ALTER TABLE statuses ALTER COLUMN caption DROP NOT NULL;"
+ynh_psql_db_shell <<< "ALTER TABLE statuses ALTER COLUMN rendered DROP NOT NULL;"
 
 #=================================================
 # START SYSTEMD SERVICE
