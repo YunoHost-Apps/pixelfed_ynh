@@ -41,15 +41,6 @@ ynh_config_add --template=".env" --destination="$install_dir/.env"
 chmod 600 "$install_dir/.env"
 
 #=================================================
-# PATCHING SOURCE
-#=================================================
-ynh_script_progression "Patching source files..."
-
-# Prevent privilege escalation by injecting commands in an email name
-# This described in more detail on the manpage https://www.postfix.org/sendmail.1.html under security
-ynh_replace --match="'/usr/sbin/sendmail -bs'" --replace="'/usr/sbin/sendmail -bs -- '" --file=$install_dir/config/mail.php
-
-#=================================================
 # SYSTEM CONFIGURATION
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."

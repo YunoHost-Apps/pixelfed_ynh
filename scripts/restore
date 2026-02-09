@@ -11,15 +11,6 @@ ynh_script_progression "Restoring the app main directory..."
 ynh_restore "$install_dir"
 
 #=================================================
-# PATCHING SOURCE
-#=================================================
-ynh_script_progression "Patching source files..."
-
-# Prevent privilege escalation by injecting commands in an email name
-# This described in more detail on the manpage https://www.postfix.org/sendmail.1.html under security
-ynh_replace --match="'/usr/sbin/sendmail -bs'" --replace="'/usr/sbin/sendmail -bs -- '" --file=$install_dir/config/mail.php
-
-#=================================================
 # RESTORE THE POSTGRESQL DATABASE
 #=================================================
 ynh_script_progression "Restoring the PostgreSQL database..."
