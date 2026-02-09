@@ -5,7 +5,6 @@ name = "Pixelfed"
 description.en = "Decentralized photo sharing social media platform"
 description.fr = "Plateforme de partage de photos décentralisée"
 
-
 version = "0.12.6~ynh3"
 
 maintainers = ["yalh76", "Lapineige"]
@@ -20,7 +19,7 @@ cpe = "cpe:2.3:a:pixelfed:pixelfed"
 fund = "https://www.patreon.com/dansup"
 
 [integration]
-yunohost = ">= 12.1.17"
+yunohost = ">= 12.1.38"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
@@ -49,9 +48,9 @@ ram.runtime = "100M"
 
 [resources]
         [resources.sources.main]
-        url = "https://github.com/pixelfed/pixelfed/archive/c68fb2e771d0e1bc5bb1e9eaaaa1e17fb5d3b71f.tar.gz"
-        sha256 = "4ffdb8108408e303ec9eaf00ff8c381801395c9471f63aceeb5335ba8186d1ff"
-        autoupdate.strategy = "latest_github_commit"
+        url = "https://github.com/pixelfed/pixelfed/archive/b4b94515de51516aa7c4a9f6d6dc8589b6415d9c.tar.gz"
+        sha256 = "d6d419707c920a08615cec7a1a93d26dd3ba3eb79398e7ea300f5be7928569f2"
+#        autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
     allow_email = true
@@ -63,10 +62,10 @@ ram.runtime = "100M"
     main.url = "/"
 
     [resources.apt]
-    packages = "postgresql, libgd3, jpegoptim, optipng, pngquant, ffmpeg, imagemagick, php8.3-redis, php8.3-bcmath, php8.3-cli, php8.3-ctype, php8.3-curl, php8.3-exif, php8.3-gd, php8.3-iconv, php8.3-intl, php8.3-mbstring, php8.3-tokenizer, php8.3-xml, php8.3-zip, php8.3-pdo, php8.3-pgsql, php8.3-fileinfo, php8.3-imagick, redis-server"
+    packages = "postgresql, libgd3, jpegoptim, optipng, pngquant, ffmpeg, imagemagick, php8.4-redis, php8.4-bcmath, php8.4-cli, php8.4-ctype, php8.4-curl, php8.4-exif, php8.4-gd, php8.4-iconv, php8.4-intl, php8.4-mbstring, php8.4-tokenizer, php8.4-xml, php8.4-zip, php8.4-pdo, php8.4-pgsql, php8.4-fileinfo, php8.4-imagick, redis-server"
 
     [resources.database]
     type = "postgresql"
 
     [resources.composer]
-    version = "2.9.2"
+    version = "2.9.5"
