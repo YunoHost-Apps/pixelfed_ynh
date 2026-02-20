@@ -117,7 +117,7 @@ pushd "$install_dir"
 	$artisan horizon:purge
 	$artisan import:cities 2>/dev/null
 	$artisan instance:actor
-	$artisan passport:client --personal <<< "\\n"
+	$artisan passport:client --personal
 popd
 
 # patch the database to fix a bug which prevent to upload images
