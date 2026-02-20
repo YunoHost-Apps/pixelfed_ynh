@@ -84,6 +84,8 @@ yunohost service add "$app" --description="Federated Image Sharing" --log="/var/
 #=================================================
 ynh_script_progression "Updating composer..."
 
+ynh_composer_exec remove intervention/image-driver-vips
+
 ynh_composer_exec self-update --2
 
 ynh_composer_exec update
