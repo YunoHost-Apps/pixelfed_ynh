@@ -58,15 +58,6 @@ ynh_setup_source --dest_dir="$install_dir" --keep=".env"
 chmod 600 "$install_dir/.env"
 
 #=================================================
-# PATCHING SOURCE
-#=================================================
-ynh_script_progression "Patching source files..."
-
-# Prevent privilege escalation by injecting commands in an email name
-# This described in more detail on the manpage https://www.postfix.org/sendmail.1.html under security
-ynh_replace --match="'/usr/sbin/sendmail -bs'" --replace="'/usr/sbin/sendmail -bs -- '" --file=$install_dir/config/mail.php
-
-#=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
 ynh_script_progression "Upgrading system configurations related to $app..."
@@ -92,6 +83,8 @@ yunohost service add "$app" --description="Federated Image Sharing" --log="/var/
 # UPDATE COMPOSER DEPENDENCIES
 #=================================================
 ynh_script_progression "Updating composer..."
+
+ynh_composer_exec remove intervention/image-driver-vips
 
 ynh_composer_exec self-update --2
 
@@ -136,7 +129,7 @@ pushd "$install_dir"
 	$artisan horizon:purge
 	$artisan import:cities 2>/dev/null
 	$artisan instance:actor
-	$artisan passport:client --personal <<< "\\n"
+	$artisan optimize
 popd
 
 # patch the database to fix a bug which prevent to upload images
