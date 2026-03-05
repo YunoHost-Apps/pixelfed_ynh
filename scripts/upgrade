@@ -119,6 +119,8 @@ pushd "$install_dir"
 	$artisan horizon:publish
 	if [ ! -f "$install_dir/storage/oauth-private.key" ]; then
     	$artisan passport:keys --force
+	else
+		ynh_print_info "Passport key creation has been skipped, as keys have been detected. If you have issues with Authentication, please run php artisan passport:keys --force to reset the authentification keys"
 	fi
 	$artisan_root config:clear
 	$artisan config:cache
