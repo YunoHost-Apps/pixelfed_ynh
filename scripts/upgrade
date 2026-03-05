@@ -129,7 +129,6 @@ pushd "$install_dir"
 	$artisan horizon:purge
 	$artisan import:cities 2>/dev/null
 	$artisan instance:actor
-    $artisan passport:client --personal <<< "\\n"
 	$artisan optimize
 popd
 
