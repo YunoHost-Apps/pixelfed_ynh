@@ -117,7 +117,9 @@ artisan_root="php$php_version artisan"
 pushd "$install_dir"
 	$artisan horizon:install
 	$artisan horizon:publish
-	$artisan passport:keys
+	if [ ! -f "$install_dir/storage/oauth-private.key" ]; then
+    	$artisan passport:keys --force
+	fi
 	$artisan_root config:clear
 	$artisan config:cache
 	$artisan_root route:clear
