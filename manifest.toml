@@ -48,8 +48,8 @@ ram.runtime = "100M"
 
 [resources]
         [resources.sources.main]
-        url = "https://github.com/pixelfed/pixelfed/archive/032e4436d931cdca21f95a0831dd80867afc22b0.zip"
-        sha256 = "6e2cc63b73a2388cadda02194ac6d532915294d300c8a5ba1d3adeb74ac96cd7"
+        url = "https://github.com/pixelfed/pixelfed/archive/07fb3795c80e714a2b2f6bb5d452a8a4affd6372.zip"
+        sha256 = "d7d743f5a60c9eb77ec643a9f81a5e8024535173c48068f0695d3cf3dcb8b5a7"
 
     [resources.system_user]
     allow_email = true
