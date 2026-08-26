@@ -5,7 +5,7 @@ name = "Pixelfed"
 description.en = "Decentralized photo sharing social media platform"
 description.fr = "Plateforme de partage de photos décentralisée"
 
-version = "0.12.8~ynh2"
+version = "0.12.9~ynh2"
 
 maintainers = ["yalh76", "Lapineige"]
 
@@ -48,8 +48,8 @@ ram.runtime = "100M"
 
 [resources]
         [resources.sources.main]
-        url = "https://github.com/pixelfed/pixelfed/archive/refs/tags/v0.12.8.tar.gz"
-        sha256 = "45af9fa8a93cce3116c98070fdcf4c040586db3e98e2164a7136edd2fb386883"
+        url = "https://github.com/pixelfed/pixelfed/archive/f9d7898b02b9143a148a387d5c09ed5d67ea5538.zip"
+        sha256 = "c6f6dd05dfef97c1a2f023d778a991fa939459aea43b58c3528662d282500da0"
 
     [resources.system_user]
     allow_email = true
