@@ -1,0 +1,11 @@
+--- a/composer.json
++++ b/composer.json
+@@ -9,6 +9,8 @@
+		"ext-bcmath": "*",
+		"ext-ctype": "*",
+		"ext-curl": "*",
++		"ext-ldap": "*",
++		"directorytree/ldaprecord-laravel": "*",
+		"ext-intl": "*",
+		"ext-json": "*",
+		"ext-mbstring": "*",
